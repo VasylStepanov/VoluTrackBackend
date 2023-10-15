@@ -1,0 +1,20 @@
+server:
+    port: 8080
+
+spring:
+    flyway:
+        schema: public
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: none
+            format_sql: true
+    datasource:
+        url: jdbc:postgresql://localhost:5432/volutrack
+        username: postgres
+        password: postgres
+        driver-class-name: org.postgresql.Driver
+
+logging:
+    file:
+        name: project.log
