@@ -2,6 +2,8 @@
 
 Volunteer Logistics and Accounting Helper - a project to make logistic easier and cheaper, accounting more accurate and tight.
 
+![Logo](src/main/resources/img/biglogo.png)
+
 
 ## Roadmap
 

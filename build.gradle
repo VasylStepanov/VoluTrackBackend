@@ -16,19 +16,27 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
 	implementation "me.paulschwarz:spring-dotenv:$spring_dotenv_v"
 
-	implementation "org.flywaydb:flyway-core:$flywaydb_v"
+	implementation "io.jsonwebtoken:jjwt-api:$jsonwebtoken_v"
+	implementation "io.jsonwebtoken:jjwt-impl:$jsonwebtoken_v"
+	implementation "io.jsonwebtoken:jjwt-jackson:$jsonwebtoken_v"
+
+	implementation "commons-validator:commons-validator:$commons_validator_v"
+
 	implementation "org.postgresql:postgresql:$postgresql_v"
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation "org.flywaydb:flyway-core:$flywaydb_v"
+
+	testImplementation "org.testcontainers:postgresql:$testcontainers_v"
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

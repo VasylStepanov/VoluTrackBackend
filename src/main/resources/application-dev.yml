@@ -1,19 +1,36 @@
 server:
     port: 8080
 
+sender:
+    email: ${EMAIL}
+    link: ${LINK}
+
 spring:
     flyway:
         schema: public
     jpa:
         show-sql: true
         hibernate:
-            ddl-auto: none
+            ddl-auto: create
             format_sql: true
     datasource:
         url: jdbc:postgresql://localhost:5432/volutrack
         username: postgres
         password: postgres
         driver-class-name: org.postgresql.Driver
+    mail:
+        host: smtp.gmail.com
+        post: 587
+        username: ${EMAIL}
+        password: ${APP_PASSWORD}
+        properties:
+            mail:
+                smtp:
+                    ssl:
+                        trust: "*"
+                    auth: true
+                    starttls:
+                        enable: true
 
 logging:
     file:
