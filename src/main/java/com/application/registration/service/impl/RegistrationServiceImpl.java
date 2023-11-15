@@ -6,8 +6,10 @@ import com.application.registration.exception.ConfirmationEmailException;
 import com.application.registration.exception.RegistrationException;
 import com.application.registration.module.ConfirmationEmail;
 import com.application.registration.service.ConfirmationEmailService;
+import com.application.user.model.Role;
 import com.application.user.model.User;
 import com.application.registration.service.RegistrationService;
+import com.application.user.repository.RoleRepository;
 import com.application.user.service.UserService;
 import com.application.user.validator.UserDataValidator;
 import lombok.AccessLevel;
@@ -18,8 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -37,6 +38,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     ConfirmationEmailService confirmationEmailService;
 
+    @Autowired
+    RoleRepository roleRepository;
+
     @Value("${sender.link}")
     String link;
 
@@ -45,7 +49,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         String token = signUpUser(registrationRequest);
         Map<String, Object> models = Map.of("name", registrationRequest.fullName(), "link", link + token);
         emailService.send(registrationRequest.email(), models);
-        return "Successfully signed up!";
+        return "Send confirmation";
     }
 
     @Override
@@ -58,7 +62,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new ConfirmationEmailException("Token is expired.");
 
         confirmationEmailService.setConfirmed(token);
-        return "Confirmed!";
+        return "Successfully signed up!";
     }
 
     @Override
@@ -72,28 +76,27 @@ public class RegistrationServiceImpl implements RegistrationService {
         else if(confirmationEmail.isConfirmed())
             throw new ConfirmationEmailException("Email is already confirmed.");
 
-        User user = userService.findById(confirmationEmail.getId());
+        String newToken = UUID.randomUUID().toString();
 
-        ConfirmationEmail confirmation = ConfirmationEmail.builder()
-                .token(token)
-                .confirmed(false)
-                .createdAt(LocalDateTime.now())
-                .expiresAt(LocalDateTime.now().plusMinutes(15))
-                .user(user)
-                .build();
+        confirmationEmail.setToken(newToken);
+        confirmationEmail.setCreatedAt(LocalDateTime.now());
+        confirmationEmail.setExpiresAt(LocalDateTime.now().plusMinutes(15));
 
-        confirmationEmailService.deleteConfirmationEmail(token);
-        confirmationEmailService.saveConfirmationEmail(confirmation);
+        Map<String, Object> models = Map.of("name", confirmationEmail.getUser().getFullName(), "link", link + token);
+        emailService.send(confirmationEmail.getUser().getEmail(), models);
 
-        return "Resent";
+        return "Resent confirmation";
     }
 
     private String signUpUser(RegistrationRequest registrationRequest) {
+        Role role = roleRepository.findByName(registrationRequest.role()).orElseThrow(() -> new IllegalStateException("Role not found."));
         User user = User.builder()
                 .fullName(registrationRequest.fullName())
                 .email(validator.eitherEmailIsValid(registrationRequest.email()))
                 .password(validator.eitherPasswordIsValid(registrationRequest.password()))
-                .role(registrationRequest.role())
+                .locked(false)
+                .enabled(true)
+                .role(role)
                 .build();
         try {
             userService.createUser(user);

@@ -6,18 +6,6 @@ sender:
     link: ${LINK}
 
 spring:
-    flyway:
-        schema: public
-    jpa:
-        show-sql: true
-        hibernate:
-            ddl-auto: create
-            format_sql: true
-    datasource:
-        url: jdbc:postgresql://localhost:5432/volutrack
-        username: postgres
-        password: postgres
-        driver-class-name: org.postgresql.Driver
     mail:
         host: smtp.gmail.com
         post: 587
@@ -31,6 +19,18 @@ spring:
                     auth: true
                     starttls:
                         enable: true
+    flyway:
+        schema: public
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+    datasource:
+        url: jdbc:postgresql://localhost:5432/volutrack
+        username: postgres
+        password: postgres
+        driver-class-name: org.postgresql.Driver
+
 
 logging:
     file:

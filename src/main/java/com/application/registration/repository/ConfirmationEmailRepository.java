@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,5 +20,7 @@ public interface ConfirmationEmailRepository extends JpaRepository<ConfirmationE
     @Query("UPDATE ConfirmationEmail c SET c.confirmed = ?2 WHERE c.token = ?1")
     void updateConfirmationToken(String token, boolean confirmed);
 
+    @Modifying
+    @Query("DELETE FROM ConfirmationEmail c WHERE c.token = ?1")
     void deleteByToken(String token);
 }

@@ -15,25 +15,21 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserServiceImpl implements UserService {
 
-
     @Autowired
     UserRepository userRepository;
 
     @Override
     public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new IllegalStateException(
-                String.format("User '%s' not found!", email)
-        ));
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     @Override
-    public User findById(UUID id){
-        return userRepository.findById(id).orElseThrow(() -> new IllegalStateException("User not found"));
+    public User findById(UUID id) {
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
     public void createUser(User user) {
         userRepository.save(user);
     }
-
 }

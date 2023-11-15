@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -33,7 +34,7 @@ public class ConfirmationEmail {
     private LocalDateTime expiresAt;
 
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "confirmation_to_user_fk")
+    @OneToOne
+    @JoinColumn(name = "id", referencedColumnName = "fk_user_id")
     User user;
 }

@@ -7,13 +7,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
 
+import java.util.Properties;
+
 @Configuration
 public class RegistrationConfig {
-
-    @Bean
-    public JavaMailSender javaMailSender(){
-        return new JavaMailSenderImpl();
-    }
 
     @Bean
     @Primary

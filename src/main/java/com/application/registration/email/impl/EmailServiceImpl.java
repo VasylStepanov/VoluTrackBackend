@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
@@ -34,6 +35,7 @@ public class EmailServiceImpl implements EmailService {
     String email;
 
     @Override
+    @Async
     public void send(String to, Map<String, Object> models) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();

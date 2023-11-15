@@ -10,7 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"confirmationEmail"})
+@EqualsAndHashCode(exclude = "confirmationEmail")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity(name = "user")
 @Table(schema = "user_data", name = "users", uniqueConstraints = @UniqueConstraint(name = "uk_email", columnNames = { "email" }))
@@ -29,11 +29,16 @@ public class User {
     @Column(length = 128, nullable = false)
     String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 32, nullable = false)
-    UserRole role;
+    @Column(name = "is_locked", nullable = false)
+    boolean locked;
 
-    @PrimaryKeyJoinColumn
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @Column(name = "is_enabled", nullable = false)
+    boolean enabled;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    Role role;
+
+    @OneToOne(mappedBy = "user", optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     ConfirmationEmail confirmationEmail;
 }

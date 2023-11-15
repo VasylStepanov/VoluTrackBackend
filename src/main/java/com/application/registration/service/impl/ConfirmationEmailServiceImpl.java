@@ -3,16 +3,17 @@ package com.application.registration.service.impl;
 import com.application.registration.module.ConfirmationEmail;
 import com.application.registration.repository.ConfirmationEmailRepository;
 import com.application.registration.service.ConfirmationEmailService;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ConfirmationEmailServiceImpl implements ConfirmationEmailService {
 
     @Autowired
-    private ConfirmationEmailRepository repository;
+    ConfirmationEmailRepository repository;
 
     @Override
     public void saveConfirmationEmail(ConfirmationEmail confirmationEmail) {
@@ -33,4 +34,5 @@ public class ConfirmationEmailServiceImpl implements ConfirmationEmailService {
     public void setConfirmed(String token) {
         repository.updateConfirmationToken(token, true);
     }
+
 }

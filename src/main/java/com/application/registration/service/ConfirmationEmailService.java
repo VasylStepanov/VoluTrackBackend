@@ -8,5 +8,6 @@ public interface ConfirmationEmailService {
     void deleteConfirmationEmail(String token);
 
     ConfirmationEmail getToken(String token);
+
     void setConfirmed(String token);
 }
