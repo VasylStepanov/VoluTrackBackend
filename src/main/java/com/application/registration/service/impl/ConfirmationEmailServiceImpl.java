@@ -30,9 +30,4 @@ public class ConfirmationEmailServiceImpl implements ConfirmationEmailService {
         return repository.findByToken(token).orElseThrow(() -> new IllegalStateException("Confirmation entity wasn't find."));
     }
 
-    @Override
-    public void setConfirmed(String token) {
-        repository.updateConfirmationToken(token, true);
-    }
-
 }

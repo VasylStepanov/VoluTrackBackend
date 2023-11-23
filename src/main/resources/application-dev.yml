@@ -5,7 +5,26 @@ sender:
     email: ${EMAIL}
     link: ${LINK}
 
+security:
+    secret: e9fe2e88cd731b2f102e90439103eabf69dadf4d40f0436c9042d229bb85f7e4
+    access-token:
+        token-name: ${ACCESS_TOKEN_NAME}
+        expiration: 3600000
+    refresh-token:
+        expiration: 86400000
+
 spring:
+    flyway:
+        schema: public
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+    datasource:
+        url: jdbc:postgresql://localhost:5432/volutrack
+        username: postgres
+        password: postgres
+        driver-class-name: org.postgresql.Driver
     mail:
         host: smtp.gmail.com
         post: 587
@@ -19,18 +38,6 @@ spring:
                     auth: true
                     starttls:
                         enable: true
-    flyway:
-        schema: public
-    jpa:
-        show-sql: true
-        hibernate:
-            ddl-auto: update
-    datasource:
-        url: jdbc:postgresql://localhost:5432/volutrack
-        username: postgres
-        password: postgres
-        driver-class-name: org.postgresql.Driver
-
 
 logging:
     file:

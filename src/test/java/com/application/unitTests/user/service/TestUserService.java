@@ -31,7 +31,7 @@ public class TestUserService {
     @Test
     @Order(1)
     public void testFindUserById_ValidId_ReturnUser(){
-        Role role = roleRepository.findByName("USER_V_I").get();
+        Role role = roleRepository.findByName("ROLE_USER_V_I").get();
 
         role.getUsers().stream().forEach(System.out::println);
 
@@ -63,7 +63,7 @@ public class TestUserService {
     @Test
     @Order(3)
     public void testFindUserByEmail_ValidEmail_ReturnUser(){
-        Role role = roleRepository.findByName("USER_V_I").get();
+        Role role = roleRepository.findByName("ROLE_USER_V_I").get();
 
         User user = User.builder()
                 .id(UUID.fromString("9a87155e-7401-11ee-b962-0242ac120002"))

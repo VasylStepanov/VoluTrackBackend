@@ -5,6 +5,14 @@ sender:
   email: ${EMAIL}
   link: ${LINK}
 
+security:
+  secret: ${SECRET}
+  access-token:
+    token-name: ${ACCESS_TOKEN_NAME}
+    expiration: ${ACCESS_TIME}
+  refresh-token:
+    expiration: ${REFRESH_TIME}
+
 spring:
   flyway:
     schema: public

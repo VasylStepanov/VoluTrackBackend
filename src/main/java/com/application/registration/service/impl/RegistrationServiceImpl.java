@@ -16,6 +16,7 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +42,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Value("${sender.link}")
     String link;
 
@@ -61,7 +65,10 @@ public class RegistrationServiceImpl implements RegistrationService {
         if(LocalDateTime.now().isAfter(expiresAt))
             throw new ConfirmationEmailException("Token is expired.");
 
-        confirmationEmailService.setConfirmed(token);
+        User user = confirmationEmail.getUser();
+        user.setEnabled(true);
+        confirmationEmail.setConfirmed(true);
+
         return "Successfully signed up!";
     }
 
@@ -93,9 +100,9 @@ public class RegistrationServiceImpl implements RegistrationService {
         User user = User.builder()
                 .fullName(registrationRequest.fullName())
                 .email(validator.eitherEmailIsValid(registrationRequest.email()))
-                .password(validator.eitherPasswordIsValid(registrationRequest.password()))
+                .password(passwordEncoder.encode(validator.eitherPasswordIsValid(registrationRequest.password())))
                 .locked(false)
-                .enabled(true)
+                .enabled(false)
                 .role(role)
                 .build();
         try {
