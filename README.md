@@ -11,6 +11,7 @@ Volunteer Logistics and Accounting Helper - a project to make logistic easier an
 - Registration is done commit. Added user layer(roles and service), registration service with email verification.
 - Registration service is recovered commit. Fixed email verification sender. Changed Spring Boot version to newer.  Added Spring Security.
 - Authentication is done commit. Access JWT token in HttpOnly Cookies, Refresh token in SQL. ToDo: Add Redis for users, to avoid extra requests to DB for every user's request.
+- Redis is added commit. Fixed tests. Better performance due to less requests to DB.
 
 ## Authors
 
