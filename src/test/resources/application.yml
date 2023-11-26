@@ -1,6 +1,15 @@
 sender:
   email: ${EMAIL}
   link: ${LINK}
+
+security:
+  secret: 75826521e55d6f9b21563cc403dfe3037c43cc3d51072e0a9d5187d8f95b68b6
+  access-token:
+    token-name: access_token
+    expiration: 3600000
+  refresh-token:
+    expiration: 86400000
+
 spring:
   jpa:
     show-sql: true
@@ -9,6 +18,23 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
     url: jdbc:tc:postgresql:alpine:///sandbox?TC_DAEMON=true
+  mail:
+    host: smtp.gmail.com
+    post: 587
+    username: test@gmail.com
+    password: test1234
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true

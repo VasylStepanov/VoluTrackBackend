@@ -1,4 +1,4 @@
-package com.application.registration;
+package com.application.registration.controller;
 
 import com.application.registration.dto.request.RegistrationRequest;
 import com.application.registration.service.RegistrationService;

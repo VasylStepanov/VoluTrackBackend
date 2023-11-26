@@ -1,5 +1,6 @@
 package com.application.unitTests.user.service;
 
+import com.application.configuration.TestRedisConfiguration;
 import com.application.user.model.Role;
 import com.application.user.model.User;
 import com.application.user.repository.RoleRepository;
@@ -16,7 +17,7 @@ import java.util.UUID;
 
 @Transactional
 @Sql("/db/test/user_added.sql")
-@SpringBootTest
+@SpringBootTest(classes = TestRedisConfiguration.class)
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class TestUserService {
 

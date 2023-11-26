@@ -50,6 +50,7 @@ public class AuthenticationController {
         } catch (LockedException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User account is locked!");
         } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email or password are wrong!");
         }
     }

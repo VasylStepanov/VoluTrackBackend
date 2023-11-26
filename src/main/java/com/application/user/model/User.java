@@ -18,7 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = "confirmationEmail")
+@EqualsAndHashCode(exclude = {"confirmationEmail", "tokens"})
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity(name = "user")
 @Table(schema = "user_data", name = "users", uniqueConstraints = @UniqueConstraint(name = "uk_email", columnNames = { "email" }))

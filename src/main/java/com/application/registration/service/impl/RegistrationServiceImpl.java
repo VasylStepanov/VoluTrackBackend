@@ -6,6 +6,7 @@ import com.application.registration.exception.ConfirmationEmailException;
 import com.application.registration.exception.RegistrationException;
 import com.application.registration.module.ConfirmationEmail;
 import com.application.registration.service.ConfirmationEmailService;
+import com.application.user.dto.UserDto;
 import com.application.user.model.Role;
 import com.application.user.model.User;
 import com.application.registration.service.RegistrationService;
@@ -66,7 +67,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new ConfirmationEmailException("Token is expired.");
 
         User user = confirmationEmail.getUser();
-        user.setEnabled(true);
+        userService.updateUser(user, UserDto.builder().enabled(true).build());
         confirmationEmail.setConfirmed(true);
 
         return "Successfully signed up!";
@@ -96,7 +97,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     private String signUpUser(RegistrationRequest registrationRequest) {
-        Role role = roleRepository.findByName(registrationRequest.role()).orElseThrow(() -> new IllegalStateException("Role not found."));
+        Role role = roleRepository
+                .findByName(registrationRequest.role())
+                .orElseThrow(() -> new IllegalStateException("Role not found."));
         User user = User.builder()
                 .fullName(registrationRequest.fullName())
                 .email(validator.eitherEmailIsValid(registrationRequest.email()))
@@ -108,6 +111,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         try {
             userService.createUser(user);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new RegistrationException("Email is already taken!");
         }
 

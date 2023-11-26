@@ -1,11 +1,8 @@
 package com.application.authentication.security;
 
 import com.application.authentication.util.CookieUtil;
-import com.application.authentication.util.SecurityCipher;
-import freemarker.template.utility.StringUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
@@ -14,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.internal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +21,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.stream.Stream;
 
 @Slf4j
 @Component
@@ -50,8 +44,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
-        //ToDo: Add redis. Save users there. First request get user from DB and save into redis. Next requests get user from cache.
-        // THIS CODE SHOULD BE CHANGED IN THE NEXT COMMIT!!!
         try {
             String jwt = cookieUtil.getAccessTokenCookie(request.getCookies());
             if(StringUtils.hasText(jwt) && jwtService.isTokenValid(jwt)){

@@ -19,6 +19,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -37,7 +38,13 @@ dependencies {
 
 	implementation "org.flywaydb:flyway-core:$flywaydb_v"
 
+	testImplementation "org.testcontainers:testcontainers:$testcontainers_v"
 	testImplementation "org.testcontainers:postgresql:$testcontainers_v"
+	testImplementation ("it.ozimov:embedded-redis:$redis_embedded_v"){
+		exclude module: 'commons-logging'
+		exclude module: 'slf4j-simple'
+	}
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
