@@ -26,7 +26,7 @@ public class UserDto {
 
     RoleDto role;
 
-    public static UserDto toUserCache(User user) {
+    public static UserDto toUserDto(User user) {
         return new UserDto(user.getId(),
                 user.getFullName(),
                 user.getEmail(),
@@ -48,5 +48,18 @@ public class UserDto {
                 .enabled(userDto.getEnabled())
                 .role(RoleDto.toRole(userDto.getRole()))
                 .build();
+    }
+
+    public static void updateUser(User user, UserDto userDto){
+        if(userDto.getFullName() != null)
+            user.setFullName(userDto.getFullName());
+        if(userDto.getEmail() != null)
+            user.setEmail(userDto.getEmail());
+        if(userDto.getPassword() != null)
+            user.setPassword(userDto.getPassword());
+        if(userDto.getEnabled() != null)
+            user.setEnabled(userDto.getEnabled());
+        if(userDto.getLocked() != null)
+            user.setLocked(userDto.getLocked());
     }
 }

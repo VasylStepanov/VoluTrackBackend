@@ -1,6 +1,5 @@
 package com.application.user.service.impl;
 
-import com.application.user.cache.UserDataCache;
 import com.application.user.dto.UserDto;
 import com.application.user.model.User;
 import com.application.user.repository.UserRepository;
@@ -9,9 +8,9 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 
@@ -22,48 +21,43 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    UserDataCache userDataCache;
-
     @Override
     public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
+        try {
+            return userRepository.findByEmail(email).get();
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override
     public User findById(UUID id) {
-        User user = userRepository.findById(id).orElse(null);
-        userDataCache.setUserToCache(user);
-        return user;
+        try {
+            return userRepository.findById(id).get();
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override
     public void updateUser(User user, UserDto userDto){
-
-        if(userDto.getFullName() != null)
-            user.setFullName(userDto.getFullName());
-        if(userDto.getEmail() != null)
-            user.setEmail(userDto.getEmail());
-        if(userDto.getPassword() != null)
-            user.setPassword(userDto.getPassword());
-        if(userDto.getEnabled() != null)
-            user.setEnabled(userDto.getEnabled());
-        if(userDto.getLocked() != null)
-            user.setLocked(userDto.getLocked());
-
-        userDataCache.setUserToCache(user);
+        UserDto.updateUser(user, userDto);
     }
 
     @Override
     public void createUser(User user) {
-        userRepository.save(user);
-        userDataCache.setUserToCache(user);
+        try {
+            userRepository.save(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Email is already taken!");
+        }
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Get user from cache if present, otherwise get from DB
-        User user = userDataCache.getUserFromCacheByEmail(username);
-        return user == null ? findUserByEmail(username) : user;
+    public UserDetails loadUserByUsername(String username) {
+        return findUserByEmail(username);
     }
 }

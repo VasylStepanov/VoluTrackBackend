@@ -5,6 +5,7 @@ import com.application.registration.service.RegistrationService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,11 @@ public class RegistrationController {
 
     @PostMapping
     public ResponseEntity<?> registration(@RequestBody RegistrationRequest registrationRequest){
-        return ResponseEntity.ok(registrationService.register(registrationRequest));
+        try {
+            return ResponseEntity.ok(registrationService.register(registrationRequest));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PostMapping("/resend")

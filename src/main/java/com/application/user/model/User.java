@@ -1,6 +1,6 @@
 package com.application.user.model;
 
-import com.application.authentication.token.Token;
+import com.application.security.token.Token;
 import com.application.registration.module.ConfirmationEmail;
 import jakarta.persistence.*;
 import lombok.*;

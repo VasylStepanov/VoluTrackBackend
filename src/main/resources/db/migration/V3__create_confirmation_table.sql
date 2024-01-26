@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS user_data.confirmation_email(
     token VARCHAR(36) NOT NULL,
     created_at TIMESTAMP(6) NOT NULL,
     expires_at TIMESTAMP(6) NOT NULL,
-    CONSTRAINT fk_user_id FOREIGN KEY(id) REFERENCES user_data.users(id)
+    CONSTRAINT fk_user_id FOREIGN KEY(id) REFERENCES user_data.users(id) ON DELETE CASCADE
 );

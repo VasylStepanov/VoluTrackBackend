@@ -1,7 +1,7 @@
-package com.application.authentication.config;
+package com.application.security.config;
 
 
-import com.application.authentication.security.JwtAuthorizationFilter;
+import com.application.security.service.JwtAuthorizationFilter;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +29,6 @@ public class SecurityConfig {
     @Autowired
     JwtAuthorizationFilter jwtAuthorizationFilter;
 
-    @Autowired
-    LogoutHandler logoutHandler;
-
     @Value("${security.access-token.token-name}")
     String accessTokenName;
 
@@ -41,7 +38,11 @@ public class SecurityConfig {
             HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v*/authentication/**", "/api/v*/registration/**", "/api/v*/authentication/logout").permitAll()
+                        .requestMatchers(
+                                "/v3/api-docs/**", "/swagger-ui/**",
+                                "/api/v*/home/**",
+                                "/api/v*/authentication/**",
+                                "/api/v*/registration/**").permitAll()
                         .requestMatchers("/api/v*/user_v_i/**").hasRole("USER_V_I")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
@@ -50,7 +51,6 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
                         .logoutUrl("/api/v*/authentication/logout")
-                        .addLogoutHandler(logoutHandler)
                         .deleteCookies(accessTokenName, "JSESSIONID")
                         .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()))
                 .build();

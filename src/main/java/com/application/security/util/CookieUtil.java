@@ -1,4 +1,4 @@
-package com.application.authentication.util;
+package com.application.security.util;
 
 import jakarta.servlet.http.Cookie;
 import lombok.AccessLevel;

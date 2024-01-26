@@ -1,5 +1,5 @@
 server:
-  port: ${PORT}
+  port: ${APPLICATION_PORT}
 
 sender:
   email: ${EMAIL}
@@ -20,15 +20,10 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    url: jdbc:postgresql://localhost:${SQL_PORT}/${DB_NAME}
-    username: ${SQL_USERNAME}
-    password: ${SQL_PASSWORD}
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
-  redis:
-    host: ${REDIS_HOSTNAME}
-    port: ${REDIS_PORT}
-    password: ${REDIS_PASSWORD}
-    timeout: ${REDIS_SAVE}
   mail:
     host: smtp.gmail.com
     post: 587
@@ -46,3 +41,7 @@ spring:
 logging:
   file:
     name: project.log
+
+springdoc:
+  swagger-ui:
+    path=/swagger-ui

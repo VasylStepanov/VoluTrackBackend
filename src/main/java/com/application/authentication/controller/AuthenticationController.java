@@ -1,9 +1,9 @@
 package com.application.authentication.controller;
 
 import com.application.authentication.dto.request.AuthenticationRequest;
-import com.application.authentication.dto.request.RefreshRequest;
 import com.application.authentication.service.AuthenticationService;
-import com.application.authentication.util.SecurityCipher;
+import com.application.security.util.SecurityCipher;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/authentication")
@@ -42,7 +44,7 @@ public class AuthenticationController {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            String decryptedAccessToken = securityCipher.decrypt(accessToken);
+            String decryptedAccessToken = accessToken == null ? null : securityCipher.decrypt(accessToken);
 
             return authenticationService.authentication(decryptedAccessToken, request);
         } catch (DisabledException e) {
@@ -56,10 +58,16 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshAccessToken(@CookieValue(name = "accessToken", required = false) String accessToken,
-                                          @RequestBody RefreshRequest request) {
+    public ResponseEntity<?> refreshAccessToken(@CookieValue(name = "accessToken", required = false) String accessToken) {
+        if(accessToken == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No token");
         String decryptedAccessToken = securityCipher.decrypt(accessToken);
 
-        return authenticationService.refreshAccessToken(decryptedAccessToken, request);
+        return authenticationService.refreshAccessToken(decryptedAccessToken);
+    }
+
+    @PostMapping("/logout")
+    public void logout(@RequestBody HttpServletRequest request){
+        authenticationService.logout(request);
     }
 }

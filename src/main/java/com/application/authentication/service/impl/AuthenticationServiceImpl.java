@@ -1,14 +1,14 @@
 package com.application.authentication.service.impl;
 
-import com.application.authentication.dto.request.RefreshRequest;
-import com.application.authentication.security.JwtService;
+import com.application.security.service.JwtService;
 import com.application.authentication.service.AuthenticationService;
 import com.application.authentication.dto.request.AuthenticationRequest;
-import com.application.authentication.token.Token;
-import com.application.authentication.token.TokenRepository;
-import com.application.authentication.util.CookieUtil;
+import com.application.security.token.Token;
+import com.application.security.token.TokenRepository;
+import com.application.security.util.CookieUtil;
 import com.application.user.model.User;
 import com.application.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -51,18 +51,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public ResponseEntity<?> authentication(String decryptedAccessToken, AuthenticationRequest request) {
         User user = userService.findUserByEmail(request.email());
 
-        Token token = user.getTokens().stream().filter(x -> x.getIpAddress().equals(request.ipAddress())).findAny().orElse(null);
-        boolean isRefreshTokenInvalid = token == null || !jwtService.isTokenValid(token.getRefreshToken());
-        if(isRefreshTokenInvalid) {
-            Date currentDate = new Date(System.currentTimeMillis());
-            String jwtRefresh = jwtService.generateRefreshToken(user, currentDate);
+        Token token = user.getTokens().stream().filter(x -> x.getUser().getId().equals(user.getId())).findAny().orElse(null);
+        boolean isRefreshTokenInvalid = token != null && !jwtService.isTokenValid(token.getRefreshToken());
+
+        if(token == null) {
+            String jwtRefresh = jwtService.generateRefreshToken(user);
+
             token = Token.builder()
                     .refreshToken(jwtRefresh)
-                    .ipAddress(request.ipAddress())
-                    .expiresAt(new Date(currentDate.getTime() + refreshExpiration))
                     .user(user)
                     .build();
+
             saveRefreshToken(token);
+        }
+
+        if(isRefreshTokenInvalid) {
+            String jwtRefresh = jwtService.generateRefreshToken(user);
+            token.setRefreshToken(jwtRefresh);
         }
 
         if(isRefreshTokenInvalid || !jwtService.isTokenValid(decryptedAccessToken)) {
@@ -77,12 +82,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> refreshAccessToken(String decryptedAccessToken, RefreshRequest request) {
+    public ResponseEntity<?> refreshAccessToken(String decryptedAccessToken) {
         boolean isAccessTokenValid = jwtService.isTokenValid(decryptedAccessToken);
         if(isAccessTokenValid)
             return ResponseEntity.ok("User is already authenticated.");
 
-        Token token = tokenRepository.findByIpAddress(request.ipAddress()).orElse(null);
+        UUID tokenId = jwtService.extractTokenId(decryptedAccessToken);
+
+        Token token = tokenRepository.findById(tokenId).orElse(null);
         if(token == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User need to authenticate!");
 
@@ -97,6 +104,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             tokenRepository.removeByRefreshToken(token.getRefreshToken());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User should re-authenticate to the app!");
         }
+    }
+
+    @Override
+    public void logout(HttpServletRequest request){
+        String token = cookieUtil.getAccessTokenCookie(request.getCookies());
+        if(token == null)
+            throw new IllegalStateException("User isn't authenticated");
+        UUID tokenId = jwtService.extractTokenId(token);
+        tokenRepository.removeById(tokenId);
     }
 
     private void saveRefreshToken(Token token) {

@@ -1,4 +1,4 @@
-package com.application.authentication.util;
+package com.application.security.util;
 
 import jakarta.annotation.PostConstruct;
 import lombok.AccessLevel;

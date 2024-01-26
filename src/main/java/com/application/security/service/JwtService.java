@@ -1,4 +1,4 @@
-package com.application.authentication.security;
+package com.application.security.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -27,17 +27,17 @@ public class JwtService {
     long refreshExpiration;
 
     public String generateAccessToken(UserDetails user, String ...args) {
-        return buildToken(Map.of("token_id", args[0], "role", args[1]), user, accessExpiration, new Date(System.currentTimeMillis()));
+        return buildToken(Map.of("token_id", args[0], "role", args[1]), user, accessExpiration);
     }
 
-    public String generateRefreshToken(UserDetails user, Date currentTime) {
-        return buildToken(new HashMap<>(), user, refreshExpiration, currentTime);
+    public String generateRefreshToken(UserDetails user) {
+        return buildToken(new HashMap<>(), user, refreshExpiration);
     }
 
     private String buildToken(Map<String, Object> extraClaims,
                               UserDetails user,
-                              long expiration,
-                              Date currentTime) {
+                              long expiration) {
+        Date currentTime = new Date(System.currentTimeMillis());
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(user.getUsername())
@@ -59,6 +59,10 @@ public class JwtService {
     public String extractRole(String token) {
         return extractClaims(token,
                 (claims) -> claims.get("role", String.class));
+    }
+
+    public Date extractExpirationDate(String token){
+        return extractClaims(token, Claims::getExpiration);
     }
 
     public boolean isTokenValid(String token){

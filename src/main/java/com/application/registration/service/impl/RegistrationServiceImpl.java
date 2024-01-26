@@ -66,9 +66,8 @@ public class RegistrationServiceImpl implements RegistrationService {
         if(LocalDateTime.now().isAfter(expiresAt))
             throw new ConfirmationEmailException("Token is expired.");
 
-        User user = confirmationEmail.getUser();
-        userService.updateUser(user, UserDto.builder().enabled(true).build());
         confirmationEmail.setConfirmed(true);
+        userService.updateUser(confirmationEmail.getUser(), UserDto.builder().enabled(true).build());
 
         return "Successfully signed up!";
     }
@@ -100,7 +99,10 @@ public class RegistrationServiceImpl implements RegistrationService {
         Role role = roleRepository
                 .findByName(registrationRequest.role())
                 .orElseThrow(() -> new IllegalStateException("Role not found."));
-        User user = User.builder()
+
+        User user;
+        try {
+            user = User.builder()
                 .fullName(registrationRequest.fullName())
                 .email(validator.eitherEmailIsValid(registrationRequest.email()))
                 .password(passwordEncoder.encode(validator.eitherPasswordIsValid(registrationRequest.password())))
@@ -108,11 +110,10 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .enabled(false)
                 .role(role)
                 .build();
-        try {
             userService.createUser(user);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            throw new RegistrationException("Email is already taken!");
+            throw new RegistrationException(e.getMessage());
         }
 
         String token = UUID.randomUUID().toString();

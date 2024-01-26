@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  application:
+    image: volutrack
+    container_name: application_volutrack
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - ${CONTAINER_PORT}:${APPLICATION_PORT}
+    depends_on:
+      - postgres
+    environment:
+      COMPOSE_PROJECT_NAME: volutrack
+
+  postgres:
+    container_name: postgres_volutrack
+    image: postgres:alpine
+    restart: no
+    ports:
+      - ${DB_PORT}:5432
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}

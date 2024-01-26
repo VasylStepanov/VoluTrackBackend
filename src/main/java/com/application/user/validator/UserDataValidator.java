@@ -17,6 +17,6 @@ public class UserDataValidator {
         final String PASSWORD_REGEX_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[_!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
         if(password.matches(PASSWORD_REGEX_PATTERN))
             return password;
-        throw new ValidationException("Password is invalid!");
+        throw new ValidationException("Password is invalid! Password should contain at least 1 Upper case letter, 1 symbol and 1 number, and 8 or more letters, but less than 20.");
     }
 }

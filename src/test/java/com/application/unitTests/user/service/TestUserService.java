@@ -1,6 +1,5 @@
 package com.application.unitTests.user.service;
 
-import com.application.configuration.TestRedisConfiguration;
 import com.application.user.model.Role;
 import com.application.user.model.User;
 import com.application.user.repository.RoleRepository;
@@ -17,7 +16,7 @@ import java.util.UUID;
 
 @Transactional
 @Sql("/db/test/user_added.sql")
-@SpringBootTest(classes = TestRedisConfiguration.class)
+@SpringBootTest
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class TestUserService {
 
@@ -57,7 +56,7 @@ public class TestUserService {
     @Test
     @Order(2)
     public void testFindUserByEmail_InvalidId_ThrowException(){
-        Assertions.assertNull(userService.findById(UUID.fromString("17a996cb-41c0-4fe1-a68f-7d48656ce95f")));
+        Assertions.assertThrows(RuntimeException.class, () -> userService.findById(UUID.fromString("17a996cb-41c0-4fe1-a68f-7d48656ce95f")));
         LOG.info("Test 2: Successfully accomplished!");
     }
 
@@ -87,7 +86,7 @@ public class TestUserService {
     @Test
     @Order(4)
     public void testFindUserByEmail_InvalidEmail_ThrowException(){
-        Assertions.assertNull(userService.findUserByEmail("washington11@gmail.com"));
+        Assertions.assertThrows(RuntimeException.class, () -> userService.findUserByEmail("washington11@gmail.com"));
         LOG.info("Test 4: Successfully accomplished!");
     }
 }
