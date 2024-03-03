@@ -49,11 +49,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if(request.getCookies() != null)
             try {
                 String jwt = cookieUtil.getAccessTokenCookie(request.getCookies());
-                if (disabledTokenService.isDisabled(jwt))
-                    throw new RuntimeException("Access token is disabled");
-                if(StringUtils.hasText(jwt) && jwtService.isTokenValid(jwt)){
-                    Authentication authentication = jwtService.getAuthentication(jwt);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                if(StringUtils.hasText(jwt)) {
+                    if (disabledTokenService.isDisabled(jwt))
+                        throw new RuntimeException("Access token is disabled");
+                    if (jwtService.isTokenValid(jwt)) {
+                        Authentication authentication = jwtService.getAuthentication(jwt);
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
                 }
             } catch (Exception e) {
                 log.error(e.getMessage());
