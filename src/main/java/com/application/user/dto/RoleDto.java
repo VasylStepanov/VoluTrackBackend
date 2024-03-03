@@ -1,6 +1,5 @@
 package com.application.user.dto;
 
-
 import com.application.user.model.Role;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

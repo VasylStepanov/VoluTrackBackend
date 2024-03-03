@@ -1,7 +1,6 @@
 package com.application.registration.module;
 
 import com.application.user.model.User;
-import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

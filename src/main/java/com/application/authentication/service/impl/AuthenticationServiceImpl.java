@@ -8,7 +8,6 @@ import com.application.security.token.TokenRepository;
 import com.application.security.util.CookieUtil;
 import com.application.user.model.User;
 import com.application.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
