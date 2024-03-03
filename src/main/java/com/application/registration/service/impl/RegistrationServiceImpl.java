@@ -13,13 +13,19 @@ import com.application.registration.service.RegistrationService;
 import com.application.user.repository.RoleRepository;
 import com.application.user.service.UserService;
 import com.application.user.validator.UserDataValidator;
+import freemarker.template.Template;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -43,7 +49,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public String register(RegistrationRequest registrationRequest) {
-        String token = signUpUser(registrationRequest);
+        //String token = signUpUser(registrationRequest);
+        String token = "132";
         Map<String, Object> models = Map.of(
                 "name", String.format("%s %s", registrationRequest.firstName(), registrationRequest.lastName()),
                 "link", link + token);
