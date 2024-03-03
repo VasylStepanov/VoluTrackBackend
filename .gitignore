@@ -4,6 +4,9 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+project.log*
+/src/main/resources/local-data
+/local-data
 
 ### STS ###
 .apt_generated

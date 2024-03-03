@@ -38,6 +38,9 @@ public class EmailServiceImpl implements EmailService {
     @Async
     public void send(String to, Map<String, Object> models) {
         try {
+            if(to.equals(email))
+                throw new MessagingException();
+
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, "utf-8");
             Template template = configuration.getTemplate("email.ftl");

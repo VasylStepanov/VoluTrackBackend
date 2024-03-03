@@ -14,7 +14,9 @@ import java.util.UUID;
 public class UserDto {
     UUID id;
 
-    String fullName;
+    String firstName;
+
+    String lastName;
 
     String email;
 
@@ -28,7 +30,8 @@ public class UserDto {
 
     public static UserDto toUserDto(User user) {
         return new UserDto(user.getId(),
-                user.getFullName(),
+                user.getFirstName(),
+                user.getLastName(),
                 user.getEmail(),
                 user.getPassword(),
                 user.isLocked(),
@@ -41,7 +44,8 @@ public class UserDto {
             return null;
         return User.builder()
                 .id(userDto.getId())
-                .fullName(userDto.getFullName())
+                .firstName(userDto.getFirstName())
+                .lastName(userDto.getLastName())
                 .email(userDto.getEmail())
                 .password(userDto.getPassword())
                 .locked(userDto.getLocked())
@@ -51,8 +55,10 @@ public class UserDto {
     }
 
     public static void updateUser(User user, UserDto userDto){
-        if(userDto.getFullName() != null)
-            user.setFullName(userDto.getFullName());
+        if(userDto.getFirstName() != null)
+            user.setFirstName(userDto.getFirstName());
+        if(userDto.getLastName() != null)
+            user.setLastName(userDto.getLastName());
         if(userDto.getEmail() != null)
             user.setEmail(userDto.getEmail());
         if(userDto.getPassword() != null)

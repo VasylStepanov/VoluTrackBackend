@@ -1,5 +1,6 @@
 package com.application.user.service;
 
+import com.application.registration.dto.request.RegistrationRequest;
 import com.application.user.dto.UserDto;
 import com.application.user.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,7 +13,10 @@ public interface UserService extends UserDetailsService {
 
     User findById(UUID id);
 
+    void updateUser(UserDto userDto);
+
     void updateUser(User user, UserDto userDto);
 
-    void createUser(User user);
-}
+    void setRole(User user, String role);
+
+    User createUser(RegistrationRequest registrationRequest);}

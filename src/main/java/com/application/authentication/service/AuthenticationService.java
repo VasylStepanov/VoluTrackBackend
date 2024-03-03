@@ -6,10 +6,8 @@ import org.springframework.http.ResponseEntity;
 
 public interface AuthenticationService {
 
-    ResponseEntity<?> authentication(String decryptedAccessToken,
-                                     AuthenticationRequest request);
+    ResponseEntity<?> authentication(AuthenticationRequest request);
 
     ResponseEntity<?> refreshAccessToken(String decryptedAccessToken);
 
-    void logout(HttpServletRequest request);
 }

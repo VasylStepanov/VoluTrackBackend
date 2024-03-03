@@ -1,5 +1,7 @@
 package com.application.security.service;
 
+import com.application.user.model.Role;
+import com.application.user.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -7,14 +9,14 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 @Component
@@ -26,8 +28,9 @@ public class JwtService {
     @Value("${security.refresh-token.expiration}")
     long refreshExpiration;
 
+
     public String generateAccessToken(UserDetails user, String ...args) {
-        return buildToken(Map.of("token_id", args[0], "role", args[1]), user, accessExpiration);
+        return buildToken(Map.of("user_id", args[0], "token_id", args[1], "role", args[2]), user, accessExpiration);
     }
 
     public String generateRefreshToken(UserDetails user) {
@@ -72,6 +75,22 @@ public class JwtService {
             return false;
         }
         return isTokenNonExpired(token);
+    }
+
+    public Authentication getAuthentication(String token){
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(generateKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        User principal = new User();
+        principal.setEmail(claims.getSubject());
+        principal.setRole(Role.builder().name((String)claims.get("role")).build());
+
+        Collection<? extends GrantedAuthority> authorities = principal.getAuthorities();
+
+        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
     private boolean isTokenNonExpired(String token) {

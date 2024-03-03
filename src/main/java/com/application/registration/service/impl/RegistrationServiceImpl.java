@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@Transactional
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RegistrationServiceImpl implements RegistrationService {
 
@@ -32,19 +33,10 @@ public class RegistrationServiceImpl implements RegistrationService {
     UserService userService;
 
     @Autowired
-    UserDataValidator validator;
-
-    @Autowired
     EmailService emailService;
 
     @Autowired
     ConfirmationEmailService confirmationEmailService;
-
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
     @Value("${sender.link}")
     String link;
@@ -52,13 +44,14 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public String register(RegistrationRequest registrationRequest) {
         String token = signUpUser(registrationRequest);
-        Map<String, Object> models = Map.of("name", registrationRequest.fullName(), "link", link + token);
+        Map<String, Object> models = Map.of(
+                "name", String.format("%s %s", registrationRequest.firstName(), registrationRequest.lastName()),
+                "link", link + token);
         emailService.send(registrationRequest.email(), models);
         return "Send confirmation";
     }
 
     @Override
-    @Transactional
     public String confirmToken(String token) {
         ConfirmationEmail confirmationEmail = confirmationEmailService.getToken(token);
         LocalDateTime expiresAt = confirmationEmail.getExpiresAt();
@@ -73,7 +66,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    @Transactional
     public String resendConfirmToken(String token){
         ConfirmationEmail confirmationEmail = confirmationEmailService.getToken(token);
         LocalDateTime expiresAt = confirmationEmail.getExpiresAt();
@@ -89,32 +81,17 @@ public class RegistrationServiceImpl implements RegistrationService {
         confirmationEmail.setCreatedAt(LocalDateTime.now());
         confirmationEmail.setExpiresAt(LocalDateTime.now().plusMinutes(15));
 
-        Map<String, Object> models = Map.of("name", confirmationEmail.getUser().getFullName(), "link", link + token);
+        Map<String, Object> models = Map.of(
+                "name", String.format("%s %s", confirmationEmail.getUser().getFirstName(), confirmationEmail.getUser().getFirstName()),
+                "link", link + newToken);
         emailService.send(confirmationEmail.getUser().getEmail(), models);
 
         return "Resent confirmation";
     }
 
     private String signUpUser(RegistrationRequest registrationRequest) {
-        Role role = roleRepository
-                .findByName(registrationRequest.role())
-                .orElseThrow(() -> new IllegalStateException("Role not found."));
 
-        User user;
-        try {
-            user = User.builder()
-                .fullName(registrationRequest.fullName())
-                .email(validator.eitherEmailIsValid(registrationRequest.email()))
-                .password(passwordEncoder.encode(validator.eitherPasswordIsValid(registrationRequest.password())))
-                .locked(false)
-                .enabled(false)
-                .role(role)
-                .build();
-            userService.createUser(user);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw new RegistrationException(e.getMessage());
-        }
+        User user = userService.createUser(registrationRequest);
 
         String token = UUID.randomUUID().toString();
 

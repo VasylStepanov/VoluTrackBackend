@@ -8,4 +8,4 @@ RUN gradle build --stacktrace -x test
 FROM openjdk:17-alpine
 COPY --from=builder /home/app/build/libs/VoluTrackBack-0.0.1-SNAPSHOT.jar /home/application.jar
 EXPOSE ${CONTAINER_PORT}
-ENTRYPOINT ["java", "-jar", "/home/application.jar", "--spring.profiles.active=dev"]
+ENTRYPOINT ["java", "-jar", "/home/application.jar"]
