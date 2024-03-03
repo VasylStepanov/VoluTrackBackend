@@ -13,18 +13,25 @@ import com.application.registration.service.RegistrationService;
 import com.application.user.repository.RoleRepository;
 import com.application.user.service.UserService;
 import com.application.user.validator.UserDataValidator;
+import freemarker.template.Template;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@Transactional
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RegistrationServiceImpl implements RegistrationService {
 
@@ -32,33 +39,26 @@ public class RegistrationServiceImpl implements RegistrationService {
     UserService userService;
 
     @Autowired
-    UserDataValidator validator;
-
-    @Autowired
     EmailService emailService;
 
     @Autowired
     ConfirmationEmailService confirmationEmailService;
-
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
     @Value("${sender.link}")
     String link;
 
     @Override
     public String register(RegistrationRequest registrationRequest) {
-        String token = signUpUser(registrationRequest);
-        Map<String, Object> models = Map.of("name", registrationRequest.fullName(), "link", link + token);
+        //String token = signUpUser(registrationRequest);
+        String token = "132";
+        Map<String, Object> models = Map.of(
+                "name", String.format("%s %s", registrationRequest.firstName(), registrationRequest.lastName()),
+                "link", link + token);
         emailService.send(registrationRequest.email(), models);
         return "Send confirmation";
     }
 
     @Override
-    @Transactional
     public String confirmToken(String token) {
         ConfirmationEmail confirmationEmail = confirmationEmailService.getToken(token);
         LocalDateTime expiresAt = confirmationEmail.getExpiresAt();
@@ -73,7 +73,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    @Transactional
     public String resendConfirmToken(String token){
         ConfirmationEmail confirmationEmail = confirmationEmailService.getToken(token);
         LocalDateTime expiresAt = confirmationEmail.getExpiresAt();
@@ -89,32 +88,17 @@ public class RegistrationServiceImpl implements RegistrationService {
         confirmationEmail.setCreatedAt(LocalDateTime.now());
         confirmationEmail.setExpiresAt(LocalDateTime.now().plusMinutes(15));
 
-        Map<String, Object> models = Map.of("name", confirmationEmail.getUser().getFullName(), "link", link + token);
+        Map<String, Object> models = Map.of(
+                "name", String.format("%s %s", confirmationEmail.getUser().getFirstName(), confirmationEmail.getUser().getFirstName()),
+                "link", link + newToken);
         emailService.send(confirmationEmail.getUser().getEmail(), models);
 
         return "Resent confirmation";
     }
 
     private String signUpUser(RegistrationRequest registrationRequest) {
-        Role role = roleRepository
-                .findByName(registrationRequest.role())
-                .orElseThrow(() -> new IllegalStateException("Role not found."));
 
-        User user;
-        try {
-            user = User.builder()
-                .fullName(registrationRequest.fullName())
-                .email(validator.eitherEmailIsValid(registrationRequest.email()))
-                .password(passwordEncoder.encode(validator.eitherPasswordIsValid(registrationRequest.password())))
-                .locked(false)
-                .enabled(false)
-                .role(role)
-                .build();
-            userService.createUser(user);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw new RegistrationException(e.getMessage());
-        }
+        User user = userService.createUser(registrationRequest);
 
         String token = UUID.randomUUID().toString();
 

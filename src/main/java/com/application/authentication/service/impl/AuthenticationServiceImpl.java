@@ -18,6 +18,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +30,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
+@Transactional
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenticationServiceImpl implements AuthenticationService {
 
@@ -47,72 +53,59 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     long refreshExpiration;
 
     @Override
-    @Transactional
-    public ResponseEntity<?> authentication(String decryptedAccessToken, AuthenticationRequest request) {
-        User user = userService.findUserByEmail(request.email());
+    public ResponseEntity<?> authentication(AuthenticationRequest request) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    request.email(), request.password()
+            ));
+            authentication.getDetails();
 
-        Token token = user.getTokens().stream().filter(x -> x.getUser().getId().equals(user.getId())).findAny().orElse(null);
-        boolean isRefreshTokenInvalid = token != null && !jwtService.isTokenValid(token.getRefreshToken());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            User user = userService.findUserByEmail(request.email());
+            Token token = new Token();
 
-        if(token == null) {
-            String jwtRefresh = jwtService.generateRefreshToken(user);
-
-            token = Token.builder()
-                    .refreshToken(jwtRefresh)
-                    .user(user)
-                    .build();
-
-            saveRefreshToken(token);
-        }
-
-        if(isRefreshTokenInvalid) {
             String jwtRefresh = jwtService.generateRefreshToken(user);
             token.setRefreshToken(jwtRefresh);
-        }
+            token.setUser(user);
+            saveRefreshToken(token);
 
-        if(isRefreshTokenInvalid || !jwtService.isTokenValid(decryptedAccessToken)) {
             HttpHeaders httpHeaders = new HttpHeaders();
-            String jwtAccess = jwtService.generateAccessToken(user, String.valueOf(token.getId()), user.getRole().getName());
+            String jwtAccess = jwtService.generateAccessToken(user, String.valueOf(user.getId()), String.valueOf(token.getId()), user.getRole().getName());
             saveAccessToken(httpHeaders, jwtAccess);
             return ResponseEntity.ok().headers(httpHeaders).body("Successfully authenticated.");
+        } catch (DisabledException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User account is banned!");
+        } catch (LockedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User account is locked!");
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email or password are wrong!");
         }
-
-        return ResponseEntity.ok("User is already authenticated.");
     }
 
     @Override
-    @Transactional
-    public ResponseEntity<?> refreshAccessToken(String decryptedAccessToken) {
-        boolean isAccessTokenValid = jwtService.isTokenValid(decryptedAccessToken);
-        if(isAccessTokenValid)
+    public ResponseEntity<?> refreshAccessToken(String accessToken) {
+        boolean isAccessTokenValid = jwtService.isTokenValid(accessToken);
+        if (isAccessTokenValid)
             return ResponseEntity.ok("User is already authenticated.");
 
-        UUID tokenId = jwtService.extractTokenId(decryptedAccessToken);
+        UUID tokenId = jwtService.extractTokenId(accessToken);
 
         Token token = tokenRepository.findById(tokenId).orElse(null);
-        if(token == null)
+        if (token == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User need to authenticate!");
 
         boolean isRefreshTokenValid = jwtService.isTokenValid(token.getRefreshToken());
 
-        if(isRefreshTokenValid) {
+        if (isRefreshTokenValid) {
             HttpHeaders httpHeaders = new HttpHeaders();
-            String jwtAccess = jwtService.generateAccessToken(token.getUser(), String.valueOf(token.getId()), token.getUser().getRole().getName());
+            String jwtAccess = jwtService.generateAccessToken(token.getUser(), String.valueOf(token.getUser().getId()), String.valueOf(token.getId()), token.getUser().getRole().getName());
             saveAccessToken(httpHeaders, jwtAccess);
             return ResponseEntity.ok().headers(httpHeaders).body("Successfully refreshed.");
         } else {
             tokenRepository.removeByRefreshToken(token.getRefreshToken());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User should re-authenticate to the app!");
         }
-    }
-
-    @Override
-    public void logout(HttpServletRequest request){
-        String token = cookieUtil.getAccessTokenCookie(request.getCookies());
-        if(token == null)
-            throw new IllegalStateException("User isn't authenticated");
-        UUID tokenId = jwtService.extractTokenId(token);
-        tokenRepository.removeById(tokenId);
     }
 
     private void saveRefreshToken(Token token) {

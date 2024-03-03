@@ -28,8 +28,11 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID id;
 
-    @Column(name = "full_name", length = 64, nullable = false)
-    String fullName;
+    @Column(name = "firstname", length = 64, nullable = false)
+    String firstName;
+
+    @Column(name = "lastname", length = 64, nullable = false)
+    String lastName;
 
     @Column(length = 80, nullable = false)
     String email;

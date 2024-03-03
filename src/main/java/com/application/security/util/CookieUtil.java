@@ -25,7 +25,7 @@ public class CookieUtil {
     SecurityCipher securityCipher;
 
     public HttpCookie createAccessTokenCookie(String token){
-        return ResponseCookie.from(accessTokenName, securityCipher.encrypt(token)).maxAge(duration).path("/").build();
+        return ResponseCookie.from(accessTokenName, securityCipher.encrypt(token)).httpOnly(true).secure(true).maxAge(duration).path("/").build();
     }
 
     public String getAccessTokenCookie(Cookie[] cookies){
@@ -36,6 +36,6 @@ public class CookieUtil {
     }
 
     public HttpCookie deleteAccessTokenCookie(){
-        return ResponseCookie.from(accessTokenName, "").maxAge(0).httpOnly(true).path("/").build();
+        return ResponseCookie.from(accessTokenName, "").maxAge(0).path("/").build();
     }
 }

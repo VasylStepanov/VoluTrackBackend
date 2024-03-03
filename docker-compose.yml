@@ -12,7 +12,6 @@ services:
       - postgres
     environment:
       COMPOSE_PROJECT_NAME: volutrack
-
   postgres:
     container_name: postgres_volutrack
     image: postgres:alpine
@@ -23,3 +22,12 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+  redis:
+    container_name: redis_volutrack
+    image: redis:latest
+    restart: no
+    ports:
+      - ${REDIS_PORT}:6379
+    volumes:
+      - ./local-data:/data
+    command: redis-server --save ${REDIS_SAVE} 1 --requirepass ${REDIS_PASSWORD}

@@ -1,5 +1,6 @@
 package com.application.security.service;
 
+import com.application.security.token.DisabledTokenService;
 import com.application.security.util.CookieUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,11 +13,9 @@ import org.flywaydb.core.internal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -39,6 +38,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Autowired
     CookieUtil cookieUtil;
 
+    @Autowired
+    DisabledTokenService disabledTokenService;
+
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -47,14 +49,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if(request.getCookies() != null)
             try {
                 String jwt = cookieUtil.getAccessTokenCookie(request.getCookies());
-                if(StringUtils.hasText(jwt) && jwtService.isTokenValid(jwt)){
-                    String username = jwtService.extractUsername(jwt);
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities()
-                    );
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                if(StringUtils.hasText(jwt)) {
+                    if (disabledTokenService.isDisabled(jwt))
+                        throw new RuntimeException("Access token is disabled");
+                    if (jwtService.isTokenValid(jwt)) {
+                        Authentication authentication = jwtService.getAuthentication(jwt);
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
                 }
             } catch (Exception e) {
                 log.error(e.getMessage());

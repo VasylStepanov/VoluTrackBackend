@@ -1,6 +1,5 @@
 package com.application.security.config;
 
-
 import com.application.security.service.JwtAuthorizationFilter;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -29,28 +28,33 @@ public class SecurityConfig {
     @Autowired
     JwtAuthorizationFilter jwtAuthorizationFilter;
 
+    @Autowired
+    LogoutHandler logoutHandler;
+
     @Value("${security.access-token.token-name}")
     String accessTokenName;
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf(AbstractHttpConfigurer::disable)
+        return httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/v3/api-docs/**", "/swagger-ui/**",
-                                "/api/v*/home/**",
-                                "/api/v*/authentication/**",
-                                "/api/v*/registration/**").permitAll()
-                        .requestMatchers("/api/v*/user_v_i/**").hasRole("USER_V_I")
-                        .anyRequest().authenticated())
+                                "/v3/api-docs/**", "/swagger-ui/**"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/api/v*/authentication",
+                                "/api/v*/registration/**"
+                        ).anonymous()
+                        .requestMatchers("/api/v*/authentication/**").authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
                         .logoutUrl("/api/v*/authentication/logout")
+                        .addLogoutHandler(logoutHandler)
                         .deleteCookies(accessTokenName, "JSESSIONID")
                         .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()))
                 .build();
