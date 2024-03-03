@@ -1,6 +1,7 @@
 package com.application.registration.module;
 
 import com.application.user.model.User;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -25,13 +26,13 @@ public class ConfirmationEmail {
     boolean confirmed;
 
     @Column(nullable = false, length = 36)
-    private String token;
+    String token;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private LocalDateTime expiresAt;
+    LocalDateTime expiresAt;
 
     @MapsId
     @OneToOne
