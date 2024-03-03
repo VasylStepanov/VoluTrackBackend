@@ -29,9 +29,6 @@ public class SecurityConfig {
     JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Autowired
-    GetCsrfTokenFilter getCsrfTokenFilter;
-
-    @Autowired
     LogoutHandler logoutHandler;
 
     @Value("${security.access-token.token-name}")
