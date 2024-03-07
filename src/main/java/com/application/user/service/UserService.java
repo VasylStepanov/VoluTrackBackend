@@ -17,6 +17,7 @@ public interface UserService extends UserDetailsService {
 
     void updateUser(User user, UserDto userDto);
 
-    void setRole(User user, String role);
+    User createUser(RegistrationRequest registrationRequest);
 
-    User createUser(RegistrationRequest registrationRequest);}
+    void deleteById(UUID id);
+}

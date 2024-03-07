@@ -31,4 +31,4 @@ http://localhost:8080/swagger-ui/index.html
 ## Authors
 
 - Fullstack developer [@Vasyl Stepanov](https://www.github.com/VasylStepanov)
-- Techlead [@Bohdan Zimchenko](https://github.com/zimaaletto)
+- Team lead [@Bohdan Zimchenko](https://github.com/zimaaletto)

@@ -29,6 +29,8 @@ spring:
       host: ${REDIS_HOSTNAME}
       port: ${REDIS_PORT}
       password: ${REDIS_PASSWORD}
+      repositories:
+        enabled: false
   mail:
     host: smtp.gmail.com
     post: 587

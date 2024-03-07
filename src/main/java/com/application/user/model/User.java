@@ -2,6 +2,7 @@ package com.application.user.model;
 
 import com.application.security.token.Token;
 import com.application.registration.module.ConfirmationEmail;
+import com.application.volunteers.volunteer.model.Volunteer;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -50,11 +51,14 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id", nullable = false)
     Role role;
 
-    @OneToOne(mappedBy = "user", optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", optional = false, fetch = FetchType.LAZY)
     ConfirmationEmail confirmationEmail;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     List<Token> tokens;
+
+    @OneToOne(mappedBy = "user")
+    Volunteer volunteer;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

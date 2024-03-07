@@ -2,6 +2,7 @@ package com.application.security.util;
 
 import jakarta.servlet.http.Cookie;
 import lombok.AccessLevel;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,14 +29,13 @@ public class CookieUtil {
         return ResponseCookie.from(accessTokenName, securityCipher.encrypt(token)).httpOnly(true).secure(true).maxAge(duration).path("/").build();
     }
 
+    @SneakyThrows
     public String getAccessTokenCookie(Cookie[] cookies){
+        if(cookies == null)
+            throw new RuntimeException("Cookie is empty");
         return Stream.of(cookies)
                 .filter(cookie -> cookie.getName().equals(accessTokenName))
                 .map(cookie -> securityCipher.decrypt(cookie.getValue()))
-                .findFirst().orElse(null);
-    }
-
-    public HttpCookie deleteAccessTokenCookie(){
-        return ResponseCookie.from(accessTokenName, "").maxAge(0).path("/").build();
+                .findFirst().orElseThrow(() -> new RuntimeException("No access token"));
     }
 }
