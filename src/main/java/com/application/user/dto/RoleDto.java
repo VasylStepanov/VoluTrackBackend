@@ -17,7 +17,7 @@ public class RoleDto {
 
     String name;
 
-    public static RoleDto toRoleCache(Role role){
+    public static RoleDto toRoleDto(Role role){
         return new RoleDto(role.getId(),
                 role.getName());
     }

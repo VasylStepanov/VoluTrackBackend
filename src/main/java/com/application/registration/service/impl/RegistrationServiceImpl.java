@@ -9,6 +9,7 @@ import com.application.user.dto.UserDto;
 import com.application.user.model.User;
 import com.application.registration.service.RegistrationService;
 import com.application.user.service.UserService;
+import com.application.volunteers.volunteer.service.VolunteerService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +34,15 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     ConfirmationEmailService confirmationEmailService;
 
+    @Autowired
+    VolunteerService volunteerService;
+
     @Value("${sender.link}")
     String link;
 
     @Override
     public String register(RegistrationRequest registrationRequest) {
-        //String token = signUpUser(registrationRequest);
-        String token = "132";
+        String token = signUpUser(registrationRequest);
         Map<String, Object> models = Map.of(
                 "name", String.format("%s %s", registrationRequest.firstName(), registrationRequest.lastName()),
                 "link", link + token);
@@ -88,6 +91,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     private String signUpUser(RegistrationRequest registrationRequest) {
 
         User user = userService.createUser(registrationRequest);
+        volunteerService.saveVolunteerProfile(user);
 
         String token = UUID.randomUUID().toString();
 

@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userRepository.findByEmail(email).get();
         } catch (NoSuchElementException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("User with this email doesn't exist");
         }
     }
 
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userRepository.findById(id).get();
         } catch (NoSuchElementException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("User with this id doesn't exist");
         }
     }
 
@@ -67,9 +67,9 @@ public class UserServiceImpl implements UserService {
     @SneakyThrows
     public void updateUser(User user, UserDto userDto){
         if(userDto.getFirstName() != null)
-            user.setFirstName(userDto.getFirstName());
+            user.setFirstName(validator.eitherFirstNameIsValid(userDto.getFirstName()));
         if(userDto.getLastName() != null)
-            user.setLastName(userDto.getLastName());
+            user.setLastName(validator.eitherLastNameIsValid(userDto.getLastName()));
         if(userDto.getEmail() != null)
             user.setEmail(validator.eitherEmailIsValid(userDto.getEmail()));
         if(userDto.getPassword() != null)
@@ -82,25 +82,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @SneakyThrows
-    public void setRole(User user, String roleName) {
-        if(!user.getRole().getName().equals("ROLE_USER"))
-            throw new RuntimeException("Role is already set.");
-        Role role = roleRepository.findByName(roleName).orElseThrow(() -> new RuntimeException("Role not found."));
-        user.setRole(role);
-    }
-
-    @Override
-    @SneakyThrows
     public User createUser(RegistrationRequest registrationRequest) {
         Role role = roleRepository
                 .findByName("ROLE_USER")
                 .orElseThrow(() -> new IllegalStateException("Role not found."));
 
         User user = User.builder()
-                .firstName(registrationRequest.firstName())
-                .lastName(registrationRequest.lastName())
+                .firstName(validator.eitherFirstNameIsValidFull(registrationRequest.firstName()))
+                .lastName(validator.eitherLastNameIsValidFull(registrationRequest.lastName()))
                 .email(validator.eitherEmailIsValid(registrationRequest.email()))
-                .password(passwordEncoder.encode(validator.eitherPasswordIsValid(registrationRequest.password())))
+                .password(passwordEncoder.encode(validator.eitherPasswordIsValidFull(registrationRequest.password())))
                 .locked(false)
                 .enabled(false)
                 .role(role)
@@ -112,5 +103,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         return findUserByEmail(username);
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        userRepository.deleteById(id);
     }
 }

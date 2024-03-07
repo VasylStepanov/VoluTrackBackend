@@ -30,7 +30,7 @@ public class JwtService {
 
 
     public String generateAccessToken(UserDetails user, String ...args) {
-        return buildToken(Map.of("user_id", args[0], "token_id", args[1], "role", args[2]), user, accessExpiration);
+        return buildToken(Map.of("user_id", args[0], "token_id", args[1], "volunteer_id", args[2], "role", args[3]), user, accessExpiration);
     }
 
     public String generateRefreshToken(UserDetails user) {
@@ -54,9 +54,19 @@ public class JwtService {
         return extractClaims(token, Claims::getSubject);
     }
 
+    public UUID extractUserId(String token) {
+        return UUID.fromString(extractClaims(token,
+                (claims) -> claims.get("user_id", String.class)));
+    }
+
     public UUID extractTokenId(String token) {
         return UUID.fromString(extractClaims(token,
             (claims) -> claims.get("token_id", String.class)));
+    }
+
+    public UUID extractVolunteerId(String token) {
+        return UUID.fromString(extractClaims(token,
+                (claims) -> claims.get("volunteer_id", String.class)));
     }
 
     public String extractRole(String token) {

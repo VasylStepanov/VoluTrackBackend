@@ -69,7 +69,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             saveRefreshToken(token);
 
             HttpHeaders httpHeaders = new HttpHeaders();
-            String jwtAccess = jwtService.generateAccessToken(user, String.valueOf(user.getId()), String.valueOf(token.getId()), user.getRole().getName());
+            String jwtAccess = jwtService.generateAccessToken(user,
+                    String.valueOf(user.getId()),
+                    String.valueOf(token.getId()),
+                    String.valueOf(user.getVolunteer().getId()),
+                    user.getRole().getName());
             saveAccessToken(httpHeaders, jwtAccess);
             return ResponseEntity.ok().headers(httpHeaders).body("Successfully authenticated.");
         } catch (DisabledException e) {
@@ -98,7 +102,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (isRefreshTokenValid) {
             HttpHeaders httpHeaders = new HttpHeaders();
-            String jwtAccess = jwtService.generateAccessToken(token.getUser(), String.valueOf(token.getUser().getId()), String.valueOf(token.getId()), token.getUser().getRole().getName());
+            String jwtAccess = jwtService.generateAccessToken(token.getUser(),
+                    String.valueOf(token.getUser().getId()),
+                    String.valueOf(token.getId()),
+                    String.valueOf(token.getUser().getVolunteer().getId()),
+                    token.getUser().getRole().getName());
             saveAccessToken(httpHeaders, jwtAccess);
             return ResponseEntity.ok().headers(httpHeaders).body("Successfully refreshed.");
         } else {
