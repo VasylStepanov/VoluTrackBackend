@@ -42,10 +42,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/v3/api-docs/**", "/swagger-ui/**",
-                                "/api/v*/test/**", "/api/v*/volunteer/profile/getByEmail",
+                                "/api/v*/test/**",
+                                "/api/v*/volunteer/profile/getByEmail",
                                 "/api/v*/items/getAllItemsByUserEmail",
                                 "/api/v*/items/getAllItemTypes",
-                                "/api/v*/items/getAllItemMeasurements"
+                                "/api/v*/items/getAllItemMeasurements",
+                                "/api/v*/address/getByEmail"
                                 ).permitAll()
                         .requestMatchers(
                                 "/api/v*/authentication/**",
@@ -53,7 +55,8 @@ public class SecurityConfig {
                         ).anonymous()
                         .requestMatchers(
                                 "/api/v*/volunteer/**",
-                                "/api/v*/items/**").authenticated())
+                                "/api/v*/items/**",
+                                "/api/v*/address/**").authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

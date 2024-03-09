@@ -1,6 +1,6 @@
 package com.application.registration.service;
 
-import com.application.registration.dto.request.RegistrationRequest;
+import com.application.registration.dto.RegistrationRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface RegistrationService {

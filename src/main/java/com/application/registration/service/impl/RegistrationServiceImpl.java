@@ -1,6 +1,6 @@
 package com.application.registration.service.impl;
 
-import com.application.registration.dto.request.RegistrationRequest;
+import com.application.registration.dto.RegistrationRequest;
 import com.application.registration.email.EmailService;
 import com.application.registration.exception.ConfirmationEmailException;
 import com.application.registration.model.ConfirmationEmail;
