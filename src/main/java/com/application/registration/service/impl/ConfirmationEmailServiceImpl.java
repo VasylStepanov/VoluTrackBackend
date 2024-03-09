@@ -1,6 +1,6 @@
 package com.application.registration.service.impl;
 
-import com.application.registration.module.ConfirmationEmail;
+import com.application.registration.model.ConfirmationEmail;
 import com.application.registration.repository.ConfirmationEmailRepository;
 import com.application.registration.service.ConfirmationEmailService;
 import lombok.AccessLevel;

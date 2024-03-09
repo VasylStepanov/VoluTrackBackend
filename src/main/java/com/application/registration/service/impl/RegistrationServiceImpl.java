@@ -3,7 +3,7 @@ package com.application.registration.service.impl;
 import com.application.registration.dto.request.RegistrationRequest;
 import com.application.registration.email.EmailService;
 import com.application.registration.exception.ConfirmationEmailException;
-import com.application.registration.module.ConfirmationEmail;
+import com.application.registration.model.ConfirmationEmail;
 import com.application.registration.service.ConfirmationEmailService;
 import com.application.user.dto.UserDto;
 import com.application.user.model.User;
@@ -98,7 +98,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         ConfirmationEmail confirmation = ConfirmationEmail.builder()
                 .token(token)
                 .confirmed(false)
-                .createdAt(LocalDateTime.now())
                 .expiresAt(LocalDateTime.now().plusMinutes(15))
                 .user(user)
                 .build();

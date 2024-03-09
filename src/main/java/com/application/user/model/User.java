@@ -1,33 +1,30 @@
 package com.application.user.model;
 
+import com.application.config.BaseEntity;
 import com.application.security.token.Token;
-import com.application.registration.module.ConfirmationEmail;
+import com.application.registration.model.ConfirmationEmail;
 import com.application.volunteers.volunteer.model.Volunteer;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@EqualsAndHashCode(exclude = {"confirmationEmail", "tokens"})
+@SuperBuilder
+@EqualsAndHashCode(exclude = {"confirmationEmail", "tokens"}, callSuper = false)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity(name = "user")
 @Table(schema = "user_data", name = "users", uniqueConstraints = @UniqueConstraint(name = "uk_email", columnNames = { "email" }))
-public class User implements UserDetails {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
+public class User extends BaseEntity implements UserDetails {
 
     @Column(name = "firstname", length = 64, nullable = false)
     String firstName;
