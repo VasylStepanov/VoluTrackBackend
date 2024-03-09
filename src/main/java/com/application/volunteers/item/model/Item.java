@@ -1,29 +1,26 @@
 package com.application.volunteers.item.model;
 
+import com.application.config.BaseEntity;
 import com.application.volunteers.volunteer.model.Volunteer;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.UUID;
+import lombok.experimental.SuperBuilder;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Entity(name = "item")
 @Table(name = "items", schema = "volunteer_data")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Item {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
+public class Item extends BaseEntity {
 
     @Column(name = "name", length = 64, nullable = false)
     String name;
 
-    @Column(name = "description", length = 256, nullable = false)
+    @Column(name = "description", length = 512, nullable = false)
     String description;
 
     @Column(name = "amount", nullable = false)
