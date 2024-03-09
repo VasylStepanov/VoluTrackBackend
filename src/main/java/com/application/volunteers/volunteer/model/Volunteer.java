@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @SuperBuilder
 @Entity
-@Table(name = "volunteer", schema = "volunteer_data")
+@Table(name = "volunteer", schema = "volunteer_data", uniqueConstraints = @UniqueConstraint(name = "uk_volunteer_user_id", columnNames = {"user_id"}))
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Volunteer extends BaseEntity {
 
@@ -25,6 +25,6 @@ public class Volunteer extends BaseEntity {
     int helpCounter = 0;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     User user;
 }

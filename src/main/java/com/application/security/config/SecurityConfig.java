@@ -47,7 +47,8 @@ public class SecurityConfig {
                                 "/api/v*/items/getAllItemsByUserEmail",
                                 "/api/v*/items/getAllItemTypes",
                                 "/api/v*/items/getAllItemMeasurements",
-                                "/api/v*/address/getByEmail"
+                                "/api/v*/address/getByEmail",
+                                "/api/v*/car/getByEmail"
                                 ).permitAll()
                         .requestMatchers(
                                 "/api/v*/authentication/**",
@@ -56,7 +57,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/v*/volunteer/**",
                                 "/api/v*/items/**",
-                                "/api/v*/address/**").authenticated())
+                                "/api/v*/address/**",
+                                "/api/v*/car/**").authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

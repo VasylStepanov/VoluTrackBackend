@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -50,21 +51,21 @@ public class ItemController {
 
     @Operation(summary = "Get all possible items' types possible to set.")
     @GetMapping("/getAllItemTypes")
-    public ResponseEntity<List<ItemType>> getAllItemTypes(){
-        return ResponseEntity.ok(itemService.getAllItemTypes());
+    public ResponseEntity<Set<ItemType>> getAllItemTypes(){
+        return ResponseEntity.ok(itemService.findAllItemTypes());
     }
 
     @Operation(summary = "Get all possible items' measurement possible to set.")
     @GetMapping("/getAllItemMeasurements")
-    public ResponseEntity<List<ItemMeasurement>> getAllItemMeasurements(){
-        return ResponseEntity.ok(itemService.getAllItemMeasurements());
+    public ResponseEntity<Set<ItemMeasurement>> getAllItemMeasurements(){
+        return ResponseEntity.ok(itemService.findAllItemMeasurements());
     }
 
     @Operation(summary = "Get item by itemId")
     @GetMapping("/getItem")
     public ResponseEntity<?> getItem(@RequestParam UUID itemId){
         try {
-            return ResponseEntity.ok(itemService.getItemById(itemId));
+            return ResponseEntity.ok(itemService.findItemById(itemId));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

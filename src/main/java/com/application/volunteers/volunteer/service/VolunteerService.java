@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface VolunteerService {
 
-    Volunteer getVolunteer(UUID userId);
+    Volunteer getVolunteer(UUID volunteerId);
     VolunteerProfileDto getProfile(UUID userId);
 
     VolunteerProfileDto getProfileByEmail(String email);

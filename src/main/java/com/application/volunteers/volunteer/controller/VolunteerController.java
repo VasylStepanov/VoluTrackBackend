@@ -17,6 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+
+/**
+ * Volunteer controller uses both volunteer and user services
+ * */
 @RestController
 @RequestMapping("api/v1/volunteer")
 @FieldDefaults(level = AccessLevel.PRIVATE)

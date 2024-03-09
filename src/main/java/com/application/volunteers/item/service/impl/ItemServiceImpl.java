@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -55,32 +56,31 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @SneakyThrows
-    public ResponseItemDto getItemById(UUID itemId) {
+    public ResponseItemDto findItemById(UUID itemId) {
         return ResponseItemDto.toResponseItemDto(getItem(itemId));
     }
 
     @Override
-    public List<ItemType> getAllItemTypes(){
-        return List.of(ItemType.values());
+    public Set<ItemType> findAllItemTypes(){
+        return Set.of(ItemType.values());
     }
 
     @Override
-    public List<ItemMeasurement> getAllItemMeasurements() {
-        return List.of(ItemMeasurement.values());
+    public Set<ItemMeasurement> findAllItemMeasurements() {
+        return Set.of(ItemMeasurement.values());
     }
 
     @Transactional
     @Override
     @SneakyThrows
     public void saveItem(UUID volunteerId, RequestItemDto requestItemDto) {
-        Volunteer volunteer = volunteerService.getVolunteer(volunteerId);
         itemRepository.save(Item.builder()
             .name(itemValidation.eitherNameValidFull(requestItemDto.name()))
             .description(itemValidation.eitherDescriptionValid(requestItemDto.description()))
             .amount(itemValidation.eitherAmountValidFull(requestItemDto.amount()))
-            .itemMeasurement(ItemMeasurement.valueOfChecked(requestItemDto.itemMeasurement()))
-            .itemType(ItemType.valueOfChecked(requestItemDto.itemType()))
-            .volunteer(volunteer)
+            .itemMeasurement(ItemMeasurement.valueOfCheckedFull(requestItemDto.itemMeasurement()))
+            .itemType(ItemType.valueOfCheckedFull(requestItemDto.itemType()))
+            .volunteer(volunteerService.getVolunteer(volunteerId))
             .build());
     }
 
