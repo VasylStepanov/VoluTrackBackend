@@ -1,6 +1,6 @@
 package com.application.authentication.controller;
 
-import com.application.authentication.dto.request.AuthenticationRequest;
+import com.application.authentication.dto.AuthenticationRequest;
 import com.application.authentication.service.AuthenticationService;
 import com.application.security.util.CookieUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/authentication")

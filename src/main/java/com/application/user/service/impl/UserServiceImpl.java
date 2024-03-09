@@ -1,6 +1,6 @@
 package com.application.user.service.impl;
 
-import com.application.registration.dto.request.RegistrationRequest;
+import com.application.registration.dto.RegistrationRequest;
 import com.application.user.dto.UserDto;
 import com.application.user.model.Role;
 import com.application.user.model.User;

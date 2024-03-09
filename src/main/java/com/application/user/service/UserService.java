@@ -1,6 +1,6 @@
 package com.application.user.service;
 
-import com.application.registration.dto.request.RegistrationRequest;
+import com.application.registration.dto.RegistrationRequest;
 import com.application.user.dto.UserDto;
 import com.application.user.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -2,7 +2,7 @@ package com.application.authentication.service.impl;
 
 import com.application.security.service.JwtService;
 import com.application.authentication.service.AuthenticationService;
-import com.application.authentication.dto.request.AuthenticationRequest;
+import com.application.authentication.dto.AuthenticationRequest;
 import com.application.security.token.Token;
 import com.application.security.token.TokenRepository;
 import com.application.security.util.CookieUtil;
