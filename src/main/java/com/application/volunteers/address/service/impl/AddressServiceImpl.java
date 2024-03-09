@@ -14,6 +14,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -36,31 +37,32 @@ public class AddressServiceImpl implements AddressService {
     @Override
     @SneakyThrows
     public ResponseAddressDto getAddressById(UUID volunteerId) {
-        return ResponseAddressDto.toResponseAddressDto(getAddress(volunteerId));
+        return ResponseAddressDto.toResponseAddressDto(getAddressByVolunteerId(volunteerId));
     }
 
     @Override
     public ResponseAddressDto getAddressByEmail(String email) {
-        User user = userService.findUserByEmail(email);
-        return ResponseAddressDto.toResponseAddressDto(getAddress(user.getVolunteer().getId()));
+        UUID volunteerId = userService.findUserByEmail(email).getId();
+        return ResponseAddressDto.toResponseAddressDto(getAddressByVolunteerId(volunteerId));
     }
 
     @Override
     public void saveAddress(UUID volunteerId, RequestAddressDto requestAddressDto) {
-        Volunteer volunteer = volunteerService.getVolunteer(volunteerId);
         addressRepository.save(Address.builder()
             .region(addressValidation.eitherRegionIsValidFull(requestAddressDto.region()))
             .settlement(addressValidation.eitherSettlementIsValidFull(requestAddressDto.settlement()))
             .location(addressValidation.eitherLocationIsValidFull(requestAddressDto.location()))
             .coordinatesLatitude(addressValidation.eitherCoordinatesLatitudeFull(requestAddressDto.coordinatesLatitude()))
             .coordinatesLongitude(addressValidation.eitherCoordinatesLongitude(requestAddressDto.coordinatesLongitude()))
-            .volunteer(volunteer)
+            .volunteer(volunteerService.getVolunteer(volunteerId))
             .build());
     }
 
     @Override
+    @Transactional
     public void updateAddress(UUID volunteerId, RequestAddressDto requestAddressDto) {
-        Address address = getAddress(volunteerId);
+        Address address = getAddressByVolunteerId(volunteerId);
+        address.isUpdated();
         if(requestAddressDto.region() != null)
             address.setRegion(addressValidation.eitherRegionIsValid(requestAddressDto.region()));
         if(requestAddressDto.settlement() != null)
@@ -73,7 +75,7 @@ public class AddressServiceImpl implements AddressService {
             address.setCoordinatesLongitude(addressValidation.eitherCoordinatesLongitude(requestAddressDto.coordinatesLongitude()));
     }
 
-    private Address getAddress(UUID volunteerId) {
-        return addressRepository.findByVolunteerId(volunteerId).orElseThrow(() -> new RuntimeException("Address not found by this id"));
+    private Address getAddressByVolunteerId(UUID volunteerId) {
+        return addressRepository.findByVolunteerId(volunteerId).orElseThrow(() -> new RuntimeException("Address is empty"));
     }
 }

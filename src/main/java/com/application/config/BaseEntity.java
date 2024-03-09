@@ -27,4 +27,10 @@ public class BaseEntity {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @SneakyThrows
+    public void isUpdated(){
+        if(updatedAt != null && updatedAt.plusDays(1).isAfter(LocalDateTime.now()))
+            throw new RuntimeException("You have already updated the " + this.getClass().getName() + " data, update will be available in: " + updatedAt.plusDays(1));
+    }
 }

@@ -60,11 +60,7 @@ public class VolunteerServiceImpl implements VolunteerService {
     @SneakyThrows
     public void updateProfile(VolunteerSetDto profile, UUID userId) {
         User user = userService.findById(userId);
-        Volunteer volunteer = user.getVolunteer();
-        LocalDateTime updatedAt = volunteer.getUpdatedAt();
-        if(updatedAt != null && updatedAt.plusDays(1).isAfter(LocalDateTime.now()))
-            throw new RuntimeException("You have already updated account data, update will be available in: " + updatedAt.plusDays(1));
-        volunteer.setUpdatedAt(LocalDateTime.now());
+        user.isUpdated();
         UserDto userDto = UserDto.builder()
                 .id(userId)
                 .firstName(profile.getFirstName())

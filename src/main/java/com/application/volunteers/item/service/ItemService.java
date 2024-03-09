@@ -6,6 +6,7 @@ import com.application.volunteers.item.model.ItemMeasurement;
 import com.application.volunteers.item.model.ItemType;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface ItemService {
@@ -14,11 +15,11 @@ public interface ItemService {
 
     List<ResponseItemDto> findAllItemsByUserEmail(String email);
 
-    ResponseItemDto getItemById(UUID itemId);
+    ResponseItemDto findItemById(UUID itemId);
 
-    List<ItemType> getAllItemTypes();
+    Set<ItemType> findAllItemTypes();
 
-    List<ItemMeasurement> getAllItemMeasurements();
+    Set<ItemMeasurement> findAllItemMeasurements();
 
     void saveItem(UUID volunteerId, RequestItemDto requestItemDto);
 

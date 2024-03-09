@@ -13,7 +13,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "address")
-@Table(name = "address", schema = "volunteer_data")
+@Table(name = "address", schema = "volunteer_data", uniqueConstraints =
+    @UniqueConstraint(name = "uk_address_volunteer_id", columnNames = {"volunteer_id"}))
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Address extends BaseEntity {
 
