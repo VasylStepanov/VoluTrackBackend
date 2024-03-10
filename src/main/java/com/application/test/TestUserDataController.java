@@ -2,15 +2,11 @@ package com.application.test;
 
 
 import com.application.registration.dto.ConfirmationEmailDto;
-import com.application.registration.module.ConfirmationEmail;
 import com.application.registration.repository.ConfirmationEmailRepository;
 import com.application.security.dto.TokenDto;
-import com.application.security.token.Token;
 import com.application.security.token.TokenRepository;
 import com.application.user.dto.RoleDto;
 import com.application.user.dto.UserDto;
-import com.application.user.model.Role;
-import com.application.user.model.User;
 import com.application.user.repository.RoleRepository;
 import com.application.user.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("api/v1/test/user_data")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserDataController {
+public class TestUserDataController {
 
     @Autowired
     RoleRepository roleRepository;
@@ -45,15 +41,15 @@ public class UserDataController {
 
     @Operation(summary = "Get all roles.",
             description = "Return JSON file.")
-    @GetMapping("/all_roles")
+    @GetMapping("/allRoles")
     public ResponseEntity<List<RoleDto>> getAllRoles(){
-        return ResponseEntity.ok(roleRepository.findAll().stream().map(RoleDto::toRoleCache).collect(Collectors.toList()));
+        return ResponseEntity.ok(roleRepository.findAll().stream().map(RoleDto::toRoleDto).collect(Collectors.toList()));
     }
 
 
     @Operation(summary = "Get all users.",
             description = "Return JSON file.")
-    @GetMapping("/all_users")
+    @GetMapping("/allUsers")
     public ResponseEntity<List<UserDto>> getAllUsers(){
         return ResponseEntity.ok(userRepository.findAll().stream().map(UserDto::toUserDto).collect(Collectors.toList()));
     }
@@ -61,7 +57,7 @@ public class UserDataController {
 
     @Operation(summary = "Get all refresh tokens.",
             description = "Return JSON file.")
-    @GetMapping("/all_refresh_tokens")
+    @GetMapping("/allRefreshTokens")
     public ResponseEntity<List<TokenDto>> getAllTokens(){
         return ResponseEntity.ok(tokenRepository.findAll().stream().map(TokenDto::toTokenDto).collect(Collectors.toList()));
     }
@@ -69,7 +65,7 @@ public class UserDataController {
 
     @Operation(summary = "Get all confirmation emails.",
             description = "Return JSON file.")
-    @GetMapping("/all_confirmation_emails")
+    @GetMapping("/allConfirmationEmails")
     public ResponseEntity<List<ConfirmationEmailDto>> getAllConfirmationEmails(){
         return ResponseEntity.ok(confirmationEmailRepository.findAll().stream().map(ConfirmationEmailDto::toConfirmationEmailDto).collect(Collectors.toList()));
     }

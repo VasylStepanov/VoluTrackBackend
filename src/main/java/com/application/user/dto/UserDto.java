@@ -4,6 +4,7 @@ import com.application.user.model.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
@@ -26,7 +27,12 @@ public class UserDto {
 
     Boolean enabled;
 
+    LocalDateTime createdAt;
+
+    LocalDateTime updatedAt;
+
     RoleDto role;
+
 
     public static UserDto toUserDto(User user) {
         return new UserDto(user.getId(),
@@ -36,6 +42,8 @@ public class UserDto {
                 user.getPassword(),
                 user.isLocked(),
                 user.isEnabled(),
+                user.getCreatedAt(),
+                user.getUpdatedAt(),
                 RoleDto.toRoleDto(user.getRole()));
     }
 

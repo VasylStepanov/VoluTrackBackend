@@ -1,6 +1,6 @@
 package com.application.registration.dto;
 
-import com.application.registration.module.ConfirmationEmail;
+import com.application.registration.model.ConfirmationEmail;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -20,6 +20,8 @@ public class ConfirmationEmailDto {
 
     LocalDateTime createdAt;
 
+    LocalDateTime updatedAt;
+
     LocalDateTime expiresAt;
 
     public static ConfirmationEmailDto toConfirmationEmailDto(ConfirmationEmail confirmationEmail) {
@@ -27,6 +29,7 @@ public class ConfirmationEmailDto {
                 confirmationEmail.isConfirmed(),
                 confirmationEmail.getToken(),
                 confirmationEmail.getCreatedAt(),
+                confirmationEmail.getUpdatedAt(),
                 confirmationEmail.getExpiresAt());
     }
 }
