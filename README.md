@@ -4,7 +4,6 @@ Volunteer Logistics and Accounting Helper - a project to make logistic easier an
 
 ![Logo](src/main/resources/img/biglogo.jpg)
 
-
 ## Roadmap
 
 - Initial commit. Spring boot project was created. Set up postgres and flyway.
@@ -14,6 +13,10 @@ Volunteer Logistics and Accounting Helper - a project to make logistic easier an
 - Big fix 1.0: Removed Redis(reason: wrong use); fixed email sending(now sending is asynchronous, better performance); improved models(removed waste stuff); Swagger UI is added; Added Docker file to containerize project.
 - Branch dev, security fix: Authorization performance process is increased(no useless requests to DB); Fixed vulnerabilities: after logout, access token is placed to deactivated tokens in Redis cache; registration and authentication endpoints for authenticated users are forbidden, logout and refresh access token is allowed only for authenticated.; User's fullname is divided into firstname and lastname; Fixed a bug in confirmation email resend controller for registration.
 - Cleanup imports and repair README file commit.
+
+## DB Schema
+
+![Logo](src/main/resources/img/diagram.png)
 
 ## Usage
 
