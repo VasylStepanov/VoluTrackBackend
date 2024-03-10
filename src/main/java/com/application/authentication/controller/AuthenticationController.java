@@ -27,7 +27,7 @@ public class AuthenticationController {
     CookieUtil cookieUtil;
 
     @Operation(summary = "Create Access and Refresh tokens.",
-            description = "Input email and password.")
+            description = "Input email and password. Authenticate as a user test: email = testemail@gmail.com, password = Password_123")
     @PostMapping
     public ResponseEntity<?> authentication(@RequestBody AuthenticationRequest request) {
         return authenticationService.authentication(request);

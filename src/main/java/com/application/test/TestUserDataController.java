@@ -41,7 +41,7 @@ public class TestUserDataController {
 
     @Operation(summary = "Get all roles.",
             description = "Return JSON file.")
-    @GetMapping("/allRoles")
+    @GetMapping("/getAllRoles")
     public ResponseEntity<List<RoleDto>> getAllRoles(){
         return ResponseEntity.ok(roleRepository.findAll().stream().map(RoleDto::toRoleDto).collect(Collectors.toList()));
     }
@@ -49,7 +49,7 @@ public class TestUserDataController {
 
     @Operation(summary = "Get all users.",
             description = "Return JSON file.")
-    @GetMapping("/allUsers")
+    @GetMapping("/getAllUsers")
     public ResponseEntity<List<UserDto>> getAllUsers(){
         return ResponseEntity.ok(userRepository.findAll().stream().map(UserDto::toUserDto).collect(Collectors.toList()));
     }
@@ -57,7 +57,7 @@ public class TestUserDataController {
 
     @Operation(summary = "Get all refresh tokens.",
             description = "Return JSON file.")
-    @GetMapping("/allRefreshTokens")
+    @GetMapping("/getAllRefreshTokens")
     public ResponseEntity<List<TokenDto>> getAllTokens(){
         return ResponseEntity.ok(tokenRepository.findAll().stream().map(TokenDto::toTokenDto).collect(Collectors.toList()));
     }
@@ -65,7 +65,7 @@ public class TestUserDataController {
 
     @Operation(summary = "Get all confirmation emails.",
             description = "Return JSON file.")
-    @GetMapping("/allConfirmationEmails")
+    @GetMapping("/getAllConfirmationEmails")
     public ResponseEntity<List<ConfirmationEmailDto>> getAllConfirmationEmails(){
         return ResponseEntity.ok(confirmationEmailRepository.findAll().stream().map(ConfirmationEmailDto::toConfirmationEmailDto).collect(Collectors.toList()));
     }
