@@ -1,14 +1,19 @@
 package com.application.authentication.service.impl;
 
+import com.application.authentication.dto.RequestUpdatePasswordDto;
+import com.application.authentication.dto.RequestUpdateUserDataDto;
 import com.application.security.service.JwtService;
 import com.application.authentication.service.AuthenticationService;
 import com.application.authentication.dto.AuthenticationRequest;
 import com.application.security.token.Token;
 import com.application.security.token.TokenRepository;
 import com.application.security.util.CookieUtil;
+import com.application.user.dto.UserDto;
 import com.application.user.model.User;
 import com.application.user.service.UserService;
+import com.application.volunteers.volunteer.service.VolunteerService;
 import lombok.AccessLevel;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +27,7 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +46,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     UserService userService;
 
     @Autowired
+    VolunteerService volunteerService;
+
+    @Autowired
     JwtService jwtService;
 
     @Autowired
@@ -47,6 +56,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Autowired
     CookieUtil cookieUtil;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Value("${security.refresh-token.expiration}")
     long refreshExpiration;
@@ -113,6 +125,36 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             tokenRepository.removeByRefreshToken(token.getRefreshToken());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User should re-authenticate to the app!");
         }
+    }
+
+    @Override
+    @SneakyThrows
+    public void updateUserData(RequestUpdateUserDataDto requestUpdateUserDataDto, UUID userId) {
+        User user = userService.findById(userId);
+        user.isUpdated();
+        UserDto userDto = UserDto.builder()
+                .firstName(requestUpdateUserDataDto.firstName())
+                .lastName(requestUpdateUserDataDto.lastName())
+                .build();
+        userService.updateUser(user, userDto);
+    }
+
+    @Override
+    public void updateUserPassword(RequestUpdatePasswordDto requestUpdatePasswordDto, UUID userId) {
+        User user = userService.findById(userId);
+        user.isUpdated();
+        if(!user.getPassword().equals(passwordEncoder.encode(requestUpdatePasswordDto.oldPassword())))
+            throw new RuntimeException("Old password is wrong");
+        UserDto userDto = UserDto.builder()
+                .password(requestUpdatePasswordDto.newPassword())
+                .build();
+        userService.updateUser(user, userDto);
+    }
+
+    @Override
+    public void deleteUser(UUID userId, UUID volunteerId) {
+        userService.deleteById(userId);
+        volunteerService.deleteById(volunteerId);
     }
 
     private void saveRefreshToken(Token token) {

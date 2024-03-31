@@ -1,7 +1,6 @@
 package com.application.volunteers.address.model;
 
 import com.application.config.BaseEntity;
-import com.application.volunteers.volunteer.model.Volunteer;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -13,8 +12,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "address")
-@Table(name = "address", schema = "volunteer_data", uniqueConstraints =
-    @UniqueConstraint(name = "uk_address_volunteer_id", columnNames = {"volunteer_id"}))
+@Table(name = "addresses", schema = "volunteer_data")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Address extends BaseEntity {
 
@@ -32,9 +30,4 @@ public class Address extends BaseEntity {
 
     @Column(name = "coordinates_longitude")
     Double coordinatesLongitude;
-
-    @Setter(AccessLevel.NONE)
-    @OneToOne
-    @JoinColumn(name = "volunteer_id", nullable = false)
-    Volunteer volunteer;
 }

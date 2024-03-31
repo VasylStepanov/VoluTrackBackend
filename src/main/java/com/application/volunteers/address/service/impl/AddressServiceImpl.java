@@ -1,16 +1,13 @@
 package com.application.volunteers.address.service.impl;
 
-import com.application.user.model.User;
-import com.application.user.service.UserService;
 import com.application.volunteers.address.dto.RequestAddressDto;
-import com.application.volunteers.address.dto.ResponseAddressDto;
 import com.application.volunteers.address.model.Address;
+import com.application.volunteers.address.model.IAddress;
 import com.application.volunteers.address.repository.AddressRepository;
 import com.application.volunteers.address.service.AddressService;
-import com.application.volunteers.volunteer.model.Volunteer;
+import com.application.volunteers.group.service.GroupService;
 import com.application.volunteers.volunteer.service.VolunteerService;
 import lombok.AccessLevel;
-import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Service
+@Transactional
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AddressServiceImpl implements AddressService {
 
@@ -29,39 +27,30 @@ public class AddressServiceImpl implements AddressService {
     AddressValidation addressValidation;
 
     @Autowired
-    UserService userService;
-
-    @Autowired
     VolunteerService volunteerService;
 
-    @Override
-    @SneakyThrows
-    public ResponseAddressDto getAddressById(UUID volunteerId) {
-        return ResponseAddressDto.toResponseAddressDto(getAddressByVolunteerId(volunteerId));
-    }
+    @Autowired
+    GroupService groupService;
 
     @Override
-    public ResponseAddressDto getAddressByEmail(String email) {
-        UUID volunteerId = userService.findUserByEmail(email).getId();
-        return ResponseAddressDto.toResponseAddressDto(getAddressByVolunteerId(volunteerId));
-    }
-
-    @Override
-    public void saveAddress(UUID volunteerId, RequestAddressDto requestAddressDto) {
-        addressRepository.save(Address.builder()
+    public void saveAddress(IAddress iAddress, RequestAddressDto requestAddressDto) {
+        Address address = addressRepository.save(Address.builder()
             .region(addressValidation.eitherRegionIsValidFull(requestAddressDto.region()))
             .settlement(addressValidation.eitherSettlementIsValidFull(requestAddressDto.settlement()))
             .location(addressValidation.eitherLocationIsValidFull(requestAddressDto.location()))
             .coordinatesLatitude(addressValidation.eitherCoordinatesLatitudeFull(requestAddressDto.coordinatesLatitude()))
             .coordinatesLongitude(addressValidation.eitherCoordinatesLongitude(requestAddressDto.coordinatesLongitude()))
-            .volunteer(volunteerService.getVolunteer(volunteerId))
             .build());
+        iAddress.setAddress(address);
     }
 
     @Override
-    @Transactional
-    public void updateAddress(UUID volunteerId, RequestAddressDto requestAddressDto) {
-        Address address = getAddressByVolunteerId(volunteerId);
+    public void updateAddress(IAddress iAddress, RequestAddressDto requestAddressDto) {
+        Address address = iAddress.getAddress();
+        if(address == null) {
+            saveAddress(iAddress, requestAddressDto);
+            return;
+        }
         address.isUpdated();
         if(requestAddressDto.region() != null)
             address.setRegion(addressValidation.eitherRegionIsValid(requestAddressDto.region()));
@@ -75,7 +64,8 @@ public class AddressServiceImpl implements AddressService {
             address.setCoordinatesLongitude(addressValidation.eitherCoordinatesLongitude(requestAddressDto.coordinatesLongitude()));
     }
 
-    private Address getAddressByVolunteerId(UUID volunteerId) {
-        return addressRepository.findByVolunteerId(volunteerId).orElseThrow(() -> new RuntimeException("Address is empty"));
+    @Override
+    public void deleteAddress(UUID addressId) {
+        addressRepository.deleteById(addressId);
     }
 }

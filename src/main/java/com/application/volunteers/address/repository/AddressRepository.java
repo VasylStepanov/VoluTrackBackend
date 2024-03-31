@@ -9,6 +9,4 @@ import java.util.UUID;
 
 @Repository
 public interface AddressRepository extends JpaRepository<Address, UUID> {
-
-    Optional<Address> findByVolunteerId(UUID volunteerId);
 }

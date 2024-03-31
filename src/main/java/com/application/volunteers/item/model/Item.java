@@ -1,6 +1,7 @@
 package com.application.volunteers.item.model;
 
 import com.application.config.BaseEntity;
+import com.application.volunteers.inventory.model.Inventory;
 import com.application.volunteers.volunteer.model.Volunteer;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,8 +29,8 @@ public class Item extends BaseEntity {
 
     @Setter(AccessLevel.NONE)
     @OneToOne
-    @JoinColumn(name = "volunteer_id", nullable = false)
-    Volunteer volunteer;
+    @JoinColumn(name = "inventory_id", nullable = false)
+    Inventory inventory;
 
     @Column(name = "item_type", nullable = false)
     @Enumerated(EnumType.ORDINAL)

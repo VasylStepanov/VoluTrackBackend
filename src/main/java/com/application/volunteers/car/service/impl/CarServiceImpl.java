@@ -1,13 +1,10 @@
 package com.application.volunteers.car.service.impl;
 
-import com.application.user.service.UserService;
 import com.application.volunteers.car.dto.RequestCarDto;
-import com.application.volunteers.car.dto.ResponseCarDto;
 import com.application.volunteers.car.model.Car;
 import com.application.volunteers.car.model.CarType;
 import com.application.volunteers.car.repository.CarRepository;
 import com.application.volunteers.car.service.CarService;
-import com.application.volunteers.volunteer.model.Volunteer;
 import com.application.volunteers.volunteer.service.VolunteerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,58 +23,56 @@ public class CarServiceImpl implements CarService {
     CarValidation carValidation;
 
     @Autowired
-    UserService userService;
-
-    @Autowired
     VolunteerService volunteerService;
 
     @Override
-    public ResponseCarDto findCarById(UUID volunteerId) {
-        return ResponseCarDto.toResponseCarDto(getCarByVolunteerId(volunteerId));
+    public Car getCar(UUID carId) {
+        return carRepository.findById(carId).orElseThrow(() -> new RuntimeException("User isn't an owner of the car"));
     }
 
     @Override
-    public ResponseCarDto findCarByEmail(String email) {
-        UUID volunteerId = userService.findUserByEmail(email).getId();
-        return ResponseCarDto.toResponseCarDto(getCarByVolunteerId(volunteerId));
-    }
-
-    @Override
-    public Set<CarType> findAllCarTypes() {
+    public Set<CarType> getAllCarTypes() {
         return Set.of(CarType.values());
     }
 
     @Override
     public void saveCar(UUID volunteerId, RequestCarDto requestCarDto) {
          carRepository.save(Car.builder()
-                .carNumber(carValidation.eitherCarNumberIsValidFull(requestCarDto.carNumber()))
+                .number(carValidation.eitherNumberIsValidFull(requestCarDto.carNumber()))
+                .description(carValidation.eitherDescriptionIsValidFull(requestCarDto.description()))
                 .carType(CarType.valueOfCheckedFull(requestCarDto.carType()))
-                .carryingKg(carValidation.eitherCarCarryingKgIsValidFull(requestCarDto.carryingKg()))
+                .carryingKg(carValidation.eitherCarryingKgIsValidFull(requestCarDto.carryingKg()))
                 .volunteer(volunteerService.getVolunteer(volunteerId))
             .build());
     }
 
     @Override
     @Transactional
-    public void updateCar(UUID volunteerId, RequestCarDto requestCarDto) {
-        Car car = getCarByVolunteerId(volunteerId);
+    public void updateCar(UUID volunteerId, UUID carId, RequestCarDto requestCarDto) {
+        Car car = eitherIsCarOwner(volunteerId, carId);
         car.isUpdated();
         if(requestCarDto.carNumber() != null)
-            car.setCarNumber(carValidation.eitherCarNumberIsValid(requestCarDto.carNumber()));
+            car.setNumber(carValidation.eitherNumberIsValid(requestCarDto.carNumber()));
+        if(requestCarDto.description() != null)
+            car.setDescription(carValidation.eitherDescriptionIsValid(requestCarDto.description()));
         if(requestCarDto.carType() != null)
             car.setCarType(CarType.valueOfChecked(requestCarDto.carType()));
         if(requestCarDto.carryingKg() != null)
-            car.setCarryingKg(carValidation.eitherCarCarryingKgIsValid(requestCarDto.carryingKg()));
+            car.setCarryingKg(carValidation.eitherCarryingKgIsValid(requestCarDto.carryingKg()));
     }
 
     @Override
     @Transactional
-    public void deleteCar(UUID volunteerId) {
-        Car car = getCarByVolunteerId(volunteerId);
+    public void deleteCar(UUID volunteerId, UUID carId) {
+        Car car = eitherIsCarOwner(volunteerId, carId);
         carRepository.deleteById(car.getId());
     }
 
-    private Car getCarByVolunteerId(UUID volunteerId){
-        return carRepository.findByVolunteerId(volunteerId).orElseThrow(() -> new RuntimeException("Car is empty"));
+    @Override
+    public Car eitherIsCarOwner(UUID volunteerId, UUID carId) throws RuntimeException {
+        Car car = getCar(carId);
+        if(car.getVolunteer().getId().equals(volunteerId))
+            return car;
+        throw new RuntimeException("User isn't an owner of the car");
     }
 }

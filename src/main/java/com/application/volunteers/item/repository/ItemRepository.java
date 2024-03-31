@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ItemRepository extends JpaRepository<Item, UUID> {
-    List<Item> findByVolunteerId(UUID volunteerId);
+    List<Item> findByInventoryId(UUID inventoryId);
 }

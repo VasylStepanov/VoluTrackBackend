@@ -3,6 +3,7 @@ package com.application.user.model;
 import com.application.config.BaseEntity;
 import com.application.security.token.Token;
 import com.application.registration.model.ConfirmationEmail;
+import com.application.volunteers.address.model.IAddress;
 import com.application.volunteers.volunteer.model.Volunteer;
 import jakarta.persistence.*;
 import lombok.*;
@@ -54,7 +55,7 @@ public class User extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     List<Token> tokens;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", optional = false, fetch = FetchType.LAZY)
     Volunteer volunteer;
 
     @Override

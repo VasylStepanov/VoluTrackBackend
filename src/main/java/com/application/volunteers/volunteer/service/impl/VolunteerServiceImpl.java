@@ -1,10 +1,11 @@
 package com.application.volunteers.volunteer.service.impl;
 
-import com.application.user.dto.UserDto;
 import com.application.user.model.User;
-import com.application.user.service.UserService;
+import com.application.volunteers.address.repository.AddressRepository;
+import com.application.volunteers.inventory.model.Inventory;
+import com.application.volunteers.inventory.repository.InventoryRepository;
 import com.application.volunteers.volunteer.dto.VolunteerProfileDto;
-import com.application.volunteers.volunteer.dto.VolunteerSetDto;
+import com.application.volunteers.volunteer.dto.VolunteerPublicProfileDto;
 import com.application.volunteers.volunteer.model.Volunteer;
 import com.application.volunteers.volunteer.repository.VolunteerRepository;
 import com.application.volunteers.volunteer.service.VolunteerService;
@@ -13,8 +14,8 @@ import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
@@ -25,14 +26,10 @@ public class VolunteerServiceImpl implements VolunteerService {
     VolunteerRepository volunteerRepository;
 
     @Autowired
-    UserService userService;
+    InventoryRepository inventoryRepository;
 
-    @Override
-    public void saveVolunteerProfile(User user) {
-        volunteerRepository.save(Volunteer.builder()
-                .user(user)
-                .build());
-    }
+    @Autowired
+    AddressRepository addressRepository;
 
     @Override
     @SneakyThrows
@@ -44,44 +41,35 @@ public class VolunteerServiceImpl implements VolunteerService {
 
     @Override
     @SneakyThrows
-    public VolunteerProfileDto getProfile(UUID userId) {
-        User user = userService.findById(userId);
-        return setupVolunteerProfileDto(user);
+    public VolunteerProfileDto getPrivateProfileData(UUID volunteerId) {
+        Volunteer volunteer = volunteerRepository.findById(volunteerId).orElseThrow(() -> new RuntimeException("Volunteer not found"));
+        return VolunteerProfileDto.setupVolunteerProfileDto(volunteer);
     }
 
     @Override
     @SneakyThrows
-    public VolunteerProfileDto getProfileByEmail(String email) {
-        User user = userService.findUserByEmail(email);
-        return setupVolunteerProfileDto(user);
+    public VolunteerPublicProfileDto getPublicProfileData(UUID volunteerId) {
+        Volunteer volunteer = volunteerRepository.findById(volunteerId).orElseThrow(() -> new RuntimeException("Volunteer not found"));
+        return VolunteerPublicProfileDto.setupVolunteerPublicProfileDto(volunteer);
     }
 
     @Override
-    @SneakyThrows
-    public void updateProfile(VolunteerSetDto profile, UUID userId) {
-        User user = userService.findById(userId);
-        user.isUpdated();
-        UserDto userDto = UserDto.builder()
-                .id(userId)
-                .firstName(profile.getFirstName())
-                .lastName(profile.getLastName())
-                .password(profile.getPassword())
-                .build();
-        userService.updateUser(user, userDto);
+    @Transactional
+    public void saveVolunteerProfile(User user) {
+        Inventory inventory = inventoryRepository.save(new Inventory());
+        volunteerRepository.save(Volunteer.builder()
+                .user(user)
+                .inventory(inventory)
+                .build());
     }
 
     @Override
-    public void deleteProfile(UUID userId) {
-        userService.deleteById(userId);
-    }
-
-    private VolunteerProfileDto setupVolunteerProfileDto(User user){
-        return new VolunteerProfileDto(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getVolunteer().getHelpCounter(),
-                user.getVolunteer().getCreatedAt()
-        );
+    @Transactional
+    public void deleteById(UUID volunteerId) {
+        Volunteer volunteer = getVolunteer(volunteerId);
+        if(volunteer.getAddress() != null)
+            addressRepository.deleteById(volunteer.getAddress().getId());
+        if(volunteer.getInventory() != null)
+            inventoryRepository.deleteById(volunteer.getInventory().getId());
     }
 }

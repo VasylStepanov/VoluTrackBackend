@@ -1,6 +1,7 @@
-CREATE TABLE IF NOT EXISTS volunteer_data.volunteer(
+CREATE TABLE IF NOT EXISTS volunteer_data.volunteers(
     id UUID CONSTRAINT volunteer_id_pk PRIMARY KEY,
-    help_counter INTEGER NOT NULL DEFAULT 0 ,
+    description VARCHAR,
+    help_counter INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP(6),
     user_id UUID NOT NULL,

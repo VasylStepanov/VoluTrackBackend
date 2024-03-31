@@ -13,25 +13,25 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "car")
-@Table(name = "car", schema = "volunteer_data", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_car_number", columnNames = {"car_number"}),
-        @UniqueConstraint(name = "uk_car_volunteer_id", columnNames = {"volunteer_id"})
-})
+@Table(name = "cars", schema = "volunteer_data", uniqueConstraints = @UniqueConstraint(name = "uk_car_number", columnNames = {"number"}))
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Car extends BaseEntity {
 
-    @Column(name = "car_number", length = 16, nullable = false, unique = true)
-    String carNumber;
+    @Column(name = "number", length = 16, nullable = false, unique = true)
+    String number;
+
+    @Column(name = "description", length = 64)
+    String description;
 
     @Column(name = "carrying_kg", nullable = false)
     Integer carryingKg;
 
-    @Column(name = "car_type", nullable = false)
+    @Column(name = "type", nullable = false)
     @Enumerated(EnumType.ORDINAL)
     CarType carType;
 
     @Setter(AccessLevel.NONE)
-    @OneToOne
-    @JoinColumn(name = "volunteer_id", nullable = false, unique = true)
+    @ManyToOne
+    @JoinColumn(name = "volunteer_id", nullable = false)
     Volunteer volunteer;
 }

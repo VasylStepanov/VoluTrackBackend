@@ -14,6 +14,7 @@ Volunteer Logistics and Accounting Helper - a project to make logistic easier an
 - Branch dev, security fix: Authorization performance process is increased(no useless requests to DB); Fixed vulnerabilities: after logout, access token is placed to deactivated tokens in Redis cache; registration and authentication endpoints for authenticated users are forbidden, logout and refresh access token is allowed only for authenticated.; User's fullname is divided into firstname and lastname; Fixed a bug in confirmation email resend controller for registration.
 - Cleanup imports and repair README file commit.
 - Branch dev, volunteer service: Added Volunteer, Address, Car and Items services. User can update his profile and manage with data.
+- Branch dev: Added Group model. Fixed bugs and vulnerabilities.
 
 ## DB Schema
 

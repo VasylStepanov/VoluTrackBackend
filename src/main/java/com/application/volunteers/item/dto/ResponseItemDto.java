@@ -10,7 +10,9 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ResponseItemDto {
 
-    UUID itemId;
+    UUID id;
+
+    String name;
 
     String description;
 
@@ -22,6 +24,7 @@ public class ResponseItemDto {
 
     public static ResponseItemDto toResponseItemDto(Item item){
         return new ResponseItemDto(item.getId(),
+                item.getName(),
                 item.getDescription(),
                 item.getAmount(),
                 item.getItemMeasurement().name(),

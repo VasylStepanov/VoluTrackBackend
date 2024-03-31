@@ -1,19 +1,15 @@
 package com.application.volunteers.address.service;
 
 import com.application.volunteers.address.dto.RequestAddressDto;
-import com.application.volunteers.address.dto.ResponseAddressDto;
+import com.application.volunteers.address.model.IAddress;
 
 import java.util.UUID;
 
 public interface AddressService {
 
+    void saveAddress(IAddress iAddress, RequestAddressDto requestAddressDto);
 
-    ResponseAddressDto getAddressById(UUID addressId);
+    void updateAddress(IAddress iAddress, RequestAddressDto requestAddressDto);
 
-    ResponseAddressDto getAddressByEmail(String email);
-
-    void saveAddress(UUID volunteerId, RequestAddressDto requestAddressDto);
-
-    void updateAddress(UUID volunteerId, RequestAddressDto requestAddressDto);
-
+    void deleteAddress(UUID addressId);
 }

@@ -1,25 +1,27 @@
 package com.application.volunteers.car.service;
 
-import com.application.volunteers.address.dto.RequestAddressDto;
-import com.application.volunteers.address.dto.ResponseAddressDto;
 import com.application.volunteers.car.dto.RequestCarDto;
-import com.application.volunteers.car.dto.ResponseCarDto;
+import com.application.volunteers.car.model.Car;
 import com.application.volunteers.car.model.CarType;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.UUID;
 
 public interface CarService {
 
-    ResponseCarDto findCarById(UUID volunteerId);
 
-    ResponseCarDto findCarByEmail(String email);
+    Car getCar(UUID carId);
 
-    Set<CarType> findAllCarTypes();
+    Set<CarType> getAllCarTypes();
 
     void saveCar(UUID volunteerId, RequestCarDto requestCarDto);
 
-    void updateCar(UUID volunteerId, RequestCarDto requestCarDto);
+    @Transactional
+    void updateCar(UUID volunteerId, UUID carId, RequestCarDto requestCarDto);
 
-    void deleteCar(UUID volunteerId);
+    @Transactional
+    void deleteCar(UUID volunteerId, UUID carId);
+
+    Car eitherIsCarOwner(UUID volunteerId, UUID carId) throws RuntimeException;
 }
