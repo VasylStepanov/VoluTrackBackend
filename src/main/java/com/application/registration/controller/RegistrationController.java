@@ -1,6 +1,6 @@
 package com.application.registration.controller;
 
-import com.application.registration.dto.request.RegistrationRequest;
+import com.application.registration.dto.RegistrationRequest;
 import com.application.registration.service.RegistrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AccessLevel;

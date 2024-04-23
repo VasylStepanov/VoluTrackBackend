@@ -41,13 +41,20 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/v3/api-docs/**", "/swagger-ui/**", "/api/v*/test/**"
-                        ).permitAll()
+                                "/v3/api-docs/**", "/swagger-ui/**",
+                                "/api/v*/test/**",
+                                "/api/v*/item/**",
+                                "/api/v*/car/**"
+                                ).permitAll()
                         .requestMatchers(
                                 "/api/v*/authentication",
+                                "/api/v*/authentication/refresh",
                                 "/api/v*/registration/**"
                         ).anonymous()
-                        .requestMatchers("/api/v*/authentication/**").authenticated())
+                        .requestMatchers(
+                                "/api/v*/volunteer/**",
+                                "/api/v*/group/**",
+                                "/api/v*/authentication/**").authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

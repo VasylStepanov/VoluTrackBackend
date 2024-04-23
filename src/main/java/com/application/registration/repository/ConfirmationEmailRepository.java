@@ -1,6 +1,6 @@
 package com.application.registration.repository;
 
-import com.application.registration.module.ConfirmationEmail;
+import com.application.registration.model.ConfirmationEmail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

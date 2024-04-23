@@ -4,4 +4,4 @@ CREATE TABLE IF NOT EXISTS user_data.roles(
     CONSTRAINT uk_name UNIQUE(name)
 );
 
-INSERT INTO user_data.roles(id, name) VALUES(1, 'ROLE_USER'), (2, 'ROLE_USER_V_I'), (3, 'ROLE_USER_V_II'), (4, 'ROLE_USER_V_III'), (5, 'ROLE_USER_V_III_P'), (6, 'ROLE_USER_V_IV'), (7, 'ROLE_RECIPIENT'), (8, 'ROLE_ADMIN'), (9, 'ROLE_MODERATOR');
+INSERT INTO user_data.roles(id, name) VALUES(1, 'ROLE_USER'), (2, 'ROLE_RECIPIENT'), (3, 'ROLE_ADMIN'), (4, 'ROLE_MODERATOR');

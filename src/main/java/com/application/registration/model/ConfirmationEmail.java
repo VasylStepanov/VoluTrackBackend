@@ -1,34 +1,29 @@
-package com.application.registration.module;
+package com.application.registration.model;
 
+import com.application.config.BaseEntity;
 import com.application.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 @Table(name = "confirmation_email", schema = "user_data")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ConfirmationEmail {
+public class ConfirmationEmail extends BaseEntity {
 
-    @Id
-    UUID id;
-    
     @Column
     boolean confirmed;
 
     @Column(nullable = false, length = 36)
     String token;
-
-    @Column(nullable = false)
-    LocalDateTime createdAt;
 
     @Column(nullable = false)
     LocalDateTime expiresAt;

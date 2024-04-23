@@ -36,7 +36,7 @@ public class UserDto {
                 user.getPassword(),
                 user.isLocked(),
                 user.isEnabled(),
-                RoleDto.toRoleCache(user.getRole()));
+                RoleDto.toRoleDto(user.getRole()));
     }
 
     public static User toUser(UserDto userDto) {

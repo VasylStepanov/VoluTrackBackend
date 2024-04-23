@@ -1,6 +1,6 @@
 package com.application.registration.service;
 
-import com.application.registration.module.ConfirmationEmail;
+import com.application.registration.model.ConfirmationEmail;
 
 public interface ConfirmationEmailService {
     void saveConfirmationEmail(ConfirmationEmail confirmationEmail);

@@ -5,5 +5,7 @@ CREATE TABLE IF NOT EXISTS user_data.users(
     email VARCHAR(80) NOT NULL,
     password VARCHAR(128) NOT NULL,
     role VARCHAR(32) NOT NULL,
+    created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP(6) NOT NULL,
     CONSTRAINT uk_email UNIQUE(email)
 );
