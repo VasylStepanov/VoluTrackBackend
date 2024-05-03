@@ -1,5 +1,7 @@
 package com.application.volunteers.volunteer.service.impl;
 
+import com.application.security.service.JwtService;
+import com.application.security.util.CookieUtil;
 import com.application.user.model.User;
 import com.application.volunteers.address.repository.AddressRepository;
 import com.application.volunteers.inventory.model.Inventory;
@@ -9,6 +11,7 @@ import com.application.volunteers.volunteer.dto.VolunteerPublicProfileDto;
 import com.application.volunteers.volunteer.model.Volunteer;
 import com.application.volunteers.volunteer.repository.VolunteerRepository;
 import com.application.volunteers.volunteer.service.VolunteerService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
@@ -21,6 +24,13 @@ import java.util.UUID;
 @Component
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public class VolunteerServiceImpl implements VolunteerService {
+
+    @Autowired
+    JwtService jwtService;
+
+    @Autowired
+    CookieUtil cookieUtil;
+
 
     @Autowired
     VolunteerRepository volunteerRepository;
@@ -37,6 +47,13 @@ public class VolunteerServiceImpl implements VolunteerService {
         return volunteerRepository
                 .findById(volunteerId)
                 .orElseThrow(() -> new RuntimeException("There is no volunteer"));
+    }
+
+    @Override
+    @SneakyThrows
+    public UUID getVolunteerId(HttpServletRequest httpServletRequest){
+        String token = cookieUtil.getAccessTokenCookie(httpServletRequest.getCookies());
+        return jwtService.extractVolunteerId(token);
     }
 
     @Override

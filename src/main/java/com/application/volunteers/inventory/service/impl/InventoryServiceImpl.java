@@ -3,10 +3,13 @@ package com.application.volunteers.inventory.service.impl;
 import com.application.volunteers.group.model.Group;
 import com.application.volunteers.group.service.GroupService;
 import com.application.volunteers.inventory.model.Inventory;
+import com.application.volunteers.inventory.model.InventoryItem;
+import com.application.volunteers.inventory.repository.InventoryItemRepository;
 import com.application.volunteers.inventory.repository.InventoryRepository;
 import com.application.volunteers.inventory.service.InventoryService;
 import com.application.volunteers.item.dto.RequestItemDto;
 import com.application.volunteers.item.dto.ResponseItemDto;
+import com.application.volunteers.item.model.Item;
 import com.application.volunteers.item.model.ItemMeasurement;
 import com.application.volunteers.item.model.ItemType;
 import com.application.volunteers.item.service.ItemService;
@@ -15,6 +18,7 @@ import com.application.volunteers.volunteer.service.VolunteerService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -35,20 +39,17 @@ public class InventoryServiceImpl implements InventoryService {
     @Autowired
     InventoryRepository inventoryRepository;
 
+    @Autowired
+    InventoryItemRepository inventoryItemRepository;
+
     @Override
     public List<ResponseItemDto> findAllItems(Inventory inventory) {
-        return itemService.findAllItems(inventory.getId());
+        return itemService.getItemsFromInventory(inventory);
     }
 
     @Override
-    public List<ResponseItemDto> findAllItemsByVolunteerId(UUID volunteerId) {
-        Inventory inventory = getVolunteerInventory(volunteerId);
-        return findAllItems(inventory);
-    }
-
-    @Override
-    public List<ResponseItemDto> findAllItemsByGroupId(UUID groupId) {
-        Inventory inventory = groupService.getGroup(groupId).getInventory();
+    public List<ResponseItemDto> findAllItems(UUID volunteerId, UUID groupId) {
+        Inventory inventory = getInventory(volunteerId, groupId);
         return findAllItems(inventory);
     }
 
@@ -64,42 +65,27 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     @SneakyThrows
-    public void saveItemByVolunteerId(RequestItemDto requestItemDto, UUID volunteerId) {
-        Inventory inventory = getVolunteerInventory(volunteerId);
-        itemService.saveItem(requestItemDto, inventory);
+    public void saveItem(RequestItemDto requestItemDto, UUID volunteerId, UUID groupId) {
+        Inventory inventory = getInventory(volunteerId, groupId);
+        Item item = itemService.saveItem(requestItemDto);
+        InventoryItem inventoryItem = InventoryItem.builder()
+                .inventory(inventory)
+                .item(item)
+                .build();
+        inventoryItemRepository.save(inventoryItem);
     }
 
     @Override
     @SneakyThrows
-    public void saveItemByGroupId(RequestItemDto requestItemDto, UUID volunteerId, UUID groupId) {
-        Inventory inventory = getGroupInventory(volunteerId, groupId);
-        itemService.saveItem(requestItemDto, inventory);
+    public void updateItem(RequestItemDto requestItemDto, UUID volunteerId, UUID groupId, UUID itemId) {
+        Inventory inventory = getInventory(volunteerId, groupId);
+        itemService.updateItem(requestItemDto, inventory, itemId);
     }
 
     @Override
-    @SneakyThrows
-    public void updateItemByVolunteerId(RequestItemDto requestItemDto, UUID volunteerId, UUID itemId) {
-        Inventory inventory = getVolunteerInventory(volunteerId);
-        itemService.updateItem(requestItemDto, inventory.getId(), itemId);
-    }
-
-    @Override
-    @SneakyThrows
-    public void updateItemByGroupId(RequestItemDto requestItemDto,  UUID volunteerId, UUID groupId, UUID itemId) {
-        Inventory inventory = getGroupInventory(volunteerId, groupId);
-        itemService.updateItem(requestItemDto, inventory.getId(), itemId);
-    }
-
-    @Override
-    public void deleteItemByVolunteerId(UUID volunteerId, UUID itemId) {
-        Inventory inventory = getVolunteerInventory(volunteerId);
-        itemService.deleteItem(inventory.getId(), itemId);
-    }
-
-    @Override
-    public void deleteItemByGroupId(UUID volunteerId, UUID groupId, UUID itemId) {
-        Inventory inventory = getGroupInventory(volunteerId, groupId);
-        itemService.deleteItem(inventory.getId(), itemId);
+    public void deleteItem(UUID volunteerId, UUID groupId, UUID itemId) {
+        Inventory inventory = getInventory(volunteerId, groupId);
+        itemService.deleteItem(inventory, itemId);
     }
 
     @Override
@@ -108,17 +94,22 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @SneakyThrows
-    private Inventory getVolunteerInventory(UUID volunteerId){
+    private Inventory getInventory(UUID volunteerId, UUID groupId) {
+        if(groupId == null)
+            return getVolunteerInventory(volunteerId);
+        return getGroupInventory(volunteerId, groupId);
+    }
+
+    @SneakyThrows
+    private Inventory getVolunteerInventory(UUID volunteerId) {
         Volunteer volunteer = volunteerService.getVolunteer(volunteerId);
         return volunteer.getInventory();
     }
 
     @SneakyThrows
-    private Inventory getGroupInventory(UUID volunteerId, UUID groupId){
-        Group group = groupService.getGroup(groupId);
-        if(group.getVolunteer().getId().equals(volunteerId))
-            return group.getInventory();
-        else
-            throw new RuntimeException("User can't manage the group's items");
+    private Inventory getGroupInventory(UUID volunteerId, UUID groupId) {
+        Group group = groupService.eitherIsAGroupRepresent(volunteerId, groupId);
+        return group.getInventory();
     }
+
 }

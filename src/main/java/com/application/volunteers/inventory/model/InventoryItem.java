@@ -7,18 +7,21 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Entity(name = "inventory")
-@Table(name = "inventories", schema = "volunteer_data")
+@Entity(name = "inventory_items")
+@Table(name = "inventory_items", schema = "volunteer_data")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Inventory extends BaseEntity {
+public class InventoryItem extends BaseEntity {
 
-    @OneToMany(mappedBy = "inventory", fetch = FetchType.LAZY)
-    List<InventoryItem> inventoryItems;
+    @OneToOne
+    @JoinColumn(name = "item_id")
+    Item item;
+
+    @ManyToOne
+    @JoinColumn(name = "inventory_id")
+    Inventory inventory;
 }

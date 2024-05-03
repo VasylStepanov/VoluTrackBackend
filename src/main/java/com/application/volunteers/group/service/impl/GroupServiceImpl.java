@@ -82,7 +82,7 @@ public class GroupServiceImpl implements GroupService {
     @SneakyThrows
     @Transactional
     public void updateGroup(RequestGroupDto groupDto, UUID volunteerId, UUID groupId) {
-        Group group = eitherIsGroupOwner(volunteerId, groupId);
+        Group group = eitherIsAGroupRepresent(volunteerId, groupId);
         if(groupDto.name() != null)
             group.setName(groupValidation.eitherNameIsValid(groupDto.name()));
         if(groupDto.description() != null)
@@ -92,7 +92,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional
     public void deleteGroup(UUID volunteerId, UUID groupId) {
-        Group group = eitherIsGroupOwner(volunteerId, groupId);
+        Group group = eitherIsAGroupRepresent(volunteerId, groupId);
         if(group.getAddress() != null)
             addressRepository.deleteById(group.getAddress().getId());
         if(group.getInventory() != null)
@@ -101,7 +101,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group eitherIsGroupOwner(UUID volunteerId, UUID groupId) throws RuntimeException {
+    public Group eitherIsAGroupRepresent(UUID volunteerId, UUID groupId) throws RuntimeException {
         Group group = getGroup(groupId);
         if(group.getVolunteer().getId().equals(volunteerId))
             return group;

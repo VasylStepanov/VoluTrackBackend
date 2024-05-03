@@ -21,5 +21,5 @@ public interface GroupService {
 
     void deleteGroup(UUID volunteerId, UUID groupId);
 
-    Group eitherIsGroupOwner(UUID volunteerId, UUID groupId) throws RuntimeException;
+    Group eitherIsAGroupRepresent(UUID volunteerId, UUID groupId) throws RuntimeException;
 }

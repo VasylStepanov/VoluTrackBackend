@@ -27,11 +27,6 @@ public class Item extends BaseEntity {
     @Column(name = "amount", nullable = false)
     Integer amount;
 
-    @Setter(AccessLevel.NONE)
-    @OneToOne
-    @JoinColumn(name = "inventory_id", nullable = false)
-    Inventory inventory;
-
     @Column(name = "item_type", nullable = false)
     @Enumerated(EnumType.ORDINAL)
     ItemType itemType;

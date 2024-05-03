@@ -53,6 +53,7 @@ public class SecurityConfig {
                         ).anonymous()
                         .requestMatchers(
                                 "/api/v*/volunteer/**",
+                                "/api/v*/inventory/**",
                                 "/api/v*/group/**",
                                 "/api/v*/authentication/**").authenticated())
                 .sessionManagement(session -> session
