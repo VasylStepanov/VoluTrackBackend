@@ -1,4 +1,6 @@
-CREATE TABLE IF NOT EXISTS volunteer_data.items(
+CREATE SCHEMA IF NOT EXISTS item_data;
+
+CREATE TABLE IF NOT EXISTS item_data.items(
     id UUID CONSTRAINT item_id_pk PRIMARY KEY,
     name VARCHAR(64) NOT NULL,
     description VARCHAR(512),

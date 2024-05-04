@@ -1,4 +1,6 @@
-CREATE TABLE IF NOT EXISTS volunteer_data.addresses(
+CREATE SCHEMA IF NOT EXISTS general_data;
+
+CREATE TABLE IF NOT EXISTS general_data.addresses(
     id UUID CONSTRAINT address_id_pk PRIMARY KEY,
     region VARCHAR(32) NOT NULL,
     settlement VARCHAR(64) NOT NULL,

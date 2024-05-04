@@ -1,2 +1,2 @@
 ALTER TABLE volunteer_data.volunteers ADD COLUMN address_id UUID;
-ALTER TABLE volunteer_data.volunteers ADD CONSTRAINT fk_volunteer_address_id FOREIGN KEY (address_id) REFERENCES volunteer_data.addresses(id);
+ALTER TABLE volunteer_data.volunteers ADD CONSTRAINT fk_volunteer_address_id FOREIGN KEY (address_id) REFERENCES general_data.addresses(id);

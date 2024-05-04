@@ -1,10 +1,9 @@
 package com.application.user.model;
 
 import com.application.config.BaseEntity;
+import com.application.content.volunteers.volunteer.model.Volunteer;
 import com.application.security.token.Token;
 import com.application.registration.model.ConfirmationEmail;
-import com.application.volunteers.address.model.IAddress;
-import com.application.volunteers.volunteer.model.Volunteer;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

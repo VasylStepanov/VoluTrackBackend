@@ -1,5 +1,6 @@
 package com.application.registration.service.impl;
 
+import com.application.content.volunteers.volunteer.service.VolunteerService;
 import com.application.registration.dto.RegistrationRequest;
 import com.application.registration.email.EmailService;
 import com.application.registration.exception.ConfirmationEmailException;
@@ -9,7 +10,6 @@ import com.application.user.dto.UserDto;
 import com.application.user.model.User;
 import com.application.registration.service.RegistrationService;
 import com.application.user.service.UserService;
-import com.application.volunteers.volunteer.service.VolunteerService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
