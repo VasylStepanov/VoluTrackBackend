@@ -16,6 +16,6 @@ CREATE TABLE IF NOT EXISTS volunteer_data.inventory_items(
     item_id UUID NOT NULL,
     created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP(6),
-    CONSTRAINT fk_inventory_id FOREIGN KEY(inventory_id) REFERENCES volunteer_data.inventories(id),
-    CONSTRAINT fk_inventory_item_id FOREIGN KEY(item_id) REFERENCES volunteer_data.items(id)
+    CONSTRAINT fk_inventory_id FOREIGN KEY(inventory_id) REFERENCES volunteer_data.inventories(id) ON DELETE CASCADE,
+    CONSTRAINT fk_inventory_item_id FOREIGN KEY(item_id) REFERENCES volunteer_data.items(id) ON DELETE CASCADE
 );

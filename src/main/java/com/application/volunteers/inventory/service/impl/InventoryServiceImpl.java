@@ -44,23 +44,13 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public List<ResponseItemDto> findAllItems(Inventory inventory) {
-        return itemService.getItemsFromInventory(inventory);
+        return itemService.getItems(inventory);
     }
 
     @Override
     public List<ResponseItemDto> findAllItems(UUID volunteerId, UUID groupId) {
         Inventory inventory = getInventory(volunteerId, groupId);
         return findAllItems(inventory);
-    }
-
-    @Override
-    public Set<ItemType> findAllItemTypes(){
-        return Set.of(ItemType.values());
-    }
-
-    @Override
-    public Set<ItemMeasurement> findAllItemMeasurements() {
-        return Set.of(ItemMeasurement.values());
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.application.config.BaseEntity;
 import com.application.volunteers.address.model.Address;
 import com.application.volunteers.address.model.IAddress;
 import com.application.volunteers.inventory.model.Inventory;
+import com.application.volunteers.request.model.Request;
 import com.application.volunteers.volunteer.model.Volunteer;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,4 +42,8 @@ public class Group extends BaseEntity implements IAddress {
     @OneToOne
     @JoinColumn(name = "inventory_id")
     Inventory inventory;
+
+    @OneToOne
+    @JoinColumn(name = "request_id")
+    Request request;
 }

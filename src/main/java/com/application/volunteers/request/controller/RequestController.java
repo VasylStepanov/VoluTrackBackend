@@ -1,7 +1,7 @@
-package com.application.volunteers.inventory.controller;
+package com.application.volunteers.request.controller;
 
-import com.application.volunteers.inventory.service.InventoryService;
 import com.application.volunteers.item.dto.RequestItemDto;
+import com.application.volunteers.request.service.RequestService;
 import com.application.volunteers.volunteer.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,27 +12,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/inventory")
-public class InventoryController {
+@RequestMapping("api/v1/request")
+public class RequestController {
 
     @Autowired
     VolunteerService volunteerService;
 
     @Autowired
-    InventoryService inventoryService;
+    RequestService requestService;
 
-    @Operation(summary = "Get all items",
-            description = "Get items by group id or if group id is null, then get by volunteer id.")
+    @Operation(summary = "Get all request items",
+            description = "Get request items by group id or if group id is null, then get by volunteer id.")
     @GetMapping("/getAllItems")
     public ResponseEntity<?> getAllItemsByInventoryId(HttpServletRequest httpServletRequest,
                                                       @RequestParam(required = false) UUID groupId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
-        return ResponseEntity.ok(inventoryService.findAllItems(volunteerId, groupId));
+        return ResponseEntity.ok(requestService.findAllRequestItems(volunteerId, groupId));
     }
 
-    @Operation(summary = "Add item",
+    @Operation(summary = "Add request item",
             description = """
-                    Add item by group id or if group id is null, then add by volunteer id.
+                    Add request item by group id or if group id is null, then add by volunteer id.
                     Amount must be more than 0 but less than 65536.
                     ItemType and ItemMeasurement are enum, there are two endpoints what responses their content.""")
     @PostMapping("/addItem")
@@ -41,13 +41,13 @@ public class InventoryController {
                                      @RequestParam(required = false) UUID groupId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
 
-        inventoryService.saveItem(requestItemDto, volunteerId, groupId);
+        requestService.saveRequestItem(requestItemDto, volunteerId, groupId);
         return ResponseEntity.ok("Item is saved");
     }
 
-    @Operation(summary = "Update item",
+    @Operation(summary = "Update request item",
             description = """ 
-                    Update item by group id or if group id is null, then update by volunteer id.
+                    Update request item by group id or if group id is null, then update by volunteer id.
                     Only owner of the item can update the item.""")
     @PutMapping("/updateItem")
     public ResponseEntity<?> updateItem(HttpServletRequest httpServletRequest,
@@ -55,20 +55,20 @@ public class InventoryController {
                                         @RequestParam(required = false) UUID groupId,
                                         @RequestParam UUID itemId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
-        inventoryService.updateItem(requestUpdateItemDto, volunteerId, groupId, itemId);
+        requestService.updateRequestItem(requestUpdateItemDto, volunteerId, groupId, itemId);
         return ResponseEntity.ok("Item is updated");
     }
 
-    @Operation(summary = "Delete item by item id",
+    @Operation(summary = "Delete request item by item id",
             description = """
-                    Delete item by group id or if group id is null, then delete by volunteer id.
+                    Delete request item by group id or if group id is null, then delete by volunteer id.
                     Only owner of the item can remove the item.""")
     @DeleteMapping("/deleteItem")
     public ResponseEntity<?> deleteItem(HttpServletRequest httpServletRequest,
                                         @RequestParam(required = false) UUID groupId,
                                         @RequestParam UUID itemId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
-        inventoryService.deleteItem(volunteerId, groupId, itemId);
+        requestService.deleteRequestItem(volunteerId, groupId, itemId);
         return ResponseEntity.ok("Item is removed");
     }
 }

@@ -6,6 +6,8 @@ import com.application.user.model.User;
 import com.application.volunteers.address.repository.AddressRepository;
 import com.application.volunteers.inventory.model.Inventory;
 import com.application.volunteers.inventory.repository.InventoryRepository;
+import com.application.volunteers.request.model.Request;
+import com.application.volunteers.request.repository.RequestRepository;
 import com.application.volunteers.volunteer.dto.VolunteerProfileDto;
 import com.application.volunteers.volunteer.dto.VolunteerPublicProfileDto;
 import com.application.volunteers.volunteer.model.Volunteer;
@@ -31,12 +33,14 @@ public class VolunteerServiceImpl implements VolunteerService {
     @Autowired
     CookieUtil cookieUtil;
 
-
     @Autowired
     VolunteerRepository volunteerRepository;
 
     @Autowired
     InventoryRepository inventoryRepository;
+
+    @Autowired
+    RequestRepository requestRepository;
 
     @Autowired
     AddressRepository addressRepository;
@@ -74,9 +78,11 @@ public class VolunteerServiceImpl implements VolunteerService {
     @Transactional
     public void saveVolunteerProfile(User user) {
         Inventory inventory = inventoryRepository.save(new Inventory());
+        Request request = requestRepository.save(new Request());
         volunteerRepository.save(Volunteer.builder()
                 .user(user)
                 .inventory(inventory)
+                .request(request)
                 .build());
     }
 
@@ -88,5 +94,7 @@ public class VolunteerServiceImpl implements VolunteerService {
             addressRepository.deleteById(volunteer.getAddress().getId());
         if(volunteer.getInventory() != null)
             inventoryRepository.deleteById(volunteer.getInventory().getId());
+        if(volunteer.getRequest() != null)
+            requestRepository.deleteById(volunteer.getRequest().getId());
     }
 }

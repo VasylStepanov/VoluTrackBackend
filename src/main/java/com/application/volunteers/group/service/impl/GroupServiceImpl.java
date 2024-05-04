@@ -11,6 +11,8 @@ import com.application.volunteers.group.service.GroupService;
 import com.application.volunteers.inventory.model.Inventory;
 import com.application.volunteers.inventory.repository.InventoryRepository;
 import com.application.volunteers.inventory.service.InventoryService;
+import com.application.volunteers.request.model.Request;
+import com.application.volunteers.request.repository.RequestRepository;
 import com.application.volunteers.volunteer.model.Volunteer;
 import com.application.volunteers.volunteer.service.VolunteerService;
 import lombok.AccessLevel;
@@ -30,6 +32,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Autowired
     InventoryRepository inventoryRepository;
+
+    @Autowired
+    RequestRepository requestRepository;
 
     @Autowired
     AddressRepository addressRepository;
@@ -70,10 +75,12 @@ public class GroupServiceImpl implements GroupService {
     public void saveGroup(RequestGroupDto groupDto, UUID volunteerId) {
         Volunteer volunteer = volunteerService.getVolunteer(volunteerId);
         Inventory inventory = inventoryRepository.save(new Inventory());
+        Request request = requestRepository.save(new Request());
         groupRepository.save(Group.builder()
             .name(groupValidation.eitherNameIsValidFull(groupDto.name()))
             .description(groupValidation.eitherDescriptionIsValidFull(groupDto.description()))
             .inventory(inventory)
+            .request(request)
             .volunteer(volunteer)
             .build());
     }
@@ -97,6 +104,8 @@ public class GroupServiceImpl implements GroupService {
             addressRepository.deleteById(group.getAddress().getId());
         if(group.getInventory() != null)
             inventoryRepository.deleteById(group.getInventory().getId());
+        if(group.getRequest() != null)
+            requestRepository.deleteById(group.getRequest().getId());
         groupRepository.delete(group);
     }
 

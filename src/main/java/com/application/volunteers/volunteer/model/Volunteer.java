@@ -7,15 +7,13 @@ import com.application.volunteers.address.model.IAddress;
 import com.application.volunteers.car.model.Car;
 import com.application.volunteers.group.model.Group;
 import com.application.volunteers.inventory.model.Inventory;
-import com.application.volunteers.item.model.Item;
+import com.application.volunteers.request.model.Request;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -53,4 +51,8 @@ public class Volunteer extends BaseEntity implements IAddress {
     @OneToOne
     @JoinColumn(name = "inventory_id")
     Inventory inventory;
+
+    @OneToOne
+    @JoinColumn(name = "request_id")
+    Request request;
 }
