@@ -46,6 +46,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
+            if(request.getCookies() == null){
+                filterChain.doFilter(request, response);
+                return;
+            }
             String jwt = cookieUtil.getAccessTokenCookie(request.getCookies());
             if (disabledTokenService.isDisabled(jwt))
                 throw new RuntimeException("Access token is disabled");

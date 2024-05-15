@@ -31,8 +31,6 @@ public class CookieUtil {
 
     @SneakyThrows
     public String getAccessTokenCookie(Cookie[] cookies){
-        if(cookies == null)
-            throw new RuntimeException("Cookie is empty");
         return Stream.of(cookies)
                 .filter(cookie -> cookie.getName().equals(accessTokenName))
                 .map(cookie -> securityCipher.decrypt(cookie.getValue()))

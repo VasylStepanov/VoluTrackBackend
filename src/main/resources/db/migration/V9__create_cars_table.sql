@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS volunteer_data.cars(
     carrying_kg INTEGER NOT NULL,
     type SMALLINT NOT NULL,
     created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP(6),
+    updated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     volunteer_id UUID NOT NULL,
     CONSTRAINT uk_car_number UNIQUE(number),
     CONSTRAINT fk_car_volunteer_id FOREIGN KEY(volunteer_id) REFERENCES volunteer_data.volunteers(id) ON DELETE CASCADE

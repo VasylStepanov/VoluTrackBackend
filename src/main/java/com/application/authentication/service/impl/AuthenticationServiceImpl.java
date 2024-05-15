@@ -2,6 +2,7 @@ package com.application.authentication.service.impl;
 
 import com.application.authentication.dto.RequestUpdatePasswordDto;
 import com.application.authentication.dto.RequestUpdateUserDataDto;
+import com.application.content.volunteers.volunteer.service.VolunteerService;
 import com.application.security.service.JwtService;
 import com.application.authentication.service.AuthenticationService;
 import com.application.authentication.dto.AuthenticationRequest;
@@ -11,7 +12,6 @@ import com.application.security.util.CookieUtil;
 import com.application.user.dto.UserDto;
 import com.application.user.model.User;
 import com.application.user.service.UserService;
-import com.application.volunteers.volunteer.service.VolunteerService;
 import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
