@@ -43,15 +43,7 @@ public class MemberController {
             ));
         throw new RuntimeException("Address is empty");
     }
-
-    @Operation(summary = "Find nearest groups.",
-            description = """
-                    Return the nearest groups by manually input address.""")
-    @GetMapping("/findGroupsManually")
-    public ResponseEntity<?> findGroups(@RequestBody RequestFindGroupsByAddressDto requestFindGroupsByAddressDto) {
-        return ResponseEntity.ok(groupService.getGroupsByLocation(requestFindGroupsByAddressDto));
-    }
-
+    
     @Operation(summary = "Find user joined groups.",
             description = """
                     Return all groups what user joined.""")
