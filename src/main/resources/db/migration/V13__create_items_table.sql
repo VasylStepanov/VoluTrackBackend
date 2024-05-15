@@ -8,5 +8,5 @@ CREATE TABLE IF NOT EXISTS item_data.items(
     item_measurement SMALLINT NOT NULL,
     item_type SMALLINT NOT NULL,
     created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP(6)
+    updated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

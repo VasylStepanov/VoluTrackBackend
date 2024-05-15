@@ -92,7 +92,7 @@ public class RequestServiceImpl implements RequestService {
 
     @SneakyThrows
     private Request getGroupRequest(UUID volunteerId, UUID groupId) {
-        Group group = groupService.eitherIsAGroupRepresent(volunteerId, groupId);
+        Group group = groupService.eitherIsAGroupModerator(volunteerId, groupId);
         return group.getRequest();
     }
 }

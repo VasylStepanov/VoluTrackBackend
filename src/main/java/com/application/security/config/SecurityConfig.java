@@ -56,7 +56,8 @@ public class SecurityConfig {
                                 "/api/v*/inventory/**",
                                 "/api/v*/request/**",
                                 "/api/v*/group/**",
-                                "/api/v*/authentication/**").authenticated())
+                                "/api/v*/authentication/**",
+                                "/api/v*/member/**").authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

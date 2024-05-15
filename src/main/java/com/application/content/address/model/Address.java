@@ -22,7 +22,7 @@ public class Address extends BaseEntity {
     @Column(name = "settlement", length = 64, nullable = false)
     String settlement;
 
-    @Column(name = "location", length = 128, nullable = false)
+    @Column(name = "location", length = 128)
     String location;
 
     @Column(name = "coordinates_latitude")

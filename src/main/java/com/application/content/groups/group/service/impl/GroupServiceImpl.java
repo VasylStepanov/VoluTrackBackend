@@ -8,6 +8,10 @@ import com.application.content.groups.group.repository.GroupRepository;
 import com.application.content.groups.group.service.GroupService;
 import com.application.content.groups.group.dto.RequestGroupDto;
 import com.application.content.groups.group.dto.response.ResponseGroupDto;
+import com.application.content.groups.member.dto.RequestFindGroupsByAddressDto;
+import com.application.content.groups.member.entity.Member;
+import com.application.content.groups.member.entity.MemberRole;
+import com.application.content.groups.member.repository.MemberRepository;
 import com.application.content.items.inventory.model.Inventory;
 import com.application.content.items.inventory.repository.InventoryRepository;
 import com.application.content.items.request.model.Request;
@@ -22,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -40,6 +45,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Autowired
     GroupRepository groupRepository;
+
+    @Autowired
+    MemberRepository memberRepository;
 
     @Autowired
     GroupValidation groupValidation;
@@ -61,8 +69,18 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public List<ResponseGroupDto> getGroupsByLocation(RequestFindGroupsByAddressDto requestFindGroupsByAddressDto) {
+        return groupRepository.findByAddress(requestFindGroupsByAddressDto.region(),
+                requestFindGroupsByAddressDto.settlement())
+                .stream()
+                .map(ResponseGroupDto::toResponseGroupDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public ResponseGroupDto getResponseGroupDto(UUID volunteerId, UUID groupId) {
         Group group = getGroup(groupId);
+
         if(group.getVolunteer().getId().equals(volunteerId))
             return ResponsePrivateGroupDto.toResponseGroupDto(group);
         else
@@ -75,44 +93,81 @@ public class GroupServiceImpl implements GroupService {
         Volunteer volunteer = volunteerService.getVolunteer(volunteerId);
         Inventory inventory = inventoryRepository.save(new Inventory());
         Request request = requestRepository.save(new Request());
-        groupRepository.save(Group.builder()
+
+        Group group = groupRepository.save(Group.builder()
             .name(groupValidation.eitherNameIsValidFull(groupDto.name()))
             .description(groupValidation.eitherDescriptionIsValidFull(groupDto.description()))
             .inventory(inventory)
             .request(request)
             .volunteer(volunteer)
             .build());
+
+        Member member = Member.builder()
+                .volunteer(volunteer)
+                .group(group)
+                .memberRole(MemberRole.ADMIN_ROLE)
+                .build();
+
+        memberRepository.save(member);
     }
 
     @Override
     @SneakyThrows
     @Transactional
     public void updateGroup(RequestGroupDto groupDto, UUID volunteerId, UUID groupId) {
-        Group group = eitherIsAGroupRepresent(volunteerId, groupId);
+        Group group = eitherIsAGroupAdmin(volunteerId, groupId);
+
         if(groupDto.name() != null)
             group.setName(groupValidation.eitherNameIsValid(groupDto.name()));
+
         if(groupDto.description() != null)
             group.setDescription(groupValidation.eitherDescriptionIsValid(groupDto.description()));
     }
 
     @Override
+    @SneakyThrows
     @Transactional
     public void deleteGroup(UUID volunteerId, UUID groupId) {
-        Group group = eitherIsAGroupRepresent(volunteerId, groupId);
+        Group group = eitherIsAGroupAdmin(volunteerId, groupId);
+
         if(group.getAddress() != null)
             addressRepository.deleteById(group.getAddress().getId());
+
         if(group.getInventory() != null)
             inventoryRepository.deleteById(group.getInventory().getId());
+
         if(group.getRequest() != null)
             requestRepository.deleteById(group.getRequest().getId());
+
         groupRepository.delete(group);
     }
 
     @Override
-    public Group eitherIsAGroupRepresent(UUID volunteerId, UUID groupId) throws RuntimeException {
-        Group group = getGroup(groupId);
-        if(group.getVolunteer().getId().equals(volunteerId))
-            return group;
-        throw new RuntimeException("User isn't an owner of the group");
+    @SneakyThrows
+    public Group eitherIsAGroupAdmin(UUID volunteerId, UUID groupId) throws RuntimeException {
+        Member member = getMembership(volunteerId, groupId);
+
+        if(member.getMemberRole().equals(MemberRole.ADMIN_ROLE))
+            return member.getGroup();
+
+        throw new RuntimeException("User is not an admin of this group");
+    }
+
+    @Override
+    @SneakyThrows
+    public Group eitherIsAGroupModerator(UUID volunteerId, UUID groupId) throws RuntimeException {
+        Member member = getMembership(volunteerId, groupId);
+
+        if(member.getMemberRole().equals(MemberRole.ADMIN_ROLE) ||
+                member.getMemberRole().equals(MemberRole.MODER_ROLE))
+            return member.getGroup();
+
+        throw new RuntimeException("User isn't a moderator of this group");
+    }
+
+    @SneakyThrows
+    private Member getMembership(UUID volunteerId, UUID groupId) throws RuntimeException {
+        Optional<Member> member = memberRepository.findByVolunteerIdAndGroupId(volunteerId, groupId);
+        return member.orElseThrow(() -> new RuntimeException("User is not related to this group"));
     }
 }

@@ -25,7 +25,7 @@ public class ItemValidation {
 
     @SneakyThrows
     public Integer eitherAmountValid(Integer amount){
-        if(amount <= 0 || amount >= 65536)
+        if(amount < 0 || amount >= 65536)
             throw new RuntimeException("Invalid amount");
         return amount;
     }

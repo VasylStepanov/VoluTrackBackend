@@ -94,7 +94,7 @@ public class InventoryServiceImpl implements InventoryService {
 
     @SneakyThrows
     private Inventory getGroupInventory(UUID volunteerId, UUID groupId) {
-        Group group = groupService.eitherIsAGroupRepresent(volunteerId, groupId);
+        Group group = groupService.eitherIsAGroupModerator(volunteerId, groupId);
         return group.getInventory();
     }
 

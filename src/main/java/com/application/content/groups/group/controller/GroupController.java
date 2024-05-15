@@ -36,12 +36,13 @@ public class GroupController {
 
     @Operation(summary = "Get group by id", description = "Owner gets more data than other users")
     @GetMapping
-    public ResponseEntity<?> getGroupById(@RequestParam UUID groupId, HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> getGroupById(@RequestParam UUID groupId,
+                                          HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         return ResponseEntity.ok(groupService.getResponseGroupDto(volunteerId, groupId));
     }
 
-    @Operation(summary = "Get group by volunteer id", description = "User get all his groups")
+    @Operation(summary = "Get own groups by volunteer id", description = "User get his created groups")
     @GetMapping("/getAllGroups")
     public ResponseEntity<?> getGroupByVolunteerId(HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
@@ -50,7 +51,8 @@ public class GroupController {
 
     @Operation(summary = "Save group")
     @PostMapping("/save")
-    public ResponseEntity<?> saveGroup(@RequestBody RequestGroupDto requestGroupDto, HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> saveGroup(@RequestBody RequestGroupDto requestGroupDto,
+                                       HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         groupService.saveGroup(requestGroupDto, volunteerId);
         return ResponseEntity.ok("Group is successfully added");
@@ -58,7 +60,9 @@ public class GroupController {
 
     @Operation(summary = "Update group")
     @PostMapping("/update")
-    public ResponseEntity<?> updateGroup(@RequestBody RequestGroupDto requestGroupDto, @RequestParam UUID groupId, HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> updateGroup(@RequestBody RequestGroupDto requestGroupDto,
+                                         @RequestParam UUID groupId,
+                                         HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         groupService.updateGroup(requestGroupDto, volunteerId, groupId);
         return ResponseEntity.ok("Group is successfully updated");
@@ -66,7 +70,8 @@ public class GroupController {
 
     @Operation(summary = "Delete group")
     @PostMapping("/delete")
-    public ResponseEntity<?> deleteGroup(@RequestParam UUID groupId, HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> deleteGroup(@RequestParam UUID groupId,
+                                         HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         groupService.deleteGroup(volunteerId, groupId);
         return ResponseEntity.ok("Group is successfully removed");
@@ -76,11 +81,14 @@ public class GroupController {
     * Address endpoints
     * */
 
-    @Operation(summary = "Update group's address", description = "If it's first request, than address is saved, next requests will update the address.")
+    @Operation(summary = "Update group's address",
+            description = "If it's first request, than address is saved, next requests will update the address.")
     @PostMapping("/address/update")
-    public ResponseEntity<?> updateAddress(@RequestBody RequestAddressDto requestAddressDto, @RequestParam UUID groupId, HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> updateAddress(@RequestBody RequestAddressDto requestAddressDto,
+                                           @RequestParam UUID groupId,
+                                           HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
-        Group group = groupService.eitherIsAGroupRepresent(volunteerId, groupId);
+        Group group = groupService.eitherIsAGroupAdmin(volunteerId, groupId);
         addressService.updateAddress(group, requestAddressDto);
         return ResponseEntity.ok("Address is updated");
     }

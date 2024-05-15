@@ -3,6 +3,7 @@ package com.application.content.groups.group.model;
 import com.application.config.BaseEntity;
 import com.application.content.address.model.Address;
 import com.application.content.address.model.IAddress;
+import com.application.content.groups.member.entity.Member;
 import com.application.content.items.inventory.model.Inventory;
 import com.application.content.items.request.model.Request;
 import com.application.content.volunteers.volunteer.model.Volunteer;
@@ -10,6 +11,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -46,4 +49,10 @@ public class Group extends BaseEntity implements IAddress {
     @OneToOne
     @JoinColumn(name = "request_id")
     Request request;
+
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    List<Member> membersInGroup;
+
+    @Column(name = "open_for_transfer", nullable = false)
+    boolean openForTransfer;
 }
