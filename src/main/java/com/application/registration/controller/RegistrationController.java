@@ -40,7 +40,7 @@ public class RegistrationController {
     @Operation(summary = "Confirm request.",
             description = "Go to email service(e.g. @gmail) and push \"Activate\" button.")
     @PostMapping("/confirm")
-    public ResponseEntity<?> confirm(@RequestParam String token){
-        return ResponseEntity.ok(registrationService.confirmToken(token));
+    public ResponseEntity<?> confirm(@RequestParam String password){
+        return ResponseEntity.ok(registrationService.confirmAccount(password));
     }
 }

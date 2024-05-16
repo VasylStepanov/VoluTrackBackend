@@ -10,6 +10,10 @@
             box-sizing: border-box;
         }
 
+        .h2_password{
+      		letter-spacing: 12px;
+		}
+
         body {
             margin: 0;
             padding: 0;
@@ -141,7 +145,7 @@
                                     <table border="0" cellpadding="10" cellspacing="0" class="heading_block block-2" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
                                         <tr>
                                             <td class="pad">
-                                                <h1 style="margin: 0; color: #2e2e2e; direction: ltr; font-family: Arial, Helvetica, sans-serif; font-size: 38px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder">Доброго дня ${name}! Ви зареєструвалися в системі VoluTrack, для активації аккаунту натисніть на клавішу нижче цього повідомлення, Слава Україні! </span></h1>
+                                                <h1 style="margin: 0; color: #2e2e2e; direction: ltr; font-family: Arial, Helvetica, sans-serif; font-size: 38px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder">Доброго дня ${name}! Ви зареєструвалися в системі VoluTrack, для активації аккаунту введіть нижче наведений пароль на сторінці активації, Слава Україні! </span></h1>
                                             </td>
                                         </tr>
                                     </table>
@@ -149,9 +153,7 @@
                                         <tr>
                                             <td class="pad">
                                                 <div align="center" class="alignment">
-                                                    <form method="post" action="${link}">
-                                                        <input class="btn" type="submit" value="Активувати">
-                                                    </form>
+                                                    <h2 class="h2_password">${password}</h2>
                                                 </div>
                                             </td>
                                         </tr>

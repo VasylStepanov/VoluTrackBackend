@@ -14,6 +14,7 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,22 +38,20 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     VolunteerService volunteerService;
 
-    @Value("${sender.link}")
-    String link;
-
     @Override
     public String register(RegistrationRequest registrationRequest) {
-        String token = signUpUser(registrationRequest);
-        Map<String, Object> models = Map.of(
-                "name", String.format("%s %s", registrationRequest.firstName(), registrationRequest.lastName()),
-                "link", link + token);
+        String password = signUpUser(registrationRequest);
+        Map<String, Object> models = getModels(registrationRequest.firstName(),
+                registrationRequest.lastName(),
+                password);
+
         emailService.send(registrationRequest.email(), models);
         return "Send confirmation";
     }
 
     @Override
-    public String confirmToken(String token) {
-        ConfirmationEmail confirmationEmail = confirmationEmailService.getToken(token);
+    public String confirmAccount(String password) {
+        ConfirmationEmail confirmationEmail = confirmationEmailService.getConfirmationEmail(password);
         LocalDateTime expiresAt = confirmationEmail.getExpiresAt();
 
         if(LocalDateTime.now().isAfter(expiresAt))
@@ -65,8 +64,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public String resendConfirmToken(String token){
-        ConfirmationEmail confirmationEmail = confirmationEmailService.getToken(token);
+    public String resendConfirmToken(String password){
+        ConfirmationEmail confirmationEmail = confirmationEmailService.getConfirmationEmail(password);
         LocalDateTime expiresAt = confirmationEmail.getExpiresAt();
 
         if(LocalDateTime.now().isBefore(expiresAt))
@@ -74,15 +73,16 @@ public class RegistrationServiceImpl implements RegistrationService {
         else if(confirmationEmail.isConfirmed())
             throw new ConfirmationEmailException("Email is already confirmed.");
 
-        String newToken = UUID.randomUUID().toString();
+        String newPassword = getPassword();
 
-        confirmationEmail.setToken(newToken);
+        Map<String, Object> models = getModels(confirmationEmail.getUser().getFirstName(),
+                confirmationEmail.getUser().getLastName(),
+                newPassword);
+
+        confirmationEmail.setPassword(newPassword);
         confirmationEmail.setCreatedAt(LocalDateTime.now());
         confirmationEmail.setExpiresAt(LocalDateTime.now().plusMinutes(15));
 
-        Map<String, Object> models = Map.of(
-                "name", String.format("%s %s", confirmationEmail.getUser().getFirstName(), confirmationEmail.getUser().getFirstName()),
-                "link", link + newToken);
         emailService.send(confirmationEmail.getUser().getEmail(), models);
 
         return "Resent confirmation";
@@ -93,10 +93,10 @@ public class RegistrationServiceImpl implements RegistrationService {
         User user = userService.createUser(registrationRequest);
         volunteerService.saveVolunteerProfile(user);
 
-        String token = UUID.randomUUID().toString();
+        String password = getPassword();
 
         ConfirmationEmail confirmation = ConfirmationEmail.builder()
-                .token(token)
+                .password(password)
                 .confirmed(false)
                 .expiresAt(LocalDateTime.now().plusMinutes(15))
                 .user(user)
@@ -104,6 +104,16 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         confirmationEmailService.saveConfirmationEmail(confirmation);
 
-        return token;
+        return password;
+    }
+
+    private Map<String, Object> getModels(String firstName, String lastName, String password) {
+        return Map.of(
+                "name", String.format("%s %s", firstName, lastName),
+                "password", password);
+    }
+
+    private String getPassword(){
+        return String.valueOf(Math.round(Math.random() * 899999 + 100000));
     }
 }

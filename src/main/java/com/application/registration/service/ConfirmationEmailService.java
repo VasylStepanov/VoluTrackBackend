@@ -5,7 +5,7 @@ import com.application.registration.model.ConfirmationEmail;
 public interface ConfirmationEmailService {
     void saveConfirmationEmail(ConfirmationEmail confirmationEmail);
 
-    void deleteConfirmationEmail(String token);
+    void deleteConfirmationEmail(String password);
 
-    ConfirmationEmail getToken(String token);
+    ConfirmationEmail getConfirmationEmail(String password);
 }
