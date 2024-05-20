@@ -1,6 +1,6 @@
 package com.application.content.groups.member.controller;
 
-import com.application.content.address.model.Address;
+import com.application.content.general.address.model.Address;
 import com.application.content.groups.group.service.GroupService;
 import com.application.content.groups.member.dto.RequestFindGroupsByAddressDto;
 import com.application.content.groups.member.dto.RequestSetMemberRoleDto;

@@ -1,4 +1,4 @@
-package com.application.content.address.model;
+package com.application.content.general.address.model;
 
 import com.application.config.BaseEntity;
 import jakarta.persistence.*;

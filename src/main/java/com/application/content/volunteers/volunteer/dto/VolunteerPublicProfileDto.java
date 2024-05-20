@@ -1,6 +1,6 @@
 package com.application.content.volunteers.volunteer.dto;
 
-import com.application.content.address.dto.ResponsePublicAddressDto;
+import com.application.content.general.address.dto.ResponsePublicAddressDto;
 import com.application.content.volunteers.volunteer.model.Volunteer;
 import lombok.AccessLevel;
 import lombok.Builder;

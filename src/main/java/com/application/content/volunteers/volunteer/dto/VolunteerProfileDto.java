@@ -1,6 +1,6 @@
 package com.application.content.volunteers.volunteer.dto;
 
-import com.application.content.address.dto.ResponsePrivateAddressDto;
+import com.application.content.general.address.dto.ResponsePrivateAddressDto;
 import com.application.content.volunteers.car.dto.ResponseCarDto;
 import com.application.content.volunteers.volunteer.model.Volunteer;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

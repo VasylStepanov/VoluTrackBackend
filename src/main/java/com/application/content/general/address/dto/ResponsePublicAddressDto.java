@@ -1,6 +1,6 @@
-package com.application.content.address.dto;
+package com.application.content.general.address.dto;
 
-import com.application.content.address.model.Address;
+import com.application.content.general.address.model.Address;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;

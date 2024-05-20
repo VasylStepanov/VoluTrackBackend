@@ -1,7 +1,7 @@
-package com.application.content.address.service;
+package com.application.content.general.address.service;
 
-import com.application.content.address.dto.RequestAddressDto;
-import com.application.content.address.model.IAddress;
+import com.application.content.general.address.dto.RequestAddressDto;
+import com.application.content.general.address.model.IAddress;
 
 import java.util.UUID;
 

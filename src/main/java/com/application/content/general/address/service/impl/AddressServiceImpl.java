@@ -1,12 +1,10 @@
-package com.application.content.address.service.impl;
+package com.application.content.general.address.service.impl;
 
-import com.application.content.address.model.Address;
-import com.application.content.address.model.IAddress;
-import com.application.content.address.dto.RequestAddressDto;
-import com.application.content.address.repository.AddressRepository;
-import com.application.content.address.service.AddressService;
-import com.application.content.groups.group.service.GroupService;
-import com.application.content.volunteers.volunteer.service.VolunteerService;
+import com.application.content.general.address.model.Address;
+import com.application.content.general.address.model.IAddress;
+import com.application.content.general.address.dto.RequestAddressDto;
+import com.application.content.general.address.repository.AddressRepository;
+import com.application.content.general.address.service.AddressService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;

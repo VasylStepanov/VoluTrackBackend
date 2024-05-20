@@ -1,8 +1,8 @@
 package com.application.content.volunteers.volunteer.model;
 
 import com.application.config.BaseEntity;
-import com.application.content.address.model.Address;
-import com.application.content.address.model.IAddress;
+import com.application.content.general.address.model.Address;
+import com.application.content.general.address.model.IAddress;
 import com.application.content.groups.member.entity.Member;
 import com.application.content.items.inventory.model.Inventory;
 import com.application.content.volunteers.car.model.Car;

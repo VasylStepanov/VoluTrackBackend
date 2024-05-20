@@ -1,8 +1,7 @@
 package com.application.content.volunteers.volunteer.controller;
 
-import com.application.content.address.dto.RequestAddressDto;
-import com.application.content.address.service.AddressService;
-import com.application.content.groups.group.model.Group;
+import com.application.content.general.address.dto.RequestAddressDto;
+import com.application.content.general.address.service.AddressService;
 import com.application.content.volunteers.car.dto.RequestCarDto;
 import com.application.content.volunteers.car.service.CarService;
 import com.application.content.volunteers.volunteer.model.Volunteer;

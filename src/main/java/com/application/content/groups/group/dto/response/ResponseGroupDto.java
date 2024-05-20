@@ -1,6 +1,5 @@
 package com.application.content.groups.group.dto.response;
 
-import com.application.content.address.dto.ResponsePrivateAddressDto;
 import com.application.content.groups.group.model.Group;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

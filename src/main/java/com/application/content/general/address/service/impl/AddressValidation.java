@@ -1,4 +1,4 @@
-package com.application.content.address.service.impl;
+package com.application.content.general.address.service.impl;
 
 import org.springframework.stereotype.Service;
 

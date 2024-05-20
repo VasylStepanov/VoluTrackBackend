@@ -1,6 +1,6 @@
 package com.application.content.groups.group.service.impl;
 
-import com.application.content.address.repository.AddressRepository;
+import com.application.content.general.address.repository.AddressRepository;
 import com.application.content.groups.group.dto.response.ResponsePrivateGroupDto;
 import com.application.content.groups.group.dto.response.ResponsePublicGroupDto;
 import com.application.content.groups.group.model.Group;
