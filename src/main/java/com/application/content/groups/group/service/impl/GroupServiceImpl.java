@@ -70,8 +70,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<ResponseGroupDto> getGroupsByLocation(RequestFindGroupsByAddressDto requestFindGroupsByAddressDto) {
-        return groupRepository.findByAddress(requestFindGroupsByAddressDto.region(),
-                requestFindGroupsByAddressDto.settlement())
+        return groupRepository.findByAddress(requestFindGroupsByAddressDto.address())
                 .stream()
                 .map(ResponseGroupDto::toResponseGroupDto)
                 .collect(Collectors.toList());

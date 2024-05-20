@@ -13,6 +13,6 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
 
     List<Group> findAllByVolunteerId(UUID volunteerId);
 
-    @Query("SELECT g FROM group g WHERE g.address.region = ?1 AND g.address.settlement = ?2")
-    List<Group> findByAddress(String region, String settlement);
+    @Query("SELECT g FROM group g WHERE g.address.address = ?1")
+    List<Group> findByAddress(String address);
 }

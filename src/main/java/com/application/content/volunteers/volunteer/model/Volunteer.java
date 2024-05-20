@@ -28,13 +28,6 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Volunteer extends BaseEntity implements IAddress {
 
-    @Column(name = "description")
-    String description;
-
-    @Builder.Default
-    @Column(name = "help_counter")
-    int helpCounter = 0;
-
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     User user;

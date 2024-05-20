@@ -5,22 +5,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class AddressValidation {
 
-    public String eitherRegionIsValid(String region){
-        if(region.length() < 2 || region.length() >= 32)
-            throw new RuntimeException("Region is invalid");
-        return region;
-    }
-
-    public String eitherSettlementIsValid(String settlement) {
-        if(settlement.length() < 2 || settlement.length() >= 64 )
-            throw new RuntimeException("Settlement is invalid");
-        return settlement;
-    }
-
-    public String eitherLocationIsValid(String location) {
-        if(location.length() < 2 || location.length() >= 128)
-            throw new RuntimeException("Location is invalid");
-        return location;
+    public String eitherAddressIsValid(String address){
+        if(address.length() < 2 || address.length() > 256)
+            throw new RuntimeException("Address is invalid");
+        return address;
     }
 
 
@@ -36,23 +24,12 @@ public class AddressValidation {
         return coordinatesLongitude;
     }
 
-    public String eitherRegionIsValidFull(String region) {
-        if(region == null)
-            throw new RuntimeException("Region is null");
-        return eitherRegionIsValid(region);
+    public String eitherAddressIsValidFull(String address) {
+        if(address == null)
+            throw new RuntimeException("Address is null");
+        return eitherAddressIsValid(address);
     }
 
-    public String eitherSettlementIsValidFull(String settlement) {
-        if(settlement == null)
-            throw new RuntimeException("Settlement is null");
-        return eitherSettlementIsValid(settlement);
-    }
-
-    public String eitherLocationIsValidFull(String location) {
-        if(location == null)
-            throw new RuntimeException("Location is null");
-        return eitherLocationIsValid(location);
-    }
 
     public Double eitherCoordinatesLatitudeFull(Double coordinatesLatitude) {
         if(coordinatesLatitude == null)

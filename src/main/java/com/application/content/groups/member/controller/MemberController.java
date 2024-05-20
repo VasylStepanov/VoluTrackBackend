@@ -39,7 +39,7 @@ public class MemberController {
         Address address = volunteerService.getVolunteer(volunteerService.getVolunteerId(httpServletRequest)).getAddress();
         if(address != null)
             return ResponseEntity.ok(groupService.getGroupsByLocation(
-               new RequestFindGroupsByAddressDto(address.getRegion(), address.getSettlement())
+               new RequestFindGroupsByAddressDto(address.getAddress())
             ));
         throw new RuntimeException("Address is empty");
     }

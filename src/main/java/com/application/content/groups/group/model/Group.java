@@ -30,10 +30,6 @@ public class Group extends BaseEntity implements IAddress {
     @Column(name = "description")
     String description;
 
-    @Builder.Default
-    @Column(name = "help_counter")
-    int helpCounter = 0;
-
     @ManyToOne
     @JoinColumn(name = "volunteer_id", nullable = false)
     Volunteer volunteer;
@@ -52,7 +48,4 @@ public class Group extends BaseEntity implements IAddress {
 
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     List<Member> membersInGroup;
-
-    @Column(name = "open_for_transfer", nullable = false)
-    boolean openForTransfer;
 }

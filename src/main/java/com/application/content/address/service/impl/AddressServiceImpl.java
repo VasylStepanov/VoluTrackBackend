@@ -26,18 +26,10 @@ public class AddressServiceImpl implements AddressService {
     @Autowired
     AddressValidation addressValidation;
 
-    @Autowired
-    VolunteerService volunteerService;
-
-    @Autowired
-    GroupService groupService;
-
     @Override
     public void saveAddress(IAddress iAddress, RequestAddressDto requestAddressDto) {
         Address address = addressRepository.save(Address.builder()
-            .region(addressValidation.eitherRegionIsValidFull(requestAddressDto.region()))
-            .settlement(addressValidation.eitherSettlementIsValidFull(requestAddressDto.settlement()))
-            .location(addressValidation.eitherLocationIsValidFull(requestAddressDto.location()))
+            .address(addressValidation.eitherAddressIsValidFull(requestAddressDto.address()))
             .coordinatesLatitude(addressValidation.eitherCoordinatesLatitudeFull(requestAddressDto.coordinatesLatitude()))
             .coordinatesLongitude(addressValidation.eitherCoordinatesLongitude(requestAddressDto.coordinatesLongitude()))
             .build());
@@ -52,12 +44,8 @@ public class AddressServiceImpl implements AddressService {
             return;
         }
         address.isUpdated();
-        if(requestAddressDto.region() != null)
-            address.setRegion(addressValidation.eitherRegionIsValid(requestAddressDto.region()));
-        if(requestAddressDto.settlement() != null)
-            address.setSettlement(addressValidation.eitherSettlementIsValid(requestAddressDto.settlement()));
-        if(requestAddressDto.location() != null)
-            address.setLocation(addressValidation.eitherLocationIsValid(requestAddressDto.location()));
+        if(requestAddressDto.address() != null)
+            address.setAddress(addressValidation.eitherAddressIsValid(requestAddressDto.address()));
         if(requestAddressDto.coordinatesLatitude() != null)
             address.setCoordinatesLatitude(addressValidation.eitherCoordinatesLatitude(requestAddressDto.coordinatesLatitude()));
         if(requestAddressDto.coordinatesLongitude() != null)

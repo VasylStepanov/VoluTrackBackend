@@ -20,15 +20,15 @@ VALUES ('abfe376e-809e-40df-8b64-3aff45ff2e3c'), ('dbe9c523-44fb-47fb-9830-0b0f5
 ('f7d0158b-fd25-4a46-ae62-7b4f70435773'), ('29ae3f8a-5439-425a-98a0-12d17e09530c'),
 ('8d756d5c-d6fe-41c6-847f-e33d6cc18eae');
 
-INSERT INTO general_data.addresses(id, region, settlement, location, coordinates_latitude, coordinates_longitude)
-VALUES ('e17d83d8-771e-4902-954c-04550fcabe60', 'Львівська область', 'Львів', 'Рівна вулиця 6', 23.9761968, 49.8314759),
-('c3880914-311c-40af-bb57-d0540933d3cd', 'Львівська область', 'Львів', NULL, NULL, NULL),
-('9cb02340-08ad-446e-a80c-55e217721675', 'Rivnens''ka oblast', 'Rivne', '24 Fabrychna St', 50.641917, 26.269554),
-('98083222-fba4-4c7b-8d77-43774966795f', 'Івано-Франківська область', 'Івано-Франківськ', '118-В, Halytska Street', NULL, NULL),
-('4fdbfff0-908b-44c9-89cb-61a37ab20df5', 'Ternopil''s''ka oblast', 'Berezhany', 'Vulytsya Lepkykh, 10', 24.93536, 49.44342),
-('769f21a1-5901-4f6b-90d4-a4b539f83b34', 'Donets''ka oblast', 'Kramators''k', 'Oleksy Tykhoho St, 1', 37.560764, 48.718680),
-('0dcd3aa9-0a10-4054-b5e4-213c59fe5db0', 'Kyivs''ka oblast', 'Bila Tserkva', 'Pryvokzal''na St, 10', 30.117936, 49.807795),
-('c4d96896-fe86-4998-b019-1b4564be1eff', 'Kyivs''ka oblast', 'Bila Tserkva', NULL, NULL, NULL);
+INSERT INTO general_data.addresses(id, address, coordinates_latitude, coordinates_longitude)
+VALUES ('e17d83d8-771e-4902-954c-04550fcabe60', 'Львівська область, Львів, Рівна вулиця 6', 23.9761968, 49.8314759),
+('c3880914-311c-40af-bb57-d0540933d3cd', 'Львівська область, Львів', NULL, NULL),
+('9cb02340-08ad-446e-a80c-55e217721675', 'Rivnens''ka oblast, Rivne, 24 Fabrychna St', 50.641917, 26.269554),
+('98083222-fba4-4c7b-8d77-43774966795f', 'Івано-Франківська область, Івано-Франківськ, 118-В, Halytska Street', NULL, NULL),
+('4fdbfff0-908b-44c9-89cb-61a37ab20df5', 'Ternopil''s''ka oblast, Berezhany, Vulytsya Lepkykh, 10', 24.93536, 49.44342),
+('769f21a1-5901-4f6b-90d4-a4b539f83b34', 'Donets''ka oblast, Kramators''k, Oleksy Tykhoho St, 1', 37.560764, 48.718680),
+('0dcd3aa9-0a10-4054-b5e4-213c59fe5db0', 'Kyivs''ka oblast, Bila Tserkva, Pryvokzal''na St, 10', 30.117936, 49.807795),
+('c4d96896-fe86-4998-b019-1b4564be1eff', 'Kyivs''ka oblast, Bila Tserkva', NULL, NULL);
 
 INSERT INTO volunteer_data.volunteers(id, user_id, address_id, inventory_id, request_id)
 VALUES ('ea5353ba-7df5-44dd-a85c-5c011580f9aa', '71119396-8694-11ed-9ef6-77042ee83937', 'e17d83d8-771e-4902-954c-04550fcabe60', '02ab61b1-ac27-4f32-9bc9-3e40341b4699', 'abfe376e-809e-40df-8b64-3aff45ff2e3c'),
@@ -38,10 +38,10 @@ VALUES ('ea5353ba-7df5-44dd-a85c-5c011580f9aa', '71119396-8694-11ed-9ef6-77042ee
 ('329a7ba0-f10b-4996-8624-cfb32ff24c38', '1e4edaf2-5e57-4753-840d-a6c97f860067', NULL, '345d947e-7b65-44b4-9431-8b4254769469', '19f87a6a-79df-4c14-823d-2ac36c1d57ad'),
 ('f042b766-57c5-4e54-a742-0678693e8fbe', '90cdbeed-0898-480a-bbd5-43042885ceb3', 'c4d96896-fe86-4998-b019-1b4564be1eff', 'aee71174-f86d-4828-a290-4409550e1b10', '473fc3a3-edfc-407a-8898-b856281f8baa');
 
-INSERT INTO group_data.groups(id, name, description, help_counter, volunteer_id, address_id, inventory_id, request_id)
-VALUES ('360ee69b-0f6b-48d7-a40b-db0cd537afda', 'Робимо окопні свічки', NULL, 8, 'f061ad57-879c-446d-8bd4-b64452243bae', '4fdbfff0-908b-44c9-89cb-61a37ab20df5', '29823253-599a-43bb-8e85-97e36c7ba429', 'f7d0158b-fd25-4a46-ae62-7b4f70435773'),
-('a79da60e-86b8-4659-a293-7defccbb5c00', 'Збір та видача гуманітарної допомоги', NULL, 3, '329a7ba0-f10b-4996-8624-cfb32ff24c38', '769f21a1-5901-4f6b-90d4-a4b539f83b34', '539d6275-39b8-46cf-af78-9b815cc670e9', '29ae3f8a-5439-425a-98a0-12d17e09530c'),
-('3478e89e-862b-455a-8eae-857ee190aa99', 'Сітки біля вокзалу', 'Плетимо сітки по вулиці Привокзальна 10. Контактний номер: +380123456789', 12, 'f042b766-57c5-4e54-a742-0678693e8fbe', '0dcd3aa9-0a10-4054-b5e4-213c59fe5db0', '755748a4-3d57-42a3-9af6-2661c021681b', '8d756d5c-d6fe-41c6-847f-e33d6cc18eae');
+INSERT INTO group_data.groups(id, name, description, volunteer_id, address_id, inventory_id, request_id)
+VALUES ('360ee69b-0f6b-48d7-a40b-db0cd537afda', 'Робимо окопні свічки', NULL, 'f061ad57-879c-446d-8bd4-b64452243bae', '4fdbfff0-908b-44c9-89cb-61a37ab20df5', '29823253-599a-43bb-8e85-97e36c7ba429', 'f7d0158b-fd25-4a46-ae62-7b4f70435773'),
+('a79da60e-86b8-4659-a293-7defccbb5c00', 'Збір та видача гуманітарної допомоги', NULL, '329a7ba0-f10b-4996-8624-cfb32ff24c38', '769f21a1-5901-4f6b-90d4-a4b539f83b34', '539d6275-39b8-46cf-af78-9b815cc670e9', '29ae3f8a-5439-425a-98a0-12d17e09530c'),
+('3478e89e-862b-455a-8eae-857ee190aa99', 'Сітки біля вокзалу', 'Плетимо сітки по вулиці Привокзальна 10. Контактний номер: +380123456789', 'f042b766-57c5-4e54-a742-0678693e8fbe', '0dcd3aa9-0a10-4054-b5e4-213c59fe5db0', '755748a4-3d57-42a3-9af6-2661c021681b', '8d756d5c-d6fe-41c6-847f-e33d6cc18eae');
 
 INSERT INTO group_data.members(id, volunteer_id, group_id, member_role)
 VALUES ('10fca4f1-2854-4f0b-b816-6a90298a4904', 'f061ad57-879c-446d-8bd4-b64452243bae', '360ee69b-0f6b-48d7-a40b-db0cd537afda', 2),

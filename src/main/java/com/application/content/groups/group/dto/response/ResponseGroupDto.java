@@ -20,13 +20,10 @@ public class ResponseGroupDto {
 
     String description;
 
-    int helpCounter;
-
     public static ResponseGroupDto toResponseGroupDto(Group group) {
         return new ResponseGroupDto(
                 group.getId(),
                 group.getName(),
-                group.getDescription(),
-                group.getHelpCounter());
+                group.getDescription());
     }
 }

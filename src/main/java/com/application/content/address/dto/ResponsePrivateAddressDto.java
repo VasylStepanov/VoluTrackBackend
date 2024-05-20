@@ -9,11 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ResponsePrivateAddressDto {
 
-    String region;
-
-    String settlement;
-
-    String location;
+    String address;
 
     Double coordinatesLatitude;
 
@@ -23,9 +19,7 @@ public class ResponsePrivateAddressDto {
         if(address == null)
             return null;
         return new ResponsePrivateAddressDto(
-                address.getRegion(),
-                address.getSettlement(),
-                address.getLocation(),
+                address.getAddress(),
                 address.getCoordinatesLatitude(),
                 address.getCoordinatesLatitude());
     }

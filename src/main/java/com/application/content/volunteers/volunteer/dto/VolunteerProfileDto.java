@@ -25,10 +25,6 @@ public class VolunteerProfileDto {
 
     String email;
 
-    String description;
-
-    int helpCounter;
-
     LocalDateTime createdAt;
 
     ResponsePrivateAddressDto responsePrivateAddressDto;
@@ -40,8 +36,6 @@ public class VolunteerProfileDto {
                 volunteer.getUser().getFirstName(),
                 volunteer.getUser().getLastName(),
                 volunteer.getUser().getEmail(),
-                volunteer.getDescription(),
-                volunteer.getHelpCounter(),
                 volunteer.getCreatedAt(),
                 ResponsePrivateAddressDto.toResponseAddressDto(volunteer.getAddress()),
                 volunteer.getCarList().stream().map(ResponseCarDto::toResponseCarDto).toList()

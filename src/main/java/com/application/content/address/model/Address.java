@@ -16,14 +16,8 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Address extends BaseEntity {
 
-    @Column(name = "region", length = 32, nullable = false)
-    String region;
-
-    @Column(name = "settlement", length = 64, nullable = false)
-    String settlement;
-
-    @Column(name = "location", length = 128)
-    String location;
+    @Column(name = "address", length = 256, nullable = false)
+    String address;
 
     @Column(name = "coordinates_latitude")
     Double coordinatesLatitude;

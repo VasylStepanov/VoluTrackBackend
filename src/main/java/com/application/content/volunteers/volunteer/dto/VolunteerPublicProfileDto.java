@@ -15,10 +15,6 @@ public class VolunteerPublicProfileDto {
 
     String lastName;
 
-    String description;
-
-    int helpCounter;
-
     LocalDateTime createdAt;
 
     ResponsePublicAddressDto responsePublicAddressDto;
@@ -27,8 +23,6 @@ public class VolunteerPublicProfileDto {
         return new VolunteerPublicProfileDto(
                 volunteer.getUser().getFirstName(),
                 volunteer.getUser().getLastName(),
-                volunteer.getDescription(),
-                volunteer.getHelpCounter(),
                 volunteer.getCreatedAt(),
                 ResponsePublicAddressDto.toResponsePublicAddressDto(volunteer.getAddress())
         );
