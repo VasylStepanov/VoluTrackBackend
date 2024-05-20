@@ -10,7 +10,7 @@ import com.application.content.volunteers.volunteer.service.VolunteerService;
 import com.application.security.service.JwtService;
 import com.application.security.util.CookieUtil;
 import com.application.user.model.User;
-import com.application.content.address.repository.AddressRepository;
+import com.application.content.general.address.repository.AddressRepository;
 import com.application.content.items.inventory.model.Inventory;
 import com.application.content.items.inventory.repository.InventoryRepository;
 

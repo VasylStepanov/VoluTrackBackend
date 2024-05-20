@@ -1,6 +1,6 @@
 package com.application.content.volunteers.volunteer.dto;
 
-import com.application.content.address.dto.ResponsePublicAddressDto;
+import com.application.content.general.address.dto.ResponsePublicAddressDto;
 import com.application.content.volunteers.volunteer.model.Volunteer;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,10 +15,6 @@ public class VolunteerPublicProfileDto {
 
     String lastName;
 
-    String description;
-
-    int helpCounter;
-
     LocalDateTime createdAt;
 
     ResponsePublicAddressDto responsePublicAddressDto;
@@ -27,8 +23,6 @@ public class VolunteerPublicProfileDto {
         return new VolunteerPublicProfileDto(
                 volunteer.getUser().getFirstName(),
                 volunteer.getUser().getLastName(),
-                volunteer.getDescription(),
-                volunteer.getHelpCounter(),
                 volunteer.getCreatedAt(),
                 ResponsePublicAddressDto.toResponsePublicAddressDto(volunteer.getAddress())
         );

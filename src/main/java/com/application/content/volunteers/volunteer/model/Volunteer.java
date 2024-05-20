@@ -1,8 +1,8 @@
 package com.application.content.volunteers.volunteer.model;
 
 import com.application.config.BaseEntity;
-import com.application.content.address.model.Address;
-import com.application.content.address.model.IAddress;
+import com.application.content.general.address.model.Address;
+import com.application.content.general.address.model.IAddress;
 import com.application.content.groups.member.entity.Member;
 import com.application.content.items.inventory.model.Inventory;
 import com.application.content.volunteers.car.model.Car;
@@ -27,13 +27,6 @@ import java.util.List;
 })
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Volunteer extends BaseEntity implements IAddress {
-
-    @Column(name = "description")
-    String description;
-
-    @Builder.Default
-    @Column(name = "help_counter")
-    int helpCounter = 0;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)

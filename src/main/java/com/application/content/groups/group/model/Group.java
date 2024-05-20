@@ -1,8 +1,8 @@
 package com.application.content.groups.group.model;
 
 import com.application.config.BaseEntity;
-import com.application.content.address.model.Address;
-import com.application.content.address.model.IAddress;
+import com.application.content.general.address.model.Address;
+import com.application.content.general.address.model.IAddress;
 import com.application.content.groups.member.entity.Member;
 import com.application.content.items.inventory.model.Inventory;
 import com.application.content.items.request.model.Request;
@@ -30,10 +30,6 @@ public class Group extends BaseEntity implements IAddress {
     @Column(name = "description")
     String description;
 
-    @Builder.Default
-    @Column(name = "help_counter")
-    int helpCounter = 0;
-
     @ManyToOne
     @JoinColumn(name = "volunteer_id", nullable = false)
     Volunteer volunteer;
@@ -52,7 +48,4 @@ public class Group extends BaseEntity implements IAddress {
 
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     List<Member> membersInGroup;
-
-    @Column(name = "open_for_transfer", nullable = false)
-    boolean openForTransfer;
 }

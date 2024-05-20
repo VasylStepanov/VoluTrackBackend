@@ -1,6 +1,6 @@
 package com.application.content.groups.group.service.impl;
 
-import com.application.content.address.repository.AddressRepository;
+import com.application.content.general.address.repository.AddressRepository;
 import com.application.content.groups.group.dto.response.ResponsePrivateGroupDto;
 import com.application.content.groups.group.dto.response.ResponsePublicGroupDto;
 import com.application.content.groups.group.model.Group;
@@ -70,8 +70,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<ResponseGroupDto> getGroupsByLocation(RequestFindGroupsByAddressDto requestFindGroupsByAddressDto) {
-        return groupRepository.findByAddress(requestFindGroupsByAddressDto.region(),
-                requestFindGroupsByAddressDto.settlement())
+        return groupRepository.findByAddress(requestFindGroupsByAddressDto.address())
                 .stream()
                 .map(ResponseGroupDto::toResponseGroupDto)
                 .collect(Collectors.toList());

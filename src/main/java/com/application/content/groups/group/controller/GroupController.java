@@ -1,7 +1,7 @@
 package com.application.content.groups.group.controller;
 
-import com.application.content.address.dto.RequestAddressDto;
-import com.application.content.address.service.AddressService;
+import com.application.content.general.address.dto.RequestAddressDto;
+import com.application.content.general.address.service.AddressService;
 import com.application.content.groups.group.dto.RequestGroupDto;
 import com.application.content.groups.group.model.Group;
 import com.application.content.groups.group.service.GroupService;

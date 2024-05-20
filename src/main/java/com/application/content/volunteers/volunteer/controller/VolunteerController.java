@@ -1,7 +1,10 @@
 package com.application.content.volunteers.volunteer.controller;
 
+import com.application.content.general.address.dto.RequestAddressDto;
+import com.application.content.general.address.service.AddressService;
 import com.application.content.volunteers.car.dto.RequestCarDto;
 import com.application.content.volunteers.car.service.CarService;
+import com.application.content.volunteers.volunteer.model.Volunteer;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +27,9 @@ public class VolunteerController {
 
     @Autowired
     CarService carService;
+
+    @Autowired
+    AddressService addressService;
 
     @Operation(summary = "Get profile data", description = "Profile data is a volunteer data with user data.")
     @GetMapping("/profile")
@@ -69,4 +75,17 @@ public class VolunteerController {
         }
     }
 
+    /*
+     * address
+     * */
+    @Operation(summary = "Update volunteer's address",
+            description = "If it's first request, than address is saved, next requests will update the address.")
+    @PostMapping("/address/update")
+    public ResponseEntity<?> updateAddress(@RequestBody RequestAddressDto requestAddressDto,
+                                           HttpServletRequest httpServletRequest){
+        UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
+        Volunteer volunteer = volunteerService.getVolunteer(volunteerId);
+        addressService.updateAddress(volunteer, requestAddressDto);
+        return ResponseEntity.ok("Address is updated");
+    }
 }

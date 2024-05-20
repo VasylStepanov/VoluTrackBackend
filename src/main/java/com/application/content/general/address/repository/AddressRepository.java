@@ -1,6 +1,6 @@
-package com.application.content.address.repository;
+package com.application.content.general.address.repository;
 
-import com.application.content.address.model.Address;
+import com.application.content.general.address.model.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

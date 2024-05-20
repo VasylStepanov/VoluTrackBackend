@@ -1,6 +1,6 @@
 package com.application.content.groups.group.dto.response;
 
-import com.application.content.address.dto.ResponsePublicAddressDto;
+import com.application.content.general.address.dto.ResponsePublicAddressDto;
 import com.application.content.groups.group.model.Group;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,8 +14,8 @@ public class ResponsePublicGroupDto extends ResponseGroupDto{
 
     ResponsePublicAddressDto responsePublicAddressDto;
 
-    public ResponsePublicGroupDto(UUID id, String name, String description, int helpCounter, ResponsePublicAddressDto responsePublicAddressDto) {
-        super(id, name, description, helpCounter);
+    public ResponsePublicGroupDto(UUID id, String name, String description, ResponsePublicAddressDto responsePublicAddressDto) {
+        super(id, name, description);
         this.responsePublicAddressDto = responsePublicAddressDto;
     }
 
@@ -24,7 +24,6 @@ public class ResponsePublicGroupDto extends ResponseGroupDto{
                 group.getId(),
                 group.getName(),
                 group.getDescription(),
-                group.getHelpCounter(),
                 ResponsePublicAddressDto.toResponsePublicAddressDto(group.getAddress()));
     }
 }

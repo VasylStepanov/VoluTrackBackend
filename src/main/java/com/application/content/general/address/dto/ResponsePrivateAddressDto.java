@@ -1,7 +1,7 @@
-package com.application.content.address.dto;
+package com.application.content.general.address.dto;
 
 
-import com.application.content.address.model.Address;
+import com.application.content.general.address.model.Address;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,11 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ResponsePrivateAddressDto {
 
-    String region;
-
-    String settlement;
-
-    String location;
+    String address;
 
     Double coordinatesLatitude;
 
@@ -23,9 +19,7 @@ public class ResponsePrivateAddressDto {
         if(address == null)
             return null;
         return new ResponsePrivateAddressDto(
-                address.getRegion(),
-                address.getSettlement(),
-                address.getLocation(),
+                address.getAddress(),
                 address.getCoordinatesLatitude(),
                 address.getCoordinatesLatitude());
     }

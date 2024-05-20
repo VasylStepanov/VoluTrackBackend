@@ -1,6 +1,5 @@
 package com.application.content.groups.group.dto.response;
 
-import com.application.content.address.dto.ResponsePrivateAddressDto;
 import com.application.content.groups.group.model.Group;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,13 +19,10 @@ public class ResponseGroupDto {
 
     String description;
 
-    int helpCounter;
-
     public static ResponseGroupDto toResponseGroupDto(Group group) {
         return new ResponseGroupDto(
                 group.getId(),
                 group.getName(),
-                group.getDescription(),
-                group.getHelpCounter());
+                group.getDescription());
     }
 }

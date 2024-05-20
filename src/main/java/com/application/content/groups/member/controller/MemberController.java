@@ -1,6 +1,6 @@
 package com.application.content.groups.member.controller;
 
-import com.application.content.address.model.Address;
+import com.application.content.general.address.model.Address;
 import com.application.content.groups.group.service.GroupService;
 import com.application.content.groups.member.dto.RequestFindGroupsByAddressDto;
 import com.application.content.groups.member.dto.RequestSetMemberRoleDto;
@@ -39,7 +39,7 @@ public class MemberController {
         Address address = volunteerService.getVolunteer(volunteerService.getVolunteerId(httpServletRequest)).getAddress();
         if(address != null)
             return ResponseEntity.ok(groupService.getGroupsByLocation(
-               new RequestFindGroupsByAddressDto(address.getRegion(), address.getSettlement())
+               new RequestFindGroupsByAddressDto(address.getAddress())
             ));
         throw new RuntimeException("Address is empty");
     }
