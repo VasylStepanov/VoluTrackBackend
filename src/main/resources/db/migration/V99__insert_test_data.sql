@@ -20,15 +20,15 @@ VALUES ('abfe376e-809e-40df-8b64-3aff45ff2e3c'), ('dbe9c523-44fb-47fb-9830-0b0f5
 ('f7d0158b-fd25-4a46-ae62-7b4f70435773'), ('29ae3f8a-5439-425a-98a0-12d17e09530c'),
 ('8d756d5c-d6fe-41c6-847f-e33d6cc18eae');
 
-INSERT INTO general_data.addresses(id, address, coordinates_latitude, coordinates_longitude)
-VALUES ('e17d83d8-771e-4902-954c-04550fcabe60', 'Львівська область, Львів, Рівна вулиця 6', 23.9761968, 49.8314759),
-('c3880914-311c-40af-bb57-d0540933d3cd', 'Львівська область, Львів', NULL, NULL),
+INSERT INTO general_data.addresses(id, address, coordinates_longitude, coordinates_latitude)
+VALUES ('e17d83d8-771e-4902-954c-04550fcabe60', 'Львівська область, Львів, Рівна вулиця 6', 49.8314759, 23.9761968),
+('c3880914-311c-40af-bb57-d0540933d3cd', 'Knyahyni Ol''hy St, 18, L''viv, L''vivs''ka oblast, 79000', 49.824465315800936, 24.007322888416407),
 ('9cb02340-08ad-446e-a80c-55e217721675', 'Rivnens''ka oblast, Rivne, 24 Fabrychna St', 50.641917, 26.269554),
-('98083222-fba4-4c7b-8d77-43774966795f', 'Івано-Франківська область, Івано-Франківськ, 118-В, Halytska Street', NULL, NULL),
-('4fdbfff0-908b-44c9-89cb-61a37ab20df5', 'Ternopil''s''ka oblast, Berezhany, Vulytsya Lepkykh, 10', 24.93536, 49.44342),
-('769f21a1-5901-4f6b-90d4-a4b539f83b34', 'Donets''ka oblast, Kramators''k, Oleksy Tykhoho St, 1', 37.560764, 48.718680),
-('0dcd3aa9-0a10-4054-b5e4-213c59fe5db0', 'Kyivs''ka oblast, Bila Tserkva, Pryvokzal''na St, 10', 30.117936, 49.807795),
-('c4d96896-fe86-4998-b019-1b4564be1eff', 'Kyivs''ka oblast, Bila Tserkva', NULL, NULL);
+('98083222-fba4-4c7b-8d77-43774966795f', 'Vulytsya Yevhena Konovalʹtsya, 305', 48.885189882170096, 24.71090984728424),
+('4fdbfff0-908b-44c9-89cb-61a37ab20df5', 'Ternopil''s''ka oblast, Berezhany, Vulytsya Lepkykh, 10', 49.44342, 24.93536),
+('769f21a1-5901-4f6b-90d4-a4b539f83b34', 'Donets''ka oblast, Kramators''k, Oleksy Tykhoho St, 1', 48.718680, 37.560764),
+('0dcd3aa9-0a10-4054-b5e4-213c59fe5db0', 'Kyivs''ka oblast, Bila Tserkva, Pryvokzal''na St, 10', 49.80787253425913, 30.11794946833953),
+('c4d96896-fe86-4998-b019-1b4564be1eff', 'Shevchenka St, 15, Bila Tserkva, Kyivs''ka oblast, 09100', 49.79388248173281, 30.118627837456383);
 
 INSERT INTO volunteer_data.volunteers(id, user_id, address_id, inventory_id, request_id)
 VALUES ('ea5353ba-7df5-44dd-a85c-5c011580f9aa', '71119396-8694-11ed-9ef6-77042ee83937', 'e17d83d8-771e-4902-954c-04550fcabe60', '02ab61b1-ac27-4f32-9bc9-3e40341b4699', 'abfe376e-809e-40df-8b64-3aff45ff2e3c'),
@@ -53,24 +53,14 @@ INSERT INTO volunteer_data.cars(id, number, description, carrying_kg, type, volu
 VALUES ('3ff0b760-5cd1-418e-877e-705c18a3bcd5', 'АО 1234 ВВ', 'Чорна шкода', 60, 0, 'ea5353ba-7df5-44dd-a85c-5c011580f9aa'),
 ('c852891b-3f67-424d-97ef-194da575d403', 'АВ 6523 АК', 'Біла хонда', 100, 1, 'c852891b-3f67-424d-97ef-194da575d403');
 
-INSERT INTO item_data.items(id, name, description, amount, item_measurement, item_type)
-VALUES ('d20bfdaf-2334-4005-8fff-d447935d6cf2', '6 пар військових берц', NULL, 6, 2, 2),
-('3e145743-21fb-4721-97ce-7d735f25ff62', 'Харчі', 'Будь-які харчі, тушонка, каші, сухе печиво, чай', 0, 0, 3),
-('e5913d2e-d5c7-4e73-aae2-03fe0c647867', '5 кг тушонки', 'Тушонка домашня в 1л банках', 5, 0, 3),
-('558fc402-b492-4574-8d15-8c73ad19fc86', '10 FPV дронів', '10 Звичайних FPV дронів', 10, 2, 5),
-('dbd2aba0-7026-46ca-976b-76b75fb24efc', 'Потрібно зимовий одяг', 'Будь-який одяг для дітей та дорослих у прифронтові селища', 0, 2, 1),
-('f783f548-86c7-47af-9521-46f026dcb1d3', '4 штуки маскувальних сіток', NULL, 4, 2, 6),
-('a3eec7b1-16a8-42d7-ba28-1b53882a251b', 'Одяг', 'Різний дитячий одяг', 4, 0, 1),
-('94300a39-e561-4e57-a13b-fdcb90fa9bf3', 'Окопні свічки', '40 кг окопних свічок', 40, 0, 7);
+INSERT INTO item_data.inventory_items(id, name, description, weight, amount, item_type, inventory_id)
+VALUES ('04498a3a-f704-4e70-b197-1a76c29f9e85', '6 пар військових берц', NULL, 6, 2, 2, '755748a4-3d57-42a3-9af6-2661c021681b'),
+('6fa8667b-1b88-48ff-badb-89701fcf1a82', '5 кг тушонки', 'Тушонка домашня в 1л банках', 5, 5, 3, '755748a4-3d57-42a3-9af6-2661c021681b'),
+('a3eec7b1-16a8-42d7-ba28-1b53882a251b', '10 FPV дронів', '10 Звичайних FPV дронів', 6, 5, 5, '29823253-599a-43bb-8e85-97e36c7ba429'),
+('d210e4d4-6164-403f-9205-7871d145df08', '4 штуки маскувальних сіток', NULL, 8, 4, 6, '02ab61b1-ac27-4f32-9bc9-3e40341b4699'),
+('8c3fbc57-b555-4c1c-ae4c-9d632c953633', 'Одяг', 'Різний дитячий одяг', 4, 0, 1, '710c2e63-641e-42c3-a306-9e3088b8fda8'),
+('ab25a8af-17ed-42cb-a8c0-78cff5563dde', 'Окопні свічки', '40 кг окопних свічок', 40, 0, 7, '539d6275-39b8-46cf-af78-9b815cc670e9');
 
-INSERT INTO item_data.inventory_items(id, inventory_id, item_id)
-VALUES ('04498a3a-f704-4e70-b197-1a76c29f9e85', '755748a4-3d57-42a3-9af6-2661c021681b', 'f783f548-86c7-47af-9521-46f026dcb1d3'),
-('6fa8667b-1b88-48ff-badb-89701fcf1a82', '755748a4-3d57-42a3-9af6-2661c021681b', 'd20bfdaf-2334-4005-8fff-d447935d6cf2'),
-('a3eec7b1-16a8-42d7-ba28-1b53882a251b', '29823253-599a-43bb-8e85-97e36c7ba429', '94300a39-e561-4e57-a13b-fdcb90fa9bf3'),
-('d210e4d4-6164-403f-9205-7871d145df08', '02ab61b1-ac27-4f32-9bc9-3e40341b4699', 'a3eec7b1-16a8-42d7-ba28-1b53882a251b'),
-('8c3fbc57-b555-4c1c-ae4c-9d632c953633', '710c2e63-641e-42c3-a306-9e3088b8fda8', 'e5913d2e-d5c7-4e73-aae2-03fe0c647867'),
-('ab25a8af-17ed-42cb-a8c0-78cff5563dde', '539d6275-39b8-46cf-af78-9b815cc670e9', '558fc402-b492-4574-8d15-8c73ad19fc86');
-
-INSERT INTO item_data.request_items(id, request_id, item_id)
-VALUES ('0b222c33-dafa-40aa-b583-7ee67f8fe02e', '29ae3f8a-5439-425a-98a0-12d17e09530c', 'dbd2aba0-7026-46ca-976b-76b75fb24efc'),
-('749d1a05-39db-4610-a4ac-365e05cdd1fd', '29ae3f8a-5439-425a-98a0-12d17e09530c', '3e145743-21fb-4721-97ce-7d735f25ff62');
+INSERT INTO item_data.request_items(id, weight, amount, item_type, request_id)
+VALUES ('0b222c33-dafa-40aa-b583-7ee67f8fe02e', 0, 0, 3, '29ae3f8a-5439-425a-98a0-12d17e09530c'),
+('749d1a05-39db-4610-a4ac-365e05cdd1fd', 0, 0, 1, '29ae3f8a-5439-425a-98a0-12d17e09530c');

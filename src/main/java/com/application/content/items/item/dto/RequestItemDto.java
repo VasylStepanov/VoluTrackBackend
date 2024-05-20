@@ -1,8 +1,6 @@
 package com.application.content.items.item.dto;
 
-public record RequestItemDto(String name,
-                             String description,
-                             Integer amount,
-                             String itemMeasurement,
-                             String itemType) {
+import com.application.content.items.item.model.ItemType;
+
+public record RequestItemDto(Integer amount, Integer weight, ItemType itemType) {
 }

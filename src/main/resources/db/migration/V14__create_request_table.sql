@@ -12,10 +12,11 @@ ALTER TABLE group_data.groups ADD CONSTRAINT fk_group_request_id FOREIGN KEY(req
 
 CREATE TABLE IF NOT EXISTS item_data.request_items(
     id UUID CONSTRAINT request_item_id_pk PRIMARY KEY,
+    item_type SMALLINT,
+    amount INTEGER NOT NULL DEFAULT 0,
+    weight INTEGER NOT NULL DEFAULT 0,
     request_id UUID NOT NULL,
-    item_id UUID NOT NULL,
     created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_request_id FOREIGN KEY(request_id) REFERENCES item_data.requests(id) ON DELETE CASCADE,
-    CONSTRAINT fk_requested_item_id FOREIGN KEY(item_id) REFERENCES item_data.items(id) ON DELETE CASCADE
+    CONSTRAINT fk_request_id FOREIGN KEY(request_id) REFERENCES item_data.requests(id) ON DELETE CASCADE
 );

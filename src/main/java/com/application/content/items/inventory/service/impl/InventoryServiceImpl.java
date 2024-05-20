@@ -7,10 +7,9 @@ import com.application.content.items.inventory.repository.InventoryRepository;
 import com.application.content.items.inventory.service.InventoryService;
 import com.application.content.groups.group.model.Group;
 import com.application.content.groups.group.service.GroupService;
-import com.application.content.items.item.dto.RequestItemDto;
-import com.application.content.items.item.dto.ResponseItemDto;
-import com.application.content.items.item.model.Item;
-import com.application.content.items.item.service.ItemService;
+import com.application.content.items.item.dto.InventoryItemDto;
+import com.application.content.items.item.dto.ResponseInventoryItemDto;
+import com.application.content.items.item.service.ItemValidation;
 import com.application.content.volunteers.volunteer.model.Volunteer;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
 import lombok.SneakyThrows;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class InventoryServiceImpl implements InventoryService {
@@ -30,48 +30,67 @@ public class InventoryServiceImpl implements InventoryService {
     GroupService groupService;
 
     @Autowired
-    ItemService itemService;
-
-    @Autowired
     InventoryRepository inventoryRepository;
 
     @Autowired
     InventoryItemRepository inventoryItemRepository;
 
-    @Override
-    public List<ResponseItemDto> findAllItems(Inventory inventory) {
-        return itemService.getItems(inventory);
-    }
+    @Autowired
+    ItemValidation itemValidation;
 
     @Override
-    public List<ResponseItemDto> findAllItems(UUID volunteerId, UUID groupId) {
+    public List<ResponseInventoryItemDto> findAllItems(UUID volunteerId, UUID groupId) {
         Inventory inventory = getInventory(volunteerId, groupId);
-        return findAllItems(inventory);
+        return inventoryItemRepository
+                .findAllByInventoryId(inventory.getId())
+                .stream()
+                .map(ResponseInventoryItemDto::toResponseInventoryItemDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     @SneakyThrows
-    public void saveItem(RequestItemDto requestItemDto, UUID volunteerId, UUID groupId) {
+    public void saveItem(InventoryItemDto inventoryItemDto, UUID volunteerId, UUID groupId) {
         Inventory inventory = getInventory(volunteerId, groupId);
-        Item item = itemService.saveItem(requestItemDto);
         InventoryItem inventoryItem = InventoryItem.builder()
+                .name(itemValidation.eitherNameValidFull(inventoryItemDto.name()))
+                .description(itemValidation.eitherDescriptionValid(inventoryItemDto.description()))
+                .amount(itemValidation.eitherIntegerMoreThanZeroEqualFull(inventoryItemDto.amount()))
+                .weight(itemValidation.eitherIntegerMoreThanZeroFull(inventoryItemDto.weight()))
+                .itemType(inventoryItemDto.itemType())
                 .inventory(inventory)
-                .item(item)
                 .build();
         inventoryItemRepository.save(inventoryItem);
     }
 
     @Override
     @SneakyThrows
-    public void updateItem(RequestItemDto requestItemDto, UUID volunteerId, UUID groupId, UUID itemId) {
+    public void updateItem(InventoryItemDto inventoryItemDto, UUID volunteerId, UUID groupId, UUID inventoryItemId) {
         Inventory inventory = getInventory(volunteerId, groupId);
-        itemService.updateItem(requestItemDto, inventory, itemId);
+        InventoryItem inventoryItem = inventory.getInventoryItems().stream()
+                .filter(x -> x.getId().equals(inventoryItemId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Item isn't from the inventory"));
+        if(inventoryItemDto.name() != null)
+            inventoryItem.setName(itemValidation.eitherNameValid(inventoryItemDto.name()));
+        if(inventoryItemDto.description() != null)
+            inventoryItem.setDescription(inventoryItemDto.description());
+        if(inventoryItemDto.amount() != null)
+            inventoryItem.setAmount(itemValidation.eitherIntegerMoreThanZeroEqual(inventoryItemDto.amount()));
+        if(inventoryItemDto.weight() != null)
+            inventoryItem.setWeight(itemValidation.eitherIntegerMoreThanZero(inventoryItemDto.weight()));
+        if(inventoryItemDto.itemType() != null)
+            inventoryItem.setItemType(inventoryItemDto.itemType());
     }
 
     @Override
-    public void deleteItem(UUID volunteerId, UUID groupId, UUID itemId) {
+    public void deleteItem(UUID volunteerId, UUID groupId, UUID inventoryItemId) {
         Inventory inventory = getInventory(volunteerId, groupId);
-        itemService.deleteItem(inventory, itemId);
+        InventoryItem inventoryItem = inventory.getInventoryItems().stream()
+                .filter(x -> x.getId().equals(inventoryItemId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Item isn't from the inventory"));
+        inventoryItemRepository.delete(inventoryItem);
     }
 
     @Override

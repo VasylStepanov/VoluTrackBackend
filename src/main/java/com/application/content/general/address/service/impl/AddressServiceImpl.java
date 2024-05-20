@@ -28,8 +28,8 @@ public class AddressServiceImpl implements AddressService {
     public void saveAddress(IAddress iAddress, RequestAddressDto requestAddressDto) {
         Address address = addressRepository.save(Address.builder()
             .address(addressValidation.eitherAddressIsValidFull(requestAddressDto.address()))
-            .coordinatesLatitude(addressValidation.eitherCoordinatesLatitudeFull(requestAddressDto.coordinatesLatitude()))
-            .coordinatesLongitude(addressValidation.eitherCoordinatesLongitude(requestAddressDto.coordinatesLongitude()))
+                .coordinatesLongitude(addressValidation.eitherCoordinatesLongitude(requestAddressDto.coordinatesLongitude()))
+                .coordinatesLatitude(addressValidation.eitherCoordinatesLatitudeFull(requestAddressDto.coordinatesLatitude()))
             .build());
         iAddress.setAddress(address);
     }
@@ -44,10 +44,10 @@ public class AddressServiceImpl implements AddressService {
         address.isUpdated();
         if(requestAddressDto.address() != null)
             address.setAddress(addressValidation.eitherAddressIsValid(requestAddressDto.address()));
-        if(requestAddressDto.coordinatesLatitude() != null)
-            address.setCoordinatesLatitude(addressValidation.eitherCoordinatesLatitude(requestAddressDto.coordinatesLatitude()));
         if(requestAddressDto.coordinatesLongitude() != null)
             address.setCoordinatesLongitude(addressValidation.eitherCoordinatesLongitude(requestAddressDto.coordinatesLongitude()));
+        if(requestAddressDto.coordinatesLatitude() != null)
+            address.setCoordinatesLatitude(addressValidation.eitherCoordinatesLatitude(requestAddressDto.coordinatesLatitude()));
     }
 
     @Override

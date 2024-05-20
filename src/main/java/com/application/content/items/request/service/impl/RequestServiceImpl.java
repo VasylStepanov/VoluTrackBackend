@@ -1,5 +1,7 @@
 package com.application.content.items.request.service.impl;
 
+import com.application.content.items.item.dto.ResponseRequestItemDto;
+import com.application.content.items.item.service.ItemValidation;
 import com.application.content.items.request.model.Request;
 import com.application.content.items.request.repository.RequestItemRepository;
 import com.application.content.items.request.repository.RequestRepository;
@@ -7,9 +9,6 @@ import com.application.content.items.request.service.RequestService;
 import com.application.content.groups.group.model.Group;
 import com.application.content.groups.group.service.GroupService;
 import com.application.content.items.item.dto.RequestItemDto;
-import com.application.content.items.item.dto.ResponseItemDto;
-import com.application.content.items.item.model.Item;
-import com.application.content.items.item.service.ItemService;
 import com.application.content.items.request.model.RequestItem;
 import com.application.content.volunteers.volunteer.model.Volunteer;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class RequestServiceImpl implements RequestService {
@@ -30,46 +30,59 @@ public class RequestServiceImpl implements RequestService {
     GroupService groupService;
 
     @Autowired
-    ItemService itemService;
-
-    @Autowired
     RequestRepository requestRepository;
 
     @Autowired
     RequestItemRepository requestItemRepository;
 
-    @Override
-    public List<ResponseItemDto> findAllRequestItems(Request request) {
-        return itemService.getItems(request);
-    }
+    @Autowired
+    ItemValidation itemValidation;
 
     @Override
-    public List<ResponseItemDto> findAllRequestItems(UUID volunteerId, UUID groupId) {
+    public List<ResponseRequestItemDto> findAllRequestItems(UUID volunteerId, UUID groupId) {
         Request request = getRequest(volunteerId, groupId);
-        return findAllRequestItems(request);
+        return requestItemRepository
+                .findAllByRequestId(request.getId())
+                .stream()
+                .map(ResponseRequestItemDto::toResponseRequestItemDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public void saveRequestItem(RequestItemDto requestItemDto, UUID volunteerId, UUID groupId) {
         Request request = getRequest(volunteerId, groupId);
-        Item item = itemService.saveItem(requestItemDto);
         RequestItem requestItem = RequestItem.builder()
+                .amount(itemValidation.eitherIntegerMoreThanZeroEqualFull(requestItemDto.amount()))
+                .weight(itemValidation.eitherIntegerMoreThanZeroEqualFull(requestItemDto.weight()))
+                .itemType(requestItemDto.itemType())
                 .request(request)
-                .item(item)
                 .build();
         requestItemRepository.save(requestItem);
     }
 
     @Override
-    public void updateRequestItem(RequestItemDto requestItemDto, UUID volunteerId, UUID groupId, UUID itemId) {
+    public void updateRequestItem(RequestItemDto requestItemDto, UUID volunteerId, UUID groupId, UUID requestItemId) {
         Request request = getRequest(volunteerId, groupId);
-        itemService.updateItem(requestItemDto, request, itemId);
+        RequestItem requestItem = request.getRequestItems().stream()
+                .filter(x -> x.getId().equals(requestItemId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("RequestItem isn't from the requests"));
+        if(requestItemDto.amount() != null)
+            requestItem.setAmount(itemValidation.eitherIntegerMoreThanZeroEqual(requestItemDto.amount()));
+        if(requestItemDto.weight() != null)
+            requestItem.setWeight(itemValidation.eitherIntegerMoreThanZeroEqual(requestItemDto.weight()));
+        if(requestItemDto.itemType() != null)
+            requestItem.setItemType(requestItemDto.itemType());
     }
 
     @Override
-    public void deleteRequestItem(UUID volunteerId, UUID groupId, UUID itemId) {
+    public void deleteRequestItem(UUID volunteerId, UUID groupId, UUID requestItemId) {
         Request request = getRequest(volunteerId, groupId);
-        itemService.deleteItem(request, itemId);
+        RequestItem requestItem = request.getRequestItems().stream()
+                .filter(x -> x.getId().equals(requestItemId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("RequestItem isn't from the requests"));
+        requestItemRepository.delete(requestItem);
     }
 
     @Override

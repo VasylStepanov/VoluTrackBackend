@@ -1,6 +1,7 @@
 package com.application.content.items.inventory.controller;
 
 import com.application.content.items.inventory.service.InventoryService;
+import com.application.content.items.item.dto.InventoryItemDto;
 import com.application.content.items.item.dto.RequestItemDto;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,11 +38,11 @@ public class InventoryController {
                     ItemType and ItemMeasurement are enum, there are two endpoints what responses their content.""")
     @PostMapping("/addItem")
     public ResponseEntity<?> addItem(HttpServletRequest httpServletRequest,
-                                     @RequestBody RequestItemDto requestItemDto,
+                                     @RequestBody InventoryItemDto inventoryItemDto,
                                      @RequestParam(required = false) UUID groupId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
 
-        inventoryService.saveItem(requestItemDto, volunteerId, groupId);
+        inventoryService.saveItem(inventoryItemDto, volunteerId, groupId);
         return ResponseEntity.ok("Item is saved");
     }
 
@@ -51,11 +52,11 @@ public class InventoryController {
                     Only owner of the item can update the item.""")
     @PutMapping("/updateItem")
     public ResponseEntity<?> updateItem(HttpServletRequest httpServletRequest,
-                                        @RequestBody RequestItemDto requestUpdateItemDto,
+                                        @RequestBody InventoryItemDto inventoryItemDto,
                                         @RequestParam(required = false) UUID groupId,
                                         @RequestParam UUID itemId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
-        inventoryService.updateItem(requestUpdateItemDto, volunteerId, groupId, itemId);
+        inventoryService.updateItem(inventoryItemDto, volunteerId, groupId, itemId);
         return ResponseEntity.ok("Item is updated");
     }
 
