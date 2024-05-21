@@ -41,7 +41,6 @@ public class InventoryController {
                                      @RequestBody InventoryItemDto inventoryItemDto,
                                      @RequestParam(required = false) UUID groupId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
-
         inventoryService.saveItem(inventoryItemDto, volunteerId, groupId);
         return ResponseEntity.ok("Item is saved");
     }

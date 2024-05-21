@@ -1,5 +1,8 @@
 package com.application.content.items.inventory.service.impl;
 
+import com.application.content.general.address.model.Address;
+import com.application.content.general.address.service.AddressService;
+import com.application.content.general.contract.service.ContractService;
 import com.application.content.items.inventory.model.Inventory;
 import com.application.content.items.inventory.model.InventoryItem;
 import com.application.content.items.inventory.repository.InventoryItemRepository;
@@ -15,6 +18,7 @@ import com.application.content.volunteers.volunteer.service.VolunteerService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +29,12 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Autowired
     VolunteerService volunteerService;
+
+    @Autowired
+    AddressService addressService;
+
+    @Autowired
+    ContractService contractService;
 
     @Autowired
     GroupService groupService;
@@ -53,6 +63,7 @@ public class InventoryServiceImpl implements InventoryService {
     public void saveItem(InventoryItemDto inventoryItemDto, UUID volunteerId, UUID groupId) {
         Inventory inventory = getInventory(volunteerId, groupId);
         InventoryItem inventoryItem = InventoryItem.builder()
+                .readyToSend(false)
                 .name(itemValidation.eitherNameValidFull(inventoryItemDto.name()))
                 .description(itemValidation.eitherDescriptionValid(inventoryItemDto.description()))
                 .amount(itemValidation.eitherIntegerMoreThanZeroEqualFull(inventoryItemDto.amount()))
@@ -60,11 +71,12 @@ public class InventoryServiceImpl implements InventoryService {
                 .itemType(inventoryItemDto.itemType())
                 .inventory(inventory)
                 .build();
-        inventoryItemRepository.save(inventoryItem);
+        inventoryItem = inventoryItemRepository.save(inventoryItem);
     }
 
     @Override
     @SneakyThrows
+    @Transactional
     public void updateItem(InventoryItemDto inventoryItemDto, UUID volunteerId, UUID groupId, UUID inventoryItemId) {
         Inventory inventory = getInventory(volunteerId, groupId);
         InventoryItem inventoryItem = inventory.getInventoryItems().stream()
@@ -81,6 +93,18 @@ public class InventoryServiceImpl implements InventoryService {
             inventoryItem.setWeight(itemValidation.eitherIntegerMoreThanZero(inventoryItemDto.weight()));
         if(inventoryItemDto.itemType() != null)
             inventoryItem.setItemType(inventoryItemDto.itemType());
+    }
+
+    @Override
+    @SneakyThrows
+    @Transactional
+    public void updateReadyToSend(UUID volunteerId, UUID groupId, UUID inventoryItemId){
+        Inventory inventory = getInventory(volunteerId, groupId);
+        InventoryItem inventoryItem = inventory.getInventoryItems().stream()
+                .filter(x -> x.getId().equals(inventoryItemId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Item isn't from the inventory"));
+        contractService.createContract(inventoryItem);
     }
 
     @Override

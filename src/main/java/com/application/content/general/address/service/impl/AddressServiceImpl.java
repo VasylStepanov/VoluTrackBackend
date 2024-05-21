@@ -5,7 +5,12 @@ import com.application.content.general.address.model.IAddress;
 import com.application.content.general.address.dto.RequestAddressDto;
 import com.application.content.general.address.repository.AddressRepository;
 import com.application.content.general.address.service.AddressService;
+import com.application.content.groups.group.model.Group;
+import com.application.content.groups.group.service.GroupService;
+import com.application.content.volunteers.volunteer.model.Volunteer;
+import com.application.content.volunteers.volunteer.service.VolunteerService;
 import lombok.AccessLevel;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +28,20 @@ public class AddressServiceImpl implements AddressService {
 
     @Autowired
     AddressValidation addressValidation;
+
+    @Autowired
+    VolunteerService volunteerService;
+
+    @Autowired
+    GroupService groupService;
+
+    @SneakyThrows
+    @Override
+    public Address getAddress(UUID volunteerId, UUID groupId) {
+        if(groupId == null)
+            return getVolunteerAddress(volunteerId);
+        return getGroupAddress(volunteerId, groupId);
+    }
 
     @Override
     public void saveAddress(IAddress iAddress, RequestAddressDto requestAddressDto) {
@@ -53,5 +72,17 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void deleteAddress(UUID addressId) {
         addressRepository.deleteById(addressId);
+    }
+
+    @SneakyThrows
+    private Address getVolunteerAddress(UUID volunteerId) {
+        Volunteer volunteer = volunteerService.getVolunteer(volunteerId);
+        return volunteer.getAddress();
+    }
+
+    @SneakyThrows
+    private Address getGroupAddress(UUID volunteerId, UUID groupId) {
+        Group group = groupService.eitherIsAGroupModerator(volunteerId, groupId);
+        return group.getAddress();
     }
 }

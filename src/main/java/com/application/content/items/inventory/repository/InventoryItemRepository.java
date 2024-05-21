@@ -1,6 +1,7 @@
 package com.application.content.items.inventory.repository;
 
 import com.application.content.items.inventory.model.InventoryItem;
+import com.application.content.items.item.model.ItemType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +10,8 @@ import java.util.UUID;
 
 @Repository
 public interface InventoryItemRepository extends JpaRepository<InventoryItem, UUID> {
+
     List<InventoryItem> findAllByInventoryId(UUID inventoryId);
+
+    List<InventoryItem> findAllByItemType(ItemType itemType);
 }

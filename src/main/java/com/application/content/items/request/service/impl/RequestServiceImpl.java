@@ -1,5 +1,8 @@
 package com.application.content.items.request.service.impl;
 
+import com.application.content.general.address.model.Address;
+import com.application.content.general.address.service.AddressService;
+import com.application.content.general.contract.service.ContractService;
 import com.application.content.items.item.dto.ResponseRequestItemDto;
 import com.application.content.items.item.service.ItemValidation;
 import com.application.content.items.request.model.Request;
@@ -25,6 +28,12 @@ public class RequestServiceImpl implements RequestService {
 
     @Autowired
     VolunteerService volunteerService;
+
+    @Autowired
+    AddressService addressService;
+
+    @Autowired
+    ContractService contractService;
 
     @Autowired
     GroupService groupService;
@@ -57,7 +66,9 @@ public class RequestServiceImpl implements RequestService {
                 .itemType(requestItemDto.itemType())
                 .request(request)
                 .build();
-        requestItemRepository.save(requestItem);
+        requestItem = requestItemRepository.save(requestItem);
+
+        contractService.createContract(requestItem);
     }
 
     @Override
