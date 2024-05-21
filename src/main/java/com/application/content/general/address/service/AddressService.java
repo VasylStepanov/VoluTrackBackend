@@ -9,7 +9,6 @@ import java.util.UUID;
 
 public interface AddressService {
 
-    @SneakyThrows
     Address getAddress(UUID volunteerId, UUID groupId);
 
     void saveAddress(IAddress iAddress, RequestAddressDto requestAddressDto);

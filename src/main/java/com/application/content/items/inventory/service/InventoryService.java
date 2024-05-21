@@ -16,8 +16,6 @@ public interface InventoryService {
 
     void updateItem(InventoryItemDto requestItemDto, UUID volunteerId, UUID groupId, UUID itemId);
 
-    @SneakyThrows
-    @Transactional
     void updateReadyToSend(UUID volunteerId, UUID groupId, UUID inventoryItemId);
 
     void deleteItem(UUID volunteerId, UUID groupId, UUID itemId);
