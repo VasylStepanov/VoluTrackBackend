@@ -1,8 +1,6 @@
 package com.application.content.items.inventory.service.impl;
 
 import com.application.content.general.address.model.Address;
-import com.application.content.general.address.service.AddressService;
-import com.application.content.general.contract.service.ContractService;
 import com.application.content.items.inventory.model.Inventory;
 import com.application.content.items.inventory.model.InventoryItem;
 import com.application.content.items.inventory.repository.InventoryItemRepository;
@@ -10,13 +8,16 @@ import com.application.content.items.inventory.repository.InventoryRepository;
 import com.application.content.items.inventory.service.InventoryService;
 import com.application.content.groups.group.model.Group;
 import com.application.content.groups.group.service.GroupService;
-import com.application.content.items.item.dto.InventoryItemDto;
-import com.application.content.items.item.dto.ResponseInventoryItemDto;
+import com.application.content.items.inventory.dto.InventoryItemDto;
+import com.application.content.items.inventory.dto.ResponseInventoryItemDto;
+import com.application.content.items.item.model.ItemType;
 import com.application.content.items.item.service.ItemValidation;
 import com.application.content.volunteers.volunteer.model.Volunteer;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,14 +28,12 @@ import java.util.stream.Collectors;
 @Service
 public class InventoryServiceImpl implements InventoryService {
 
+    @Setter
+    @Value("${const.size_length}")
+    double SIZE_LENGTH;
+
     @Autowired
     VolunteerService volunteerService;
-
-    @Autowired
-    AddressService addressService;
-
-    @Autowired
-    ContractService contractService;
 
     @Autowired
     GroupService groupService;
@@ -47,6 +46,30 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Autowired
     ItemValidation itemValidation;
+
+    @Override
+    public List<InventoryItem> findAllInventoryItemsByAddress(Address address) {
+        return inventoryItemRepository.findAllByAddress(address.getCoordinatesLongitude() + SIZE_LENGTH,
+                address.getCoordinatesLongitude() - SIZE_LENGTH,
+                address.getCoordinatesLatitude() + SIZE_LENGTH,
+                address.getCoordinatesLatitude() - SIZE_LENGTH);
+    }
+
+    @Override
+    public List<InventoryItem> findAllInventoryItemsByAddressAndItemType(Address address, ItemType itemType){
+        return inventoryItemRepository.findAllByAddress(address.getCoordinatesLongitude() + SIZE_LENGTH,
+                address.getCoordinatesLongitude() - SIZE_LENGTH,
+                address.getCoordinatesLatitude() + SIZE_LENGTH,
+                address.getCoordinatesLatitude() - SIZE_LENGTH,
+                itemType.name());
+    }
+
+    @Override
+    public Volunteer getRepresentative(InventoryItem inventoryItem){
+        if(inventoryItem.getInventory().getGroup() == null)
+            return inventoryItem.getInventory().getVolunteer();
+        return inventoryItem.getInventory().getGroup().getVolunteer();
+    }
 
     @Override
     public List<ResponseInventoryItemDto> findAllItems(UUID volunteerId, UUID groupId) {
@@ -63,15 +86,16 @@ public class InventoryServiceImpl implements InventoryService {
     public void saveItem(InventoryItemDto inventoryItemDto, UUID volunteerId, UUID groupId) {
         Inventory inventory = getInventory(volunteerId, groupId);
         InventoryItem inventoryItem = InventoryItem.builder()
+                .endProduct(inventoryItemDto.endProduct())
                 .readyToSend(false)
                 .name(itemValidation.eitherNameValidFull(inventoryItemDto.name()))
                 .description(itemValidation.eitherDescriptionValid(inventoryItemDto.description()))
-                .amount(itemValidation.eitherIntegerMoreThanZeroEqualFull(inventoryItemDto.amount()))
-                .weight(itemValidation.eitherIntegerMoreThanZeroFull(inventoryItemDto.weight()))
+                .amount(itemValidation.eitherMoreThanZeroEqualFull(inventoryItemDto.amount()))
+                .weight(itemValidation.eitherMoreThanZeroFull(inventoryItemDto.weight()))
                 .itemType(inventoryItemDto.itemType())
                 .inventory(inventory)
                 .build();
-        inventoryItem = inventoryItemRepository.save(inventoryItem);
+        inventoryItemRepository.save(inventoryItem);
     }
 
     @Override
@@ -83,14 +107,16 @@ public class InventoryServiceImpl implements InventoryService {
                 .filter(x -> x.getId().equals(inventoryItemId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Item isn't from the inventory"));
+        if(inventoryItemDto.endProduct() != null)
+            inventoryItem.setEndProduct(inventoryItemDto.endProduct());
         if(inventoryItemDto.name() != null)
             inventoryItem.setName(itemValidation.eitherNameValid(inventoryItemDto.name()));
         if(inventoryItemDto.description() != null)
             inventoryItem.setDescription(inventoryItemDto.description());
         if(inventoryItemDto.amount() != null)
-            inventoryItem.setAmount(itemValidation.eitherIntegerMoreThanZeroEqual(inventoryItemDto.amount()));
+            inventoryItem.setAmount(itemValidation.eitherMoreThanZeroEqual(inventoryItemDto.amount()));
         if(inventoryItemDto.weight() != null)
-            inventoryItem.setWeight(itemValidation.eitherIntegerMoreThanZero(inventoryItemDto.weight()));
+            inventoryItem.setWeight(itemValidation.eitherMoreThanZero(inventoryItemDto.weight()));
         if(inventoryItemDto.itemType() != null)
             inventoryItem.setItemType(inventoryItemDto.itemType());
     }
@@ -98,13 +124,18 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @SneakyThrows
     @Transactional
-    public void updateReadyToSend(UUID volunteerId, UUID groupId, UUID inventoryItemId){
+    public void updateReadyToSend(boolean readyToSend, UUID volunteerId, UUID groupId, UUID inventoryItemId){
         Inventory inventory = getInventory(volunteerId, groupId);
         InventoryItem inventoryItem = inventory.getInventoryItems().stream()
                 .filter(x -> x.getId().equals(inventoryItemId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Item isn't from the inventory"));
-        contractService.createContract(inventoryItem);
+        if(inventoryItem.isReadyToSend() == readyToSend)
+            throw new RuntimeException("Ready to send already set to: " + readyToSend);
+        if(readyToSend)
+            inventoryItem.setReadyToSend(true);
+        else
+            inventoryItem.setReadyToSend(false);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.application.content.items.item.dto;
+package com.application.content.items.inventory.dto;
 
 import com.application.content.items.inventory.model.InventoryItem;
 import com.application.content.items.item.model.ItemType;
@@ -10,24 +10,24 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ResponseInventoryItemDto {
+public class ResponseShortInventoryItemDto {
 
-    boolean readyToSend;
+    boolean endProduct;
 
     String name;
 
-    String description;
-
-    Integer weight;
+    Double weight;
 
     Integer amount;
 
     ItemType itemType;
 
-    public static ResponseInventoryItemDto toResponseInventoryItemDto(InventoryItem inventoryItem){
-        return new ResponseInventoryItemDto(inventoryItem.isReadyToSend(),
+    public static ResponseShortInventoryItemDto toResponseShortInventoryItemDto(InventoryItem inventoryItem){
+        if(inventoryItem == null)
+            return null;
+        return new ResponseShortInventoryItemDto(
+                inventoryItem.isEndProduct(),
                 inventoryItem.getName(),
-                inventoryItem.getDescription(),
                 inventoryItem.getWeight(),
                 inventoryItem.getAmount(),
                 inventoryItem.getItemType());

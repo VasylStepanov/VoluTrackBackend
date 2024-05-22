@@ -28,7 +28,7 @@ public class ItemValidationImpl implements ItemValidation {
 
     @SneakyThrows
     @Override
-    public Integer eitherIntegerMoreThanZero(Integer value){
+    public Double eitherMoreThanZero(Double value){
         if(value <= 0 || value >= 65536)
             throw new RuntimeException("Invalid value");
         return value;
@@ -36,7 +36,15 @@ public class ItemValidationImpl implements ItemValidation {
 
     @SneakyThrows
     @Override
-    public Integer eitherIntegerMoreThanZeroEqual(Integer value){
+    public Integer eitherMoreThanZeroEqual(Integer value){
+        if(value < 0 || value >= 65536)
+            throw new RuntimeException("Invalid value");
+        return value;
+    }
+
+    @SneakyThrows
+    @Override
+    public Double eitherMoreThanZeroEqual(Double value){
         if(value < 0 || value >= 65536)
             throw new RuntimeException("Invalid value");
         return value;
@@ -52,17 +60,25 @@ public class ItemValidationImpl implements ItemValidation {
 
     @SneakyThrows
     @Override
-    public Integer eitherIntegerMoreThanZeroFull(Integer value){
+    public Double eitherMoreThanZeroFull(Double value){
         if(value == null)
             throw new RuntimeException("Value is null");
-        return eitherIntegerMoreThanZero(value);
+        return eitherMoreThanZero(value);
     }
 
     @SneakyThrows
     @Override
-    public Integer eitherIntegerMoreThanZeroEqualFull(Integer value){
+    public Integer eitherMoreThanZeroEqualFull(Integer value){
         if(value == null)
             throw new RuntimeException("Value is null");
-        return eitherIntegerMoreThanZeroEqual(value);
+        return eitherMoreThanZeroEqual(value);
+    }
+
+    @SneakyThrows
+    @Override
+    public Double eitherMoreThanZeroEqualFull(Double value){
+        if(value == null)
+            throw new RuntimeException("Value is null");
+        return eitherMoreThanZeroEqual(value);
     }
 }

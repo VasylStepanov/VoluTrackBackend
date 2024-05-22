@@ -1,19 +1,24 @@
 package com.application.content.items.item.service;
 
+import lombok.SneakyThrows;
+
 public interface ItemValidation {
 
     String eitherNameValid(String name);
 
     String eitherDescriptionValid(String description);
 
-    Integer eitherIntegerMoreThanZero(Integer value);
+    Double eitherMoreThanZero(Double value);
 
-    Integer eitherIntegerMoreThanZeroEqual(Integer value);
+    Integer eitherMoreThanZeroEqual(Integer value);
+
+    Double eitherMoreThanZeroEqual(Double value);
 
     String eitherNameValidFull(String name);
 
-    Integer eitherIntegerMoreThanZeroFull(Integer value);
+    Double eitherMoreThanZeroFull(Double value);
 
-    Integer eitherIntegerMoreThanZeroEqualFull(Integer value);
+    Integer eitherMoreThanZeroEqualFull(Integer value);
 
+    Double eitherMoreThanZeroEqualFull(Double value);
 }

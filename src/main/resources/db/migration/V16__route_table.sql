@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS general_data.routes(
+    id UUID CONSTRAINT route_id_pk PRIMARY KEY,
+    start_at TIMESTAMP(6) NOT NULL,
+    status SMALLINT NOT NULL,
+    driver_id UUID NOT NULL,
+    car_id UUID NOT NULL,
+    from_address_id UUID NOT NULL,
+    to_address_id UUID NOT NULL,
+    inventory_item_id UUID,
+    request_item_id UUID,
+    volunteer_id_giver UUID,
+    volunteer_id_taker UUID,
+    created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_contract_driver_id FOREIGN KEY(driver_id) REFERENCES volunteer_data.volunteers(id) ON DELETE CASCADE,
+    CONSTRAINT fk_contract_car_id FOREIGN KEY(car_id) REFERENCES volunteer_data.cars(id) ON DELETE CASCADE,
+    CONSTRAINT fk_contract_from_address_id FOREIGN KEY(from_address_id) REFERENCES general_data.addresses(id) ON DELETE CASCADE,
+    CONSTRAINT fk_contract_to_address_id FOREIGN KEY(to_address_id) REFERENCES general_data.addresses(id) ON DELETE CASCADE,
+    CONSTRAINT fk_contract_inventory_item_id FOREIGN KEY(inventory_item_id) REFERENCES item_data.inventory_items(id) ON DELETE CASCADE,
+    CONSTRAINT fk_contract_request_item_id FOREIGN KEY(request_item_id) REFERENCES item_data.request_items(id) ON DELETE CASCADE,
+    CONSTRAINT fk_contract_volunteer_id_giver FOREIGN KEY(volunteer_id_giver) REFERENCES volunteer_data.volunteers(id) ON DELETE CASCADE,
+    CONSTRAINT fk_contract_volunteer_id_taker FOREIGN KEY(volunteer_id_taker) REFERENCES volunteer_data.volunteers(id) ON DELETE CASCADE
+)

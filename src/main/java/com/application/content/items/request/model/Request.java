@@ -23,9 +23,9 @@ public class Request extends BaseEntity {
     @OneToMany(mappedBy = "request")
     List<RequestItem> requestItems;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "request", optional = false, fetch = FetchType.LAZY)
     Group group;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "request", optional = false, fetch = FetchType.LAZY)
     Volunteer volunteer;
 }

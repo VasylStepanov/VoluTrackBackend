@@ -42,11 +42,11 @@ public class Volunteer extends BaseEntity implements IAddress {
     @OneToMany(mappedBy = "volunteer", fetch = FetchType.LAZY)
     List<Group> groupList;
 
-    @OneToOne
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "inventory_id")
     Inventory inventory;
 
-    @OneToOne
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id")
     Request request;
 

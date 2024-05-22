@@ -17,8 +17,11 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RequestItem extends BaseEntity {
 
+    @Column(name = "end_product", nullable = false)
+    boolean endProduct;
+
     @Column(name = "weight", nullable = false)
-    Integer weight;
+    Double weight;
 
     @Column(name = "amount", nullable = false)
     Integer amount;

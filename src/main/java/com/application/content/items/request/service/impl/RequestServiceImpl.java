@@ -1,9 +1,8 @@
 package com.application.content.items.request.service.impl;
 
 import com.application.content.general.address.model.Address;
-import com.application.content.general.address.service.AddressService;
-import com.application.content.general.contract.service.ContractService;
-import com.application.content.items.item.dto.ResponseRequestItemDto;
+import com.application.content.items.item.model.ItemType;
+import com.application.content.items.request.dto.ResponseRequestItemDto;
 import com.application.content.items.item.service.ItemValidation;
 import com.application.content.items.request.model.Request;
 import com.application.content.items.request.repository.RequestItemRepository;
@@ -11,12 +10,14 @@ import com.application.content.items.request.repository.RequestRepository;
 import com.application.content.items.request.service.RequestService;
 import com.application.content.groups.group.model.Group;
 import com.application.content.groups.group.service.GroupService;
-import com.application.content.items.item.dto.RequestItemDto;
+import com.application.content.items.request.dto.RequestItemDto;
 import com.application.content.items.request.model.RequestItem;
 import com.application.content.volunteers.volunteer.model.Volunteer;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,14 +27,12 @@ import java.util.stream.Collectors;
 @Service
 public class RequestServiceImpl implements RequestService {
 
+    @Setter
+    @Value("${const.size_length}")
+    double SIZE_LENGTH;
+
     @Autowired
     VolunteerService volunteerService;
-
-    @Autowired
-    AddressService addressService;
-
-    @Autowired
-    ContractService contractService;
 
     @Autowired
     GroupService groupService;
@@ -46,6 +45,30 @@ public class RequestServiceImpl implements RequestService {
 
     @Autowired
     ItemValidation itemValidation;
+
+    @Override
+    public List<RequestItem> findAllRequestItemsByAddress(Address address) {
+        return requestItemRepository.findAllByAddress(address.getCoordinatesLongitude() + SIZE_LENGTH,
+                address.getCoordinatesLongitude() - SIZE_LENGTH,
+                address.getCoordinatesLatitude() + SIZE_LENGTH,
+                address.getCoordinatesLatitude() - SIZE_LENGTH);
+    }
+
+    @Override
+    public List<RequestItem> findAllRequestItemsByAddressAndItemType(Address address, ItemType itemType){
+        return requestItemRepository.findAllByAddress(address.getCoordinatesLongitude() + SIZE_LENGTH,
+                address.getCoordinatesLongitude() - SIZE_LENGTH,
+                address.getCoordinatesLatitude() + SIZE_LENGTH,
+                address.getCoordinatesLatitude() - SIZE_LENGTH,
+                itemType.name());
+    }
+
+    @Override
+    public Volunteer getRepresentative(RequestItem requestItem){
+        if(requestItem.getRequest().getGroup() == null)
+            return requestItem.getRequest().getVolunteer();
+        return requestItem.getRequest().getGroup().getVolunteer();
+    }
 
     @Override
     public List<ResponseRequestItemDto> findAllRequestItems(UUID volunteerId, UUID groupId) {
@@ -61,14 +84,13 @@ public class RequestServiceImpl implements RequestService {
     public void saveRequestItem(RequestItemDto requestItemDto, UUID volunteerId, UUID groupId) {
         Request request = getRequest(volunteerId, groupId);
         RequestItem requestItem = RequestItem.builder()
-                .amount(itemValidation.eitherIntegerMoreThanZeroEqualFull(requestItemDto.amount()))
-                .weight(itemValidation.eitherIntegerMoreThanZeroEqualFull(requestItemDto.weight()))
+                .endProduct(requestItemDto.endProduct())
+                .amount(itemValidation.eitherMoreThanZeroEqualFull(requestItemDto.amount()))
+                .weight(itemValidation.eitherMoreThanZeroEqualFull(requestItemDto.weight()))
                 .itemType(requestItemDto.itemType())
                 .request(request)
                 .build();
-        requestItem = requestItemRepository.save(requestItem);
-
-        contractService.createContract(requestItem);
+        requestItemRepository.save(requestItem);
     }
 
     @Override
@@ -78,10 +100,12 @@ public class RequestServiceImpl implements RequestService {
                 .filter(x -> x.getId().equals(requestItemId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("RequestItem isn't from the requests"));
+        if(requestItemDto.endProduct() != null)
+            requestItem.setEndProduct(requestItemDto.endProduct());
         if(requestItemDto.amount() != null)
-            requestItem.setAmount(itemValidation.eitherIntegerMoreThanZeroEqual(requestItemDto.amount()));
+            requestItem.setAmount(itemValidation.eitherMoreThanZeroEqual(requestItemDto.amount()));
         if(requestItemDto.weight() != null)
-            requestItem.setWeight(itemValidation.eitherIntegerMoreThanZeroEqual(requestItemDto.weight()));
+            requestItem.setWeight(itemValidation.eitherMoreThanZeroEqual(requestItemDto.weight()));
         if(requestItemDto.itemType() != null)
             requestItem.setItemType(requestItemDto.itemType());
     }

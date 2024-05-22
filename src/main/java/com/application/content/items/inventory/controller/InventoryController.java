@@ -1,8 +1,7 @@
 package com.application.content.items.inventory.controller;
 
 import com.application.content.items.inventory.service.InventoryService;
-import com.application.content.items.item.dto.InventoryItemDto;
-import com.application.content.items.item.dto.RequestItemDto;
+import com.application.content.items.inventory.dto.InventoryItemDto;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -57,6 +56,17 @@ public class InventoryController {
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         inventoryService.updateItem(inventoryItemDto, volunteerId, groupId, itemId);
         return ResponseEntity.ok("Item is updated");
+    }
+
+    @Operation(summary = "Update item, set ready to send")
+    @PutMapping("/setReadyToSend")
+    public ResponseEntity<?> updateItemSetReadyToSend(HttpServletRequest httpServletRequest,
+                                        @RequestParam boolean readyToSend,
+                                        @RequestParam(required = false) UUID groupId,
+                                        @RequestParam UUID itemId){
+        UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
+        inventoryService.updateReadyToSend(readyToSend, volunteerId, groupId, itemId);
+        return ResponseEntity.ok("Item ready_to_send is updated");
     }
 
     @Operation(summary = "Delete item by item id",

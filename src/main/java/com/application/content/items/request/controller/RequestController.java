@@ -1,6 +1,6 @@
 package com.application.content.items.request.controller;
 
-import com.application.content.items.item.dto.RequestItemDto;
+import com.application.content.items.request.dto.RequestItemDto;
 import com.application.content.items.request.service.RequestService;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;

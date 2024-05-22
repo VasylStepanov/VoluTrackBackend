@@ -18,7 +18,9 @@ public class VolunteerPrivateProfileDto {
 
     String lastName;
 
-    public static VolunteerPrivateProfileDto setupVolunteerPrivateProfileDto(Volunteer volunteer) {
+    public static VolunteerPrivateProfileDto toVolunteerPrivateProfileDto(Volunteer volunteer) {
+        if(volunteer == null)
+            return null;
         return new VolunteerPrivateProfileDto(
                 volunteer.getUser().getFirstName(),
                 volunteer.getUser().getLastName());

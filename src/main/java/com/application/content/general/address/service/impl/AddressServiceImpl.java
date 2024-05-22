@@ -7,6 +7,8 @@ import com.application.content.general.address.repository.AddressRepository;
 import com.application.content.general.address.service.AddressService;
 import com.application.content.groups.group.model.Group;
 import com.application.content.groups.group.service.GroupService;
+import com.application.content.items.inventory.model.InventoryItem;
+import com.application.content.items.request.model.RequestItem;
 import com.application.content.volunteers.volunteer.model.Volunteer;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
 import lombok.AccessLevel;
@@ -44,13 +46,31 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void saveAddress(IAddress iAddress, RequestAddressDto requestAddressDto) {
-        Address address = addressRepository.save(Address.builder()
-            .address(addressValidation.eitherAddressIsValidFull(requestAddressDto.address()))
+    public Address getAddress(InventoryItem inventoryItem) {
+        if(inventoryItem.getInventory().getGroup() == null)
+            return inventoryItem.getInventory().getVolunteer().getAddress();
+        return inventoryItem.getInventory().getGroup().getAddress();
+    }
+
+    @Override
+    public Address getAddress(RequestItem requestItem) {
+        if(requestItem.getRequest().getGroup() == null)
+            return requestItem.getRequest().getVolunteer().getAddress();
+        return requestItem.getRequest().getGroup().getAddress();
+    }
+
+    @Override
+    public Address saveAddress(RequestAddressDto requestAddressDto) {
+        return addressRepository.save(Address.builder()
+                .address(addressValidation.eitherAddressIsValidFull(requestAddressDto.address()))
                 .coordinatesLongitude(addressValidation.eitherCoordinatesLongitude(requestAddressDto.coordinatesLongitude()))
                 .coordinatesLatitude(addressValidation.eitherCoordinatesLatitudeFull(requestAddressDto.coordinatesLatitude()))
-            .build());
-        iAddress.setAddress(address);
+                .build());
+    }
+
+    @Override
+    public void saveAddress(IAddress iAddress, RequestAddressDto requestAddressDto) {
+        iAddress.setAddress(saveAddress(requestAddressDto));
     }
 
     @Override

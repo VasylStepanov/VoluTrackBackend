@@ -12,13 +12,16 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Entity(name = "inventory_items")
+@Entity(name = "inventory_item")
 @Table(name = "inventory_items", schema = "item_data")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class InventoryItem extends BaseEntity {
 
     @Column(name = "ready_to_send")
     boolean readyToSend;
+
+    @Column(name = "end_product", nullable = false)
+    boolean endProduct;
 
     @Column(name = "name", length = 64, nullable = false)
     String name;
@@ -27,7 +30,7 @@ public class InventoryItem extends BaseEntity {
     String description;
 
     @Column(name = "weight", nullable = false)
-    Integer weight;
+    Double weight;
 
     @Column(name = "amount", nullable = false)
     Integer amount;

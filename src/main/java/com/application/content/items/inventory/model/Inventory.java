@@ -23,9 +23,9 @@ public class Inventory extends BaseEntity {
     @OneToMany(mappedBy = "inventory", fetch = FetchType.LAZY)
     List<InventoryItem> inventoryItems;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "inventory", optional = false, fetch = FetchType.LAZY)
     Group group;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "inventory", optional = false, fetch = FetchType.LAZY)
     Volunteer volunteer;
 }
