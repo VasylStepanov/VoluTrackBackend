@@ -29,6 +29,10 @@ public interface RouteService {
 
     void createRoute(UUID volunteerId, RequestRouteDto requestRouteDto);
 
+    void setRouteStatusGiven(UUID volunteerId, UUID routeId);
+
+    void transferItem(UUID volunteerId, UUID routeId);
+
     void updateRoute(UUID volunteerId, RequestUpdateRouteDto requestUpdateRouteDto);
 
     void deleteRoute(UUID volunteerId, UUID routeId);

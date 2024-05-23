@@ -11,6 +11,7 @@ import com.application.content.general.route.repository.RouteRepository;
 import com.application.content.general.route.service.RouteService;
 import com.application.content.groups.group.model.Group;
 import com.application.content.groups.group.service.GroupService;
+import com.application.content.items.inventory.model.Inventory;
 import com.application.content.items.inventory.model.InventoryItem;
 import com.application.content.items.inventory.service.InventoryService;
 import com.application.content.items.request.dto.RequestStatus;
@@ -177,6 +178,26 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
+    public void setRouteStatusGiven(UUID volunteerId, UUID routeId) {
+        Route route = routeRepository
+                .findById(routeId)
+                .orElseThrow(() -> new RuntimeException("There is no such a route"));
+        if(route.getVolunteerGiver().getId().equals(volunteerId))
+            route.setRouteStatus(RouteStatus.DRIVER_TAKE);
+    }
+
+    @Override
+    public void transferItem(UUID volunteerId, UUID routeId) {
+        Route route = routeRepository
+                .findById(routeId)
+                .orElseThrow(() -> new RuntimeException("There is no such a route"));
+
+        Inventory inventory = inventoryService.getInventoryByRequest(route.getRequestItem());
+        route.getInventoryItem().setInventory(inventory);
+        deleteRoute(route);
+    }
+
+    @Override
     @SneakyThrows
     public void updateRoute(UUID volunteerId, RequestUpdateRouteDto requestUpdateRouteDto) {
         Route route = getRouteEitherDriver(volunteerId, requestUpdateRouteDto.routeId());
@@ -194,6 +215,10 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public void deleteRoute(UUID volunteerId, UUID routeId) {
         Route route = getRouteEitherDriver(volunteerId, routeId);
+        routeRepository.delete(route);
+    }
+
+    private void deleteRoute(Route route) {
         routeRepository.delete(route);
     }
 

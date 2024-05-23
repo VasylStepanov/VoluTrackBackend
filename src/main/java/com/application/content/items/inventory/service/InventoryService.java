@@ -3,8 +3,11 @@ package com.application.content.items.inventory.service;
 import com.application.content.general.address.model.Address;
 import com.application.content.items.inventory.dto.InventoryItemDto;
 import com.application.content.items.inventory.dto.ResponseInventoryItemDto;
+import com.application.content.items.inventory.model.Inventory;
 import com.application.content.items.inventory.model.InventoryItem;
 import com.application.content.items.item.model.ItemType;
+import com.application.content.items.request.model.Request;
+import com.application.content.items.request.model.RequestItem;
 import com.application.content.volunteers.volunteer.model.Volunteer;
 
 import java.util.List;
@@ -17,6 +20,8 @@ public interface InventoryService {
     List<InventoryItem> findAllInventoryItemsByAddressAndItemType(Address address, ItemType itemType);
 
     Volunteer getRepresentative(InventoryItem inventoryItem);
+
+    Inventory getInventoryByRequest(RequestItem requestItem);
 
     List<ResponseInventoryItemDto> findAllItems(UUID volunteerId, UUID groupId);
 

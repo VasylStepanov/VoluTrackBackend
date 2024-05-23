@@ -12,6 +12,8 @@ import com.application.content.items.inventory.dto.InventoryItemDto;
 import com.application.content.items.inventory.dto.ResponseInventoryItemDto;
 import com.application.content.items.item.model.ItemType;
 import com.application.content.items.item.service.ItemValidation;
+import com.application.content.items.request.model.Request;
+import com.application.content.items.request.model.RequestItem;
 import com.application.content.volunteers.volunteer.model.Volunteer;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
 import lombok.Setter;
@@ -69,6 +71,13 @@ public class InventoryServiceImpl implements InventoryService {
         if(inventoryItem.getInventory().getGroup() == null)
             return inventoryItem.getInventory().getVolunteer();
         return inventoryItem.getInventory().getGroup().getVolunteer();
+    }
+
+    @Override
+    public Inventory getInventoryByRequest(RequestItem requestItem) {
+        if(requestItem.getRequest().getGroup() != null)
+            return requestItem.getRequest().getGroup().getInventory();
+        return requestItem.getRequest().getVolunteer().getInventory();
     }
 
     @Override

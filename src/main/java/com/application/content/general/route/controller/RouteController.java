@@ -79,6 +79,9 @@ public class RouteController {
         return ResponseEntity.ok(ResponseFullDriverRouteDto.toResponseShortDriverRouteDto(route, from, to));
     }
 
+    @Operation(summary = "Driver create a route", description = """
+                Driver create a route, select two point in map and his car.
+                """)
     @PostMapping
     public ResponseEntity<?> createRoute(HttpServletRequest httpServletRequest,
                                          @RequestBody RequestRouteDto requestRouteDto){
@@ -93,6 +96,22 @@ public class RouteController {
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         routeService.updateRoute(volunteerId, requestUpdateRouteDto);
         return ResponseEntity.ok("Route is updated");
+    }
+
+    @PutMapping("/giveAid")
+    public ResponseEntity<?> giveAid(HttpServletRequest httpServletRequest,
+                                              @RequestParam UUID routeId){
+        UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
+        routeService.setRouteStatusGiven(volunteerId, routeId);
+        return ResponseEntity.ok("Item is given by volunteer");
+    }
+
+    @PutMapping("/takeAid")
+    public ResponseEntity<?> takeAid(HttpServletRequest httpServletRequest,
+                                              @RequestParam UUID routeId){
+        UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
+        routeService.transferItem(volunteerId, routeId);
+        return ResponseEntity.ok("Item is taken by volunteer");
     }
 
     @DeleteMapping
