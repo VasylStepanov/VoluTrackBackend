@@ -2,6 +2,7 @@ package com.application.content.items.request.service.impl;
 
 import com.application.content.general.address.model.Address;
 import com.application.content.items.item.model.ItemType;
+import com.application.content.items.request.dto.RequestStatus;
 import com.application.content.items.request.dto.ResponseRequestItemDto;
 import com.application.content.items.item.service.ItemValidation;
 import com.application.content.items.request.model.Request;
@@ -81,9 +82,10 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public void saveRequestItem(RequestItemDto requestItemDto, UUID volunteerId, UUID groupId) {
+    public RequestItem saveRequestItem(RequestItemDto requestItemDto, UUID volunteerId, UUID groupId) {
         Request request = getRequest(volunteerId, groupId);
         RequestItem requestItem = RequestItem.builder()
+                .requestStatus(RequestStatus.CREATED)
                 .endProduct(requestItemDto.endProduct())
                 .amount(itemValidation.eitherMoreThanZeroEqualFull(requestItemDto.amount()))
                 .weight(itemValidation.eitherMoreThanZeroEqualFull(requestItemDto.weight()))
@@ -91,6 +93,7 @@ public class RequestServiceImpl implements RequestService {
                 .request(request)
                 .build();
         requestItemRepository.save(requestItem);
+        return requestItem;
     }
 
     @Override
@@ -100,6 +103,10 @@ public class RequestServiceImpl implements RequestService {
                 .filter(x -> x.getId().equals(requestItemId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("RequestItem isn't from the requests"));
+        if(requestItem.getRequestStatus().equals(RequestStatus.IN_PROCESS))
+            throw new RuntimeException("Can't update request is in process");
+        if(requestItem.getRequestStatus().equals(RequestStatus.COMPLETED))
+            throw new RuntimeException("Can't update request is completed");
         if(requestItemDto.endProduct() != null)
             requestItem.setEndProduct(requestItemDto.endProduct());
         if(requestItemDto.amount() != null)
@@ -117,6 +124,8 @@ public class RequestServiceImpl implements RequestService {
                 .filter(x -> x.getId().equals(requestItemId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("RequestItem isn't from the requests"));
+        if(requestItem.getRequestStatus().equals(RequestStatus.IN_PROCESS))
+            throw new RuntimeException("Can't delete request is in process");
         requestItemRepository.delete(requestItem);
     }
 

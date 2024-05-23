@@ -12,6 +12,7 @@ ALTER TABLE group_data.groups ADD CONSTRAINT fk_group_request_id FOREIGN KEY(req
 
 CREATE TABLE IF NOT EXISTS item_data.request_items(
     id UUID CONSTRAINT request_item_id_pk PRIMARY KEY,
+    request_status SMALLINT NOT NULL,
     end_product BOOLEAN NOT NULL,
     item_type SMALLINT,
     amount INTEGER NOT NULL DEFAULT 0,

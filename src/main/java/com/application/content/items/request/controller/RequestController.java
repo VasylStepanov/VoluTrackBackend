@@ -1,12 +1,15 @@
 package com.application.content.items.request.controller;
 
+import com.application.content.general.route.service.RouteService;
 import com.application.content.items.request.dto.RequestItemDto;
+import com.application.content.items.request.model.RequestItem;
 import com.application.content.items.request.service.RequestService;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -21,9 +24,12 @@ public class RequestController {
     @Autowired
     RequestService requestService;
 
+    @Autowired
+    RouteService routeService;
+
     @Operation(summary = "Get all request items",
             description = "Get request items by group id or if group id is null, then get by volunteer id.")
-    @GetMapping("/getAllItems")
+    @GetMapping("/getAllRequestItems")
     public ResponseEntity<?> getAllItemsByInventoryId(HttpServletRequest httpServletRequest,
                                                       @RequestParam(required = false) UUID groupId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
@@ -35,13 +41,14 @@ public class RequestController {
                     Add request item by group id or if group id is null, then add by volunteer id.
                     Amount must be more than 0 but less than 65536.
                     ItemType and ItemMeasurement are enum, there are two endpoints what responses their content.""")
-    @PostMapping("/addItem")
-    public ResponseEntity<?> addItem(HttpServletRequest httpServletRequest,
+    @PostMapping("/addRequestItem")
+    @Transactional
+    public ResponseEntity<?> addRequestItem(HttpServletRequest httpServletRequest,
                                      @RequestBody RequestItemDto requestItemDto,
                                      @RequestParam(required = false) UUID groupId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
-
-        requestService.saveRequestItem(requestItemDto, volunteerId, groupId);
+        RequestItem requestItem = requestService.saveRequestItem(requestItemDto, volunteerId, groupId);
+        routeService.setItemToRouteByRequestItem(requestItem);
         return ResponseEntity.ok("Item is saved");
     }
 
@@ -49,13 +56,13 @@ public class RequestController {
             description = """ 
                     Update request item by group id or if group id is null, then update by volunteer id.
                     Only owner of the item can update the item.""")
-    @PutMapping("/updateItem")
-    public ResponseEntity<?> updateItem(HttpServletRequest httpServletRequest,
+    @PutMapping("/updateRequestItem")
+    public ResponseEntity<?> updateRequestItem(HttpServletRequest httpServletRequest,
                                         @RequestBody RequestItemDto requestUpdateItemDto,
                                         @RequestParam(required = false) UUID groupId,
-                                        @RequestParam UUID itemId){
+                                        @RequestParam UUID requestItemId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
-        requestService.updateRequestItem(requestUpdateItemDto, volunteerId, groupId, itemId);
+        requestService.updateRequestItem(requestUpdateItemDto, volunteerId, groupId, requestItemId);
         return ResponseEntity.ok("Item is updated");
     }
 
@@ -63,12 +70,12 @@ public class RequestController {
             description = """
                     Delete request item by group id or if group id is null, then delete by volunteer id.
                     Only owner of the item can remove the item.""")
-    @DeleteMapping("/deleteItem")
-    public ResponseEntity<?> deleteItem(HttpServletRequest httpServletRequest,
+    @DeleteMapping("/deleteRequestItem")
+    public ResponseEntity<?> deleteRequestItem(HttpServletRequest httpServletRequest,
                                         @RequestParam(required = false) UUID groupId,
-                                        @RequestParam UUID itemId){
+                                        @RequestParam UUID requestItemId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
-        requestService.deleteRequestItem(volunteerId, groupId, itemId);
+        requestService.deleteRequestItem(volunteerId, groupId, requestItemId);
         return ResponseEntity.ok("Item is removed");
     }
 }

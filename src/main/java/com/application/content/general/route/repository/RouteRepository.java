@@ -17,6 +17,16 @@ public interface RouteRepository extends JpaRepository<Route, UUID> {
 
     List<Route> findRoutesByDriverId(UUID driverId);
 
+    List<Route> findByCarId(UUID carId);
+
+    List<Route> findByInventoryItemId(UUID inventoryItemId);
+
+    List<Route> findByRequestItemId(UUID requestItemId);
+
+    List<Route> findByVolunteerGiverId(UUID volunteerGiverId);
+
+    List<Route> findByVolunteerTakerId(UUID volunteerTakerId);
+
     @Query("""
             SELECT r FROM route r WHERE r.fromAddress.coordinatesLongitude < ?1
             AND r.fromAddress.coordinatesLongitude > ?2

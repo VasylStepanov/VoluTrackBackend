@@ -30,19 +30,19 @@ public class Route extends BaseEntity {
     @Column(name = "status", nullable = false)
     RouteStatus routeStatus;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id", nullable = false)
     Volunteer driver;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id", nullable = false)
     Car car;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "from_address_id", nullable = false)
     Address fromAddress;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "to_address_id", nullable = false)
     Address toAddress;
 
@@ -50,15 +50,15 @@ public class Route extends BaseEntity {
     @JoinColumn(name = "inventory_item_id")
     InventoryItem inventoryItem;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "request_item_id")
     RequestItem requestItem;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "volunteer_id_giver")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "volunteer_giver_id")
     Volunteer volunteerGiver;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "volunteer_id_taker")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "volunteer_taker_id")
     Volunteer volunteerTaker;
 }

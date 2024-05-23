@@ -123,8 +123,7 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     @SneakyThrows
-    @Transactional
-    public void updateReadyToSend(boolean readyToSend, UUID volunteerId, UUID groupId, UUID inventoryItemId){
+    public InventoryItem updateReadyToSend(boolean readyToSend, UUID volunteerId, UUID groupId, UUID inventoryItemId){
         Inventory inventory = getInventory(volunteerId, groupId);
         InventoryItem inventoryItem = inventory.getInventoryItems().stream()
                 .filter(x -> x.getId().equals(inventoryItemId))
@@ -136,6 +135,7 @@ public class InventoryServiceImpl implements InventoryService {
             inventoryItem.setReadyToSend(true);
         else
             inventoryItem.setReadyToSend(false);
+        return inventoryItem;
     }
 
     @Override

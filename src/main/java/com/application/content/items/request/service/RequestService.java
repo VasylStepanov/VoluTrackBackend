@@ -4,6 +4,7 @@ import com.application.content.general.address.model.Address;
 import com.application.content.items.item.model.ItemType;
 import com.application.content.items.request.dto.RequestItemDto;
 import com.application.content.items.request.dto.ResponseRequestItemDto;
+import com.application.content.items.request.model.Request;
 import com.application.content.items.request.model.RequestItem;
 import com.application.content.volunteers.volunteer.model.Volunteer;
 
@@ -20,7 +21,7 @@ public interface RequestService {
 
     List<ResponseRequestItemDto> findAllRequestItems(UUID volunteerId, UUID groupId);
 
-    void saveRequestItem(RequestItemDto requestItemDto, UUID volunteerId, UUID groupId);
+    RequestItem saveRequestItem(RequestItemDto requestItemDto, UUID volunteerId, UUID groupId);
 
     void updateRequestItem(RequestItemDto requestItemDto, UUID volunteerId, UUID groupId, UUID itemId);
 

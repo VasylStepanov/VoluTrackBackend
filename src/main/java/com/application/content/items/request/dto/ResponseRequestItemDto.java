@@ -13,6 +13,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ResponseRequestItemDto {
 
+    RequestStatus requestStatus;
+
     boolean endProduct;
 
     Double weight;
@@ -23,6 +25,7 @@ public class ResponseRequestItemDto {
 
     public static ResponseRequestItemDto toResponseRequestItemDto(RequestItem requestItem){
         return new ResponseRequestItemDto(
+                requestItem.getRequestStatus(),
                 requestItem.isEndProduct(),
                 requestItem.getWeight(),
                 requestItem.getAmount(),

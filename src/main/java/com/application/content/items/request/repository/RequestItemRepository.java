@@ -19,7 +19,8 @@ public interface RequestItemRepository extends JpaRepository<RequestItem, UUID> 
     @Query("""
             SELECT r
             FROM request_item r
-            WHERE ((r.request.group.address.coordinatesLongitude < ?1 AND
+            WHERE r.requestStatus != 'COMPLETED' AND
+            ((r.request.group.address.coordinatesLongitude < ?1 AND
             r.request.group.address.coordinatesLongitude > ?2 AND
             r.request.group.address.coordinatesLatitude < ?3 AND
             r.request.group.address.coordinatesLatitude > ?4)
@@ -35,7 +36,7 @@ public interface RequestItemRepository extends JpaRepository<RequestItem, UUID> 
     @Query("""
             SELECT r
             FROM request_item r
-            WHERE r.itemType = ?5 AND
+            WHERE r.itemType = '?5' AND r.requestStatus != 'COMPLETED' AND
             ((r.request.group.address.coordinatesLongitude < ?1 AND
             r.request.group.address.coordinatesLongitude > ?2 AND
             r.request.group.address.coordinatesLatitude < ?3 AND

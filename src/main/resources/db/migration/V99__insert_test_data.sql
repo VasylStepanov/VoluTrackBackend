@@ -91,12 +91,12 @@ VALUES ('04498a3a-f704-4e70-b197-1a76c29f9e85', true, true, '6 пар війсь
 ('388835f9-19c3-49b7-945f-8cd7fc216f51', true, true, 'Дрони', 'FPV дрони', 6, 4, 4, '97095135-7388-4fbc-9e79-e642fa11c5ea'),
 ('56a492f7-9117-405a-bac6-31dc4f1405f4', false, false, 'Запчастини для дронів', NULL, 20, 0, 0, '97095135-7388-4fbc-9e79-e642fa11c5ea');
 
-INSERT INTO item_data.request_items(id, end_product, weight, amount, item_type, request_id)
-VALUES ('0b222c33-dafa-40aa-b583-7ee67f8fe02e', true, 0, 0, 3, '29ae3f8a-5439-425a-98a0-12d17e09530c'),
-('749d1a05-39db-4610-a4ac-365e05cdd1fd', true, 0, 0, 1, '29ae3f8a-5439-425a-98a0-12d17e09530c'),
-('03867446-1f50-45d7-9146-51258955f076', false, 100, 0, 0, '05faca4f-245c-4f91-b937-4be606520f9f'),
-('f32ecc47-b82d-40a9-b901-6a1b7fbdce52', false, 0, 0, 3, '96696d5e-d513-49e9-b752-d5f0a9284e1b');
+INSERT INTO item_data.request_items(id, request_status, end_product, weight, amount, item_type, request_id)
+VALUES ('0b222c33-dafa-40aa-b583-7ee67f8fe02e', 0, true, 0, 0, 3, '29ae3f8a-5439-425a-98a0-12d17e09530c'),
+('749d1a05-39db-4610-a4ac-365e05cdd1fd', 0, true, 0, 0, 1, '29ae3f8a-5439-425a-98a0-12d17e09530c'),
+('03867446-1f50-45d7-9146-51258955f076', 1, false, 100, 0, 0, '05faca4f-245c-4f91-b937-4be606520f9f'),
+('f32ecc47-b82d-40a9-b901-6a1b7fbdce52', 0, false, 0, 0, 3, '96696d5e-d513-49e9-b752-d5f0a9284e1b');
 
-INSERT INTO general_data.routes(id, start_at, status, driver_id, car_id, from_address_id, to_address_id, inventory_item_id, request_item_id, volunteer_id_giver, volunteer_id_taker)
+INSERT INTO general_data.routes(id, start_at, status, driver_id, car_id, from_address_id, to_address_id, inventory_item_id, request_item_id, volunteer_giver_id, volunteer_taker_id)
 VALUES ('effd3f58-5f6b-4cbd-8f00-f056e0edffbe', '2024-06-22 09:15:00.000', 0, 'c852891b-3f67-424d-97ef-194da575d403', 'c852891b-3f67-424d-97ef-194da575d403', 'c3880914-311c-40af-bb57-d0540933d3cd', '4d05e7fe-de5c-4b98-b506-48b3ed170038', NULL, NULL, NULL, NULL),
 ('07a0fd7f-53f4-4868-a985-946fa4930c98', '2024-06-13 19:15:00.000', 0, 'd7b05a64-e7f6-4059-b41d-69672dfdec1e', 'b8d3c4f3-8bcd-4d7b-8cd5-167f1b61f3e3', '649daf96-6513-41f6-b5d8-688c3eae8fc9', '16b262e2-4207-4602-b699-5353350d51fd', NULL, NULL, NULL, NULL);
