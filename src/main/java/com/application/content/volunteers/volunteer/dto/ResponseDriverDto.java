@@ -13,15 +13,13 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ResponseDriverDto {
 
-    String firstName;
-
-    String lastName;
+    VolunteerPrivateProfileDto privateProfileDto;
 
     ResponseCarDto responseCarDto;
 
     public static ResponseDriverDto toResponseDriverDto(Volunteer volunteer, Car car) {
-        return new ResponseDriverDto(volunteer.getUser().getFirstName(),
-                volunteer.getUser().getLastName(),
+        return new ResponseDriverDto(
+                VolunteerPrivateProfileDto.toVolunteerPrivateProfileDto(volunteer),
                 ResponseCarDto.toResponseCarDto(car));
     }
 }
