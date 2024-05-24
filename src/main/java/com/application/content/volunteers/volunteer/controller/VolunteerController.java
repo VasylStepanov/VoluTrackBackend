@@ -1,10 +1,12 @@
 package com.application.content.volunteers.volunteer.controller;
 
+import com.application.authentication.dto.RequestUpdateUserDataDto;
 import com.application.content.general.address.dto.RequestAddressDto;
 import com.application.content.general.address.service.AddressService;
 import com.application.content.general.route.service.RouteService;
 import com.application.content.volunteers.car.dto.RequestCarDto;
 import com.application.content.volunteers.car.service.CarService;
+import com.application.content.volunteers.volunteer.dto.RequestVolunteerUpdateDto;
 import com.application.content.volunteers.volunteer.model.Volunteer;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,13 +49,23 @@ public class VolunteerController {
         return ResponseEntity.ok(volunteerService.getPublicProfileData(id));
     }
 
+    @Operation(summary = "Get profile public data by volunteer id", description = "Profile data is a volunteer data with user data.")
+    @PutMapping("/profile/update")
+    public ResponseEntity<?> updateProfile(@RequestBody RequestVolunteerUpdateDto requestVolunteerUpdateDto,
+                                           HttpServletRequest httpServletRequest){
+        UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
+        volunteerService.updateVolunteerProfile(requestVolunteerUpdateDto, volunteerId);
+        return ResponseEntity.ok("Volunteer is updated");
+    }
+
     /*
     * Car endpoints
     * */
 
     @Operation(summary = "Save car", description = "Car number examples: UA - АА0000АА; EU - AA000AA, AA00000. Carrying kg is a maximum weight to transport. To set car type get all possible types from /getAllCarTypes")
     @PostMapping("/car/save")
-    public ResponseEntity<?> saveCar(@RequestBody RequestCarDto requestCarDto, HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> saveCar(@RequestBody RequestCarDto requestCarDto,
+                                     HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         carService.saveCar(volunteerId, requestCarDto);
         return ResponseEntity.ok("Car is saved");
@@ -88,7 +100,7 @@ public class VolunteerController {
      * */
     @Operation(summary = "Update volunteer's address",
             description = "If it's first request, than address is saved, next requests will update the address.")
-    @PostMapping("/address/update")
+    @PutMapping("/address/update")
     public ResponseEntity<?> updateAddress(@RequestBody RequestAddressDto requestAddressDto,
                                            HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);

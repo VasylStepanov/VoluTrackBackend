@@ -25,6 +25,8 @@ public class VolunteerProfileDto {
 
     String email;
 
+    String phoneNumber;
+
     LocalDateTime createdAt;
 
     ResponsePrivateAddressDto responsePrivateAddressDto;
@@ -36,6 +38,7 @@ public class VolunteerProfileDto {
                 volunteer.getUser().getFirstName(),
                 volunteer.getUser().getLastName(),
                 volunteer.getUser().getEmail(),
+                volunteer.getPhoneNumber(),
                 volunteer.getCreatedAt(),
                 ResponsePrivateAddressDto.toResponseAddressDto(volunteer.getAddress()),
                 volunteer.getCarList().stream().map(ResponseCarDto::toResponseCarDto).toList()

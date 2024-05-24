@@ -1,11 +1,14 @@
 package com.application.content.volunteers.volunteer.service.impl;
 
+import com.application.authentication.dto.RequestUpdateUserDataDto;
 import com.application.content.items.request.model.Request;
 import com.application.content.items.request.repository.RequestRepository;
+import com.application.content.volunteers.volunteer.dto.RequestVolunteerUpdateDto;
 import com.application.content.volunteers.volunteer.dto.VolunteerProfileDto;
 import com.application.content.volunteers.volunteer.dto.VolunteerPublicProfileDto;
 import com.application.content.volunteers.volunteer.model.Volunteer;
 import com.application.content.volunteers.volunteer.repository.VolunteerRepository;
+import com.application.content.volunteers.volunteer.service.VolunteerDataValidation;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
 import com.application.security.service.JwtService;
 import com.application.security.util.CookieUtil;
@@ -46,6 +49,9 @@ public class VolunteerServiceImpl implements VolunteerService {
     @Autowired
     AddressRepository addressRepository;
 
+    @Autowired
+    VolunteerDataValidation volunteerDataValidation;
+
     @Override
     @SneakyThrows
     public Volunteer getVolunteer(UUID volunteerId) {
@@ -85,6 +91,15 @@ public class VolunteerServiceImpl implements VolunteerService {
                 .inventory(inventory)
                 .request(request)
                 .build());
+    }
+
+    @Override
+    public void updateVolunteerProfile(RequestVolunteerUpdateDto requestVolunteerUpdateDto,
+                                       UUID volunteerId) {
+        Volunteer volunteer = getVolunteer(volunteerId);
+        if(requestVolunteerUpdateDto.phoneNumber() != null)
+            volunteer.setPhoneNumber(
+                    volunteerDataValidation.eitherPhoneNumberIsValid(requestVolunteerUpdateDto.phoneNumber()));
     }
 
     @Override

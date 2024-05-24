@@ -11,9 +11,12 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class VolunteerPublicProfileDto {
+
     String firstName;
 
     String lastName;
+
+    String phoneNumber;
 
     LocalDateTime createdAt;
 
@@ -23,6 +26,7 @@ public class VolunteerPublicProfileDto {
         return new VolunteerPublicProfileDto(
                 volunteer.getUser().getFirstName(),
                 volunteer.getUser().getLastName(),
+                volunteer.getPhoneNumber(),
                 volunteer.getCreatedAt(),
                 ResponsePublicAddressDto.toResponsePublicAddressDto(volunteer.getAddress())
         );

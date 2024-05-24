@@ -18,11 +18,14 @@ public class VolunteerPrivateProfileDto {
 
     String lastName;
 
+    String phoneNumber;
+
     public static VolunteerPrivateProfileDto toVolunteerPrivateProfileDto(Volunteer volunteer) {
         if(volunteer == null)
             return null;
         return new VolunteerPrivateProfileDto(
                 volunteer.getUser().getFirstName(),
-                volunteer.getUser().getLastName());
+                volunteer.getUser().getLastName(),
+                volunteer.getPhoneNumber());
     }
 }
