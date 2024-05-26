@@ -1,12 +1,10 @@
 package com.application.content.volunteers.volunteer.controller;
 
-import com.application.authentication.dto.RequestUpdateUserDataDto;
 import com.application.content.general.address.dto.RequestAddressDto;
 import com.application.content.general.address.service.AddressService;
 import com.application.content.general.route.service.RouteService;
 import com.application.content.volunteers.car.dto.RequestCarDto;
 import com.application.content.volunteers.car.service.CarService;
-import com.application.content.volunteers.volunteer.dto.RequestVolunteerUpdateDto;
 import com.application.content.volunteers.volunteer.model.Volunteer;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,15 +45,6 @@ public class VolunteerController {
     @GetMapping("/profile/getById")
     public ResponseEntity<?> getProfileByVolunteerId(@RequestParam UUID id){
         return ResponseEntity.ok(volunteerService.getPublicProfileData(id));
-    }
-
-    @Operation(summary = "Get profile public data by volunteer id", description = "Profile data is a volunteer data with user data.")
-    @PutMapping("/profile/update")
-    public ResponseEntity<?> updateProfile(@RequestBody RequestVolunteerUpdateDto requestVolunteerUpdateDto,
-                                           HttpServletRequest httpServletRequest){
-        UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
-        volunteerService.updateVolunteerProfile(requestVolunteerUpdateDto, volunteerId);
-        return ResponseEntity.ok("Volunteer is updated");
     }
 
     /*

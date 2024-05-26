@@ -1,7 +1,5 @@
 package com.application.content.volunteers.volunteer.service;
 
-import com.application.authentication.dto.RequestUpdateUserDataDto;
-import com.application.content.volunteers.volunteer.dto.RequestVolunteerUpdateDto;
 import com.application.content.volunteers.volunteer.dto.VolunteerProfileDto;
 import com.application.content.volunteers.volunteer.dto.VolunteerPublicProfileDto;
 import com.application.content.volunteers.volunteer.model.Volunteer;
@@ -21,8 +19,6 @@ public interface VolunteerService {
     VolunteerPublicProfileDto getPublicProfileData(UUID volunteerId);
 
     void saveVolunteerProfile(User user);
-
-    void updateVolunteerProfile(RequestVolunteerUpdateDto requestVolunteerUpdateDto, UUID volunteerId);
 
     void deleteById(UUID volunteerId);
 }

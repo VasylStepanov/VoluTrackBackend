@@ -66,18 +66,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @SneakyThrows
     public void updateUser(User user, UserDto userDto){
-        if(userDto.getFirstName() != null)
-            user.setFirstName(validator.eitherFirstNameIsValid(userDto.getFirstName()));
-        if(userDto.getLastName() != null)
-            user.setLastName(validator.eitherLastNameIsValid(userDto.getLastName()));
-        if(userDto.getEmail() != null)
-            user.setEmail(validator.eitherEmailIsValid(userDto.getEmail()));
-        if(userDto.getPassword() != null)
-            user.setPassword(passwordEncoder.encode(validator.eitherPasswordIsValid(userDto.getPassword())));
-        if(userDto.getEnabled() != null)
-            user.setEnabled(userDto.getEnabled());
-        if(userDto.getLocked() != null)
-            user.setLocked(userDto.getLocked());
+        UserDto.updateUser(user, userDto);
     }
 
     @Override
@@ -91,6 +80,7 @@ public class UserServiceImpl implements UserService {
                 .firstName(validator.eitherFirstNameIsValidFull(registrationRequest.firstName()))
                 .lastName(validator.eitherLastNameIsValidFull(registrationRequest.lastName()))
                 .email(validator.eitherEmailIsValid(registrationRequest.email()))
+                .phoneNumber(validator.eitherPhoneNumberIsValid(registrationRequest.phoneNumber()))
                 .password(passwordEncoder.encode(validator.eitherPasswordIsValidFull(registrationRequest.password())))
                 .locked(false)
                 .enabled(false)

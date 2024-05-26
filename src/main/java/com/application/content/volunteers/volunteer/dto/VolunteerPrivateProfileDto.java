@@ -26,6 +26,6 @@ public class VolunteerPrivateProfileDto {
         return new VolunteerPrivateProfileDto(
                 volunteer.getUser().getFirstName(),
                 volunteer.getUser().getLastName(),
-                volunteer.getPhoneNumber());
+                volunteer.getUser().getPhoneNumber());
     }
 }

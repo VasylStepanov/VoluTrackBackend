@@ -23,14 +23,10 @@ import java.util.List;
 @SuperBuilder
 @Entity(name = "volunteer")
 @Table(name = "volunteers", schema = "volunteer_data", uniqueConstraints = {
-    @UniqueConstraint(name = "uk_volunteer_user_id", columnNames = {"user_id"}),
-    @UniqueConstraint(name = "uk_phone_number", columnNames = {"phone_number"})
+    @UniqueConstraint(name = "uk_volunteer_user_id", columnNames = {"user_id"})
 })
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Volunteer extends BaseEntity implements IAddress {
-
-    @Column(name = "phone_number")
-    String phoneNumber;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)

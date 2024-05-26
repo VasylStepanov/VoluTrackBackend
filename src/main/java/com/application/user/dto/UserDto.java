@@ -20,6 +20,8 @@ public class UserDto {
 
     String email;
 
+    String phoneNumber;
+
     String password;
 
     Boolean locked;
@@ -33,6 +35,7 @@ public class UserDto {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
+                user.getPhoneNumber(),
                 user.getPassword(),
                 user.isLocked(),
                 user.isEnabled(),
@@ -47,6 +50,7 @@ public class UserDto {
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
                 .email(userDto.getEmail())
+                .phoneNumber(userDto.getPhoneNumber())
                 .password(userDto.getPassword())
                 .locked(userDto.getLocked())
                 .enabled(userDto.getEnabled())
@@ -61,6 +65,8 @@ public class UserDto {
             user.setLastName(userDto.getLastName());
         if(userDto.getEmail() != null)
             user.setEmail(userDto.getEmail());
+        if(userDto.getPhoneNumber() != null)
+            user.setPhoneNumber(userDto.getPhoneNumber());
         if(userDto.getPassword() != null)
             user.setPassword(userDto.getPassword());
         if(userDto.getEnabled() != null)

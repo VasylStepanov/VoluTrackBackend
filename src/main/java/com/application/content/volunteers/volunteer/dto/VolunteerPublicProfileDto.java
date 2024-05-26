@@ -26,7 +26,7 @@ public class VolunteerPublicProfileDto {
         return new VolunteerPublicProfileDto(
                 volunteer.getUser().getFirstName(),
                 volunteer.getUser().getLastName(),
-                volunteer.getPhoneNumber(),
+                volunteer.getUser().getPhoneNumber(),
                 volunteer.getCreatedAt(),
                 ResponsePublicAddressDto.toResponsePublicAddressDto(volunteer.getAddress())
         );

@@ -1,14 +1,14 @@
-INSERT INTO user_data.users(id, firstname, lastname, email, password, is_locked, is_enabled, role_id)
-VALUES ('71119396-8694-11ed-9ef6-77042ee83937', 'Микола', 'Вишиванка', 'zlodiy123@gmail.com', '$2a$12$rmi83nAZKjrOwL/9JSIspuLpDshxr9BQkLJZeSJu1f6J0YEMfXjrO', 'false', 'true', 1),
-('9a87155e-7401-11ee-b962-0242ac120002', 'Георгій', 'Вишенський', 'washington111@gmail.com', '$2a$12$HpXzPZ2C66a1r2CDUgY3QeruTDRJFboE0ebT9NO/lNjEB7AnkeU6a', 'false', 'true', 1),
-('e2cb927c-7401-11ee-b962-0242ac120002', 'Володя', 'Осташин', 'vovka1992_ost@gmail.com', '$2a$12$aZVMQ0wTIweamdoqGxKF1eRS7QJfxy.2N7R89XKyuwMbYO4iuUVGG', 'false', 'true', 1),
-('2781a503-7dda-4389-80fd-c627777ec0f3', 'Сергій', 'Камишин', 'kamishinsergey123@gmail.com', '$2a$12$0cai5HiyVT0mR6iWqb/1PunobDeAhGFNSBkc1CNHfqsFiUnhkVh76', 'false', 'true', 1),
-('1e4edaf2-5e57-4753-840d-a6c97f860067', 'Юлія', 'Сверидова', 'julia_sveridova_work@gmail.com', '$2a$12$Y5zIBa49N4lWl37jJaKSNecRPd1MzbSJ8iejcJeenyTcT3mYUe8Q.', 'false', 'true', 1),
-('90cdbeed-0898-480a-bbd5-43042885ceb3', 'Макар', 'Вишневецький', 'vishnya1976@gmail.com', '$2a$12$i3f0tALYX8pMjYa/SYadJek5FxqWnwofa6cPi1yAoT1QWTq6YZP2G', 'false', 'true', 1),
-('a48c5d51-11d3-47cd-8705-dd53df55f845', 'Євгеній', 'Сошкін', 'zhenya1990@gmail.com', '$2a$12$VTtj8eiBMF9MZMycthaF6urVE39D8Wlsa/v9Mdq4BOG5.rEbUTuZC', 'false', 'true', 1),
-('46bb1ff3-e05d-481c-b435-960dfc1f933d', 'Марк', 'Балтишев', 'baltishevmark123@gmail.com', '$2a$12$ZVG4OzDa/l5Z2HUaNMxBfOd0TYBrvPDw7oxRkUOEyJnzsZPtVOHx2', 'false', 'true', 1),
-('b1a163be-3913-4299-8403-35785977b768', 'Оксана', 'Зиноївна', 'zenoivnazitomyr@gmail.com', '$2a$12$eHmZ.QUluAUVk7s40WPktukPv.PGw0oz8gT0IY60dgqN.9QSmsa0e', 'false', 'true', 1),
-('dba68dc0-d1ba-4df8-9399-7ab09b071560', 'Довженко', 'Марія', 'dovzhenko.m.1978@gmail.com', '$2a$12$T89M9KeZJ2oE.we1V60UbOcaFdulAtjz8/sNS.VBkRJRcRrZPHPYS', 'false', 'true', 1);
+INSERT INTO user_data.users(id, firstname, lastname, email, phone_number, password, is_locked, is_enabled, role_id)
+VALUES ('71119396-8694-11ed-9ef6-77042ee83937', 'Микола', 'Вишиванка', 'zlodiy123@gmail.com', '+380123456781', '$2a$12$rmi83nAZKjrOwL/9JSIspuLpDshxr9BQkLJZeSJu1f6J0YEMfXjrO', 'false', 'true', 1),
+('9a87155e-7401-11ee-b962-0242ac120002', 'Георгій', 'Вишенський', 'washington111@gmail.com', '+380123456782', '$2a$12$HpXzPZ2C66a1r2CDUgY3QeruTDRJFboE0ebT9NO/lNjEB7AnkeU6a', 'false', 'true', 1),
+('e2cb927c-7401-11ee-b962-0242ac120002', 'Володя', 'Осташин', 'vovka1992_ost@gmail.com', '+380123456783', '$2a$12$aZVMQ0wTIweamdoqGxKF1eRS7QJfxy.2N7R89XKyuwMbYO4iuUVGG', 'false', 'true', 1),
+('2781a503-7dda-4389-80fd-c627777ec0f3', 'Сергій', 'Камишин', 'kamishinsergey123@gmail.com', '+380123456784', '$2a$12$0cai5HiyVT0mR6iWqb/1PunobDeAhGFNSBkc1CNHfqsFiUnhkVh76', 'false', 'true', 1),
+('1e4edaf2-5e57-4753-840d-a6c97f860067', 'Юлія', 'Сверидова', 'julia_sveridova_work@gmail.com', '+380123456785', '$2a$12$Y5zIBa49N4lWl37jJaKSNecRPd1MzbSJ8iejcJeenyTcT3mYUe8Q.', 'false', 'true', 1),
+('90cdbeed-0898-480a-bbd5-43042885ceb3', 'Макар', 'Вишневецький', 'vishnya1976@gmail.com', '+380123456786', '$2a$12$i3f0tALYX8pMjYa/SYadJek5FxqWnwofa6cPi1yAoT1QWTq6YZP2G', 'false', 'true', 1),
+('a48c5d51-11d3-47cd-8705-dd53df55f845', 'Євгеній', 'Сошкін', 'zhenya1990@gmail.com', '+380123456787', '$2a$12$VTtj8eiBMF9MZMycthaF6urVE39D8Wlsa/v9Mdq4BOG5.rEbUTuZC', 'false', 'true', 1),
+('46bb1ff3-e05d-481c-b435-960dfc1f933d', 'Марк', 'Балтишев', 'baltishevmark123@gmail.com', '+380123456788', '$2a$12$ZVG4OzDa/l5Z2HUaNMxBfOd0TYBrvPDw7oxRkUOEyJnzsZPtVOHx2', 'false', 'true', 1),
+('b1a163be-3913-4299-8403-35785977b768', 'Оксана', 'Зиноївна', 'zenoivnazitomyr@gmail.com', '+380123456789', '$2a$12$eHmZ.QUluAUVk7s40WPktukPv.PGw0oz8gT0IY60dgqN.9QSmsa0e', 'false', 'true', 1),
+('dba68dc0-d1ba-4df8-9399-7ab09b071560', 'Довженко', 'Марія', 'dovzhenko.m.1978@gmail.com', '+380123456791', '$2a$12$T89M9KeZJ2oE.we1V60UbOcaFdulAtjz8/sNS.VBkRJRcRrZPHPYS', 'false', 'true', 1);
 
 INSERT INTO item_data.inventories(id)
 VALUES ('02ab61b1-ac27-4f32-9bc9-3e40341b4699'), ('710c2e63-641e-42c3-a306-9e3088b8fda8'),
@@ -45,17 +45,17 @@ VALUES ('e17d83d8-771e-4902-954c-04550fcabe60', 'Львівська област
 ('16b262e2-4207-4602-b699-5353350d51fd', 'Bilopil''s''kyi Shlyakh St, 53, Sumy, Sums''ka oblast, 40000', 50.929899459924336, 34.74157271215379),
 ('70d90328-33ea-4369-acc0-aae94d91772a', 'Lyapunova St, 33, Kharkiv, Kharkivs''ka oblast, 61000', 50.019895, 36.230942);
 
-INSERT INTO volunteer_data.volunteers(id, phone_number, user_id, address_id, inventory_id, request_id)
-VALUES ('ea5353ba-7df5-44dd-a85c-5c011580f9aa', '+380123456781', '71119396-8694-11ed-9ef6-77042ee83937', 'e17d83d8-771e-4902-954c-04550fcabe60', '02ab61b1-ac27-4f32-9bc9-3e40341b4699', 'abfe376e-809e-40df-8b64-3aff45ff2e3c'),
-('c852891b-3f67-424d-97ef-194da575d403', '+380123456782','9a87155e-7401-11ee-b962-0242ac120002', 'c3880914-311c-40af-bb57-d0540933d3cd', '710c2e63-641e-42c3-a306-9e3088b8fda8', 'dbe9c523-44fb-47fb-9830-0b0f51bf36b7'),
-('f061ad57-879c-446d-8bd4-b64452243bae', NULL, 'e2cb927c-7401-11ee-b962-0242ac120002', NULL, '9785b0c7-93e3-4da1-b8c8-2809c2065146', '59da3984-f587-4d51-9994-0276deaba65a'),
-('f0330f60-0438-490f-97e8-d7330f73e3f4', '+380123456783', '2781a503-7dda-4389-80fd-c627777ec0f3', NULL, '672c6a46-0ee6-4817-bd0b-0d27231daf1f', 'ce699406-2ab7-4928-b8c9-1e84a1ca61ec'),
-('329a7ba0-f10b-4996-8624-cfb32ff24c38', '+380123456784', '1e4edaf2-5e57-4753-840d-a6c97f860067', NULL, '345d947e-7b65-44b4-9431-8b4254769469', '19f87a6a-79df-4c14-823d-2ac36c1d57ad'),
-('f042b766-57c5-4e54-a742-0678693e8fbe', NULL, '90cdbeed-0898-480a-bbd5-43042885ceb3', 'c4d96896-fe86-4998-b019-1b4564be1eff', 'aee71174-f86d-4828-a290-4409550e1b10', '473fc3a3-edfc-407a-8898-b856281f8baa'),
-('f841617c-fa16-464f-9efc-71f3731e8f52', '+380123456785', 'a48c5d51-11d3-47cd-8705-dd53df55f845', NULL, '006ea5bb-ec91-4026-a62c-ea4469f5276e', 'e9c45510-0f52-4523-9ef0-cdf80192fbf9'),
-('d7b05a64-e7f6-4059-b41d-69672dfdec1e', NULL, '46bb1ff3-e05d-481c-b435-960dfc1f933d', NULL, '8ee6f894-0bfb-4716-9264-54e9aee6ba61', '21874d6e-e21b-4f43-8ef3-d0dabccc1095'),
-('a0c04e2a-bb44-4e39-abd2-dda0d9417f74', NULL, 'b1a163be-3913-4299-8403-35785977b768', NULL, '0e612ea1-32de-4776-b1f1-412fd482fd70', '96696d5e-d513-49e9-b752-d5f0a9284e1b'),
-('7de01b75-f9cc-46a9-b995-f2e42cdc424e', NULL, 'dba68dc0-d1ba-4df8-9399-7ab09b071560', NULL, '50a638ab-06c0-4493-89a2-5e3ada61ea44', '0120d5d8-cd90-4edb-a929-d33c8982878f');
+INSERT INTO volunteer_data.volunteers(id, user_id, address_id, inventory_id, request_id)
+VALUES ('ea5353ba-7df5-44dd-a85c-5c011580f9aa', '71119396-8694-11ed-9ef6-77042ee83937', 'e17d83d8-771e-4902-954c-04550fcabe60', '02ab61b1-ac27-4f32-9bc9-3e40341b4699', 'abfe376e-809e-40df-8b64-3aff45ff2e3c'),
+('c852891b-3f67-424d-97ef-194da575d403', '9a87155e-7401-11ee-b962-0242ac120002', 'c3880914-311c-40af-bb57-d0540933d3cd', '710c2e63-641e-42c3-a306-9e3088b8fda8', 'dbe9c523-44fb-47fb-9830-0b0f51bf36b7'),
+('f061ad57-879c-446d-8bd4-b64452243bae', 'e2cb927c-7401-11ee-b962-0242ac120002', NULL, '9785b0c7-93e3-4da1-b8c8-2809c2065146', '59da3984-f587-4d51-9994-0276deaba65a'),
+('f0330f60-0438-490f-97e8-d7330f73e3f4', '2781a503-7dda-4389-80fd-c627777ec0f3', NULL, '672c6a46-0ee6-4817-bd0b-0d27231daf1f', 'ce699406-2ab7-4928-b8c9-1e84a1ca61ec'),
+('329a7ba0-f10b-4996-8624-cfb32ff24c38', '1e4edaf2-5e57-4753-840d-a6c97f860067', NULL, '345d947e-7b65-44b4-9431-8b4254769469', '19f87a6a-79df-4c14-823d-2ac36c1d57ad'),
+('f042b766-57c5-4e54-a742-0678693e8fbe', '90cdbeed-0898-480a-bbd5-43042885ceb3', 'c4d96896-fe86-4998-b019-1b4564be1eff', 'aee71174-f86d-4828-a290-4409550e1b10', '473fc3a3-edfc-407a-8898-b856281f8baa'),
+('f841617c-fa16-464f-9efc-71f3731e8f52', 'a48c5d51-11d3-47cd-8705-dd53df55f845', NULL, '006ea5bb-ec91-4026-a62c-ea4469f5276e', 'e9c45510-0f52-4523-9ef0-cdf80192fbf9'),
+('d7b05a64-e7f6-4059-b41d-69672dfdec1e', '46bb1ff3-e05d-481c-b435-960dfc1f933d', NULL, '8ee6f894-0bfb-4716-9264-54e9aee6ba61', '21874d6e-e21b-4f43-8ef3-d0dabccc1095'),
+('a0c04e2a-bb44-4e39-abd2-dda0d9417f74', 'b1a163be-3913-4299-8403-35785977b768', NULL, '0e612ea1-32de-4776-b1f1-412fd482fd70', '96696d5e-d513-49e9-b752-d5f0a9284e1b'),
+('7de01b75-f9cc-46a9-b995-f2e42cdc424e', 'dba68dc0-d1ba-4df8-9399-7ab09b071560', NULL, '50a638ab-06c0-4493-89a2-5e3ada61ea44', '0120d5d8-cd90-4edb-a929-d33c8982878f');
 
 INSERT INTO group_data.groups(id, name, description, volunteer_id, address_id, inventory_id, request_id)
 VALUES ('360ee69b-0f6b-48d7-a40b-db0cd537afda', 'Робимо окопні свічки', NULL, 'f061ad57-879c-446d-8bd4-b64452243bae', '4fdbfff0-908b-44c9-89cb-61a37ab20df5', '29823253-599a-43bb-8e85-97e36c7ba429', 'f7d0158b-fd25-4a46-ae62-7b4f70435773'),

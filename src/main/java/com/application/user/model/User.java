@@ -23,7 +23,10 @@ import java.util.List;
 @EqualsAndHashCode(exclude = {"confirmationEmail", "tokens"}, callSuper = false)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity(name = "user")
-@Table(schema = "user_data", name = "users", uniqueConstraints = @UniqueConstraint(name = "uk_email", columnNames = { "email" }))
+@Table(schema = "user_data", name = "users", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_email", columnNames = { "email" }),
+        @UniqueConstraint(name = "uk_phone_number", columnNames = {"phone_number"})
+})
 public class User extends BaseEntity implements UserDetails {
 
     @Column(name = "firstname", length = 64, nullable = false)
@@ -34,6 +37,9 @@ public class User extends BaseEntity implements UserDetails {
 
     @Column(length = 80, nullable = false)
     String email;
+
+    @Column(name = "phone_number", nullable = false)
+    String phoneNumber;
 
     @Column(length = 128, nullable = false)
     String password;
