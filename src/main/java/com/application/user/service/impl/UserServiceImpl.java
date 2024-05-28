@@ -12,11 +12,13 @@ import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -86,8 +88,11 @@ public class UserServiceImpl implements UserService {
                 .enabled(false)
                 .role(role)
                 .build();
-        userRepository.save(user);
-        return user;
+
+        if(userRepository.findByData(registrationRequest.email(), registrationRequest.phoneNumber()).isPresent())
+            throw new RuntimeException("User already exists with the provided data.");
+
+        return userRepository.save(user);
     }
 
     @Override

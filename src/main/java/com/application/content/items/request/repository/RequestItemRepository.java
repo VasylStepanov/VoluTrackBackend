@@ -19,7 +19,7 @@ public interface RequestItemRepository extends JpaRepository<RequestItem, UUID> 
     @Query("""
             SELECT r
             FROM request_item r
-            WHERE r.requestStatus != 'COMPLETED' AND
+            WHERE r.requestStatus != RequestStatus.COMPLETED AND
             ((r.request.group.address.coordinatesLongitude < ?1 AND
             r.request.group.address.coordinatesLongitude > ?2 AND
             r.request.group.address.coordinatesLatitude < ?3 AND
@@ -36,7 +36,7 @@ public interface RequestItemRepository extends JpaRepository<RequestItem, UUID> 
     @Query("""
             SELECT r
             FROM request_item r
-            WHERE r.itemType = '?5' AND r.requestStatus != 'COMPLETED' AND
+            WHERE r.itemType = ?5 AND r.requestStatus != RequestStatus.COMPLETED AND
             ((r.request.group.address.coordinatesLongitude < ?1 AND
             r.request.group.address.coordinatesLongitude > ?2 AND
             r.request.group.address.coordinatesLatitude < ?3 AND
@@ -50,6 +50,6 @@ public interface RequestItemRepository extends JpaRepository<RequestItem, UUID> 
                                             double longitudeY,
                                             double latitudeX,
                                             double latitudeY,
-                                            String itemType);
+                                            ItemType itemType);
 
 }

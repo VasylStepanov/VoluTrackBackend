@@ -11,10 +11,11 @@ import com.application.content.general.route.repository.RouteRepository;
 import com.application.content.general.route.service.RouteService;
 import com.application.content.groups.group.model.Group;
 import com.application.content.groups.group.service.GroupService;
+import com.application.content.items.inventory.dto.InventoryItemDto;
 import com.application.content.items.inventory.model.Inventory;
 import com.application.content.items.inventory.model.InventoryItem;
 import com.application.content.items.inventory.service.InventoryService;
-import com.application.content.items.request.dto.RequestStatus;
+import com.application.content.items.request.model.RequestStatus;
 import com.application.content.items.request.model.RequestItem;
 import com.application.content.items.request.service.RequestService;
 import com.application.content.volunteers.car.model.Car;
@@ -38,7 +39,6 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @Service
-@Transactional
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RouteServiceImpl implements RouteService {
 
@@ -138,6 +138,7 @@ public class RouteServiceImpl implements RouteService {
                 .stream()
                 .map(BaseEntity::getId)
                 .toList();
+
         List<UUID> requestItemIds = group.getRequest()
                 .getRequestItems()
                 .stream()
@@ -154,6 +155,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
+    @Transactional
     public void createRoute(UUID volunteerId, RequestRouteDto requestRouteDto) {
         Volunteer volunteer = volunteerService.getVolunteer(volunteerId);
         Address from = addressService.saveAddress(requestRouteDto.from());
@@ -199,6 +201,7 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     @SneakyThrows
+    @Transactional
     public void updateRoute(UUID volunteerId, RequestUpdateRouteDto requestUpdateRouteDto) {
         Route route = getRouteEitherDriver(volunteerId, requestUpdateRouteDto.routeId());
 
@@ -215,6 +218,8 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public void deleteRoute(UUID volunteerId, UUID routeId) {
         Route route = getRouteEitherDriver(volunteerId, routeId);
+        if(!route.getRouteStatus().equals(RouteStatus.CREATED))
+            throw new RuntimeException("Route can't be deleted");
         routeRepository.delete(route);
     }
 
@@ -227,6 +232,7 @@ public class RouteServiceImpl implements RouteService {
     public void setItemToRouteByInventoryItem(InventoryItem inventoryItem){
         Address address = addressService.getAddress(inventoryItem);
         Volunteer giverRepresentative = inventoryService.getRepresentative(inventoryItem);
+
         List<Route> routeList = routeRepository.findRouteByAddressFrom(
                 address.getCoordinatesLongitude() + SIZE_LENGTH,
                 address.getCoordinatesLongitude() - SIZE_LENGTH,
@@ -242,6 +248,7 @@ public class RouteServiceImpl implements RouteService {
                     if(!requestItem.getRequestStatus().equals(RequestStatus.IN_PROCESS))
                         requestItem.setRequestStatus(RequestStatus.IN_PROCESS);
                     Volunteer takerRepresentative = requestService.getRepresentative(requestItem);
+                    updateRouteEntities(inventoryItem, requestItem, route.getCar());
                     route.setInventoryItem(inventoryItem);
                     route.setRequestItem(requestItem);
                     route.setVolunteerGiver(giverRepresentative);
@@ -259,6 +266,7 @@ public class RouteServiceImpl implements RouteService {
     public void setItemToRouteByRequestItem(RequestItem requestItem){
         Address address = addressService.getAddress(requestItem);
         Volunteer takerRepresentative = requestService.getRepresentative(requestItem);
+
         List<Route> routeList = routeRepository.findRouteByAddressTo(
                 address.getCoordinatesLongitude() + SIZE_LENGTH,
                 address.getCoordinatesLongitude() - SIZE_LENGTH,
@@ -273,6 +281,7 @@ public class RouteServiceImpl implements RouteService {
                     InventoryItem inventoryItem = getClosestInventoryItem(inventoryItems, route.getFromAddress());
                     requestItem.setRequestStatus(RequestStatus.IN_PROCESS);
                     Volunteer giverRepresentative = inventoryService.getRepresentative(inventoryItem);
+                    updateRouteEntities(inventoryItem, requestItem, route.getCar());
                     route.setInventoryItem(inventoryItem);
                     route.setRequestItem(requestItem);
                     route.setVolunteerGiver(giverRepresentative);
@@ -290,13 +299,20 @@ public class RouteServiceImpl implements RouteService {
     public void setItemToRoute(Route route){
         List<InventoryItem> inventoryItems = inventoryService.findAllInventoryItemsByAddress(route.getFromAddress());
         List<RequestItem> requestItems = requestService.findAllRequestItemsByAddress(route.getToAddress());
-
+        
+        inventoryItems = inventoryItems.stream().filter(x -> {
+            if(x.getAmount() == 0)
+                return x.getWeight() < route.getCar().getCarryingKg();
+            return x.getWeight() / x.getAmount() < route.getCar().getCarryingKg();
+        }).toList();
+        
         for(InventoryItem inventoryItem: inventoryItems){
             for (RequestItem requestItem: requestItems){
                 if(doesInventoryItemFitsRequestItem(inventoryItem, requestItem)){
                     inventoryItem.setReadyToSend(false);
                     if(!requestItem.getRequestStatus().equals(RequestStatus.IN_PROCESS))
                         requestItem.setRequestStatus(RequestStatus.IN_PROCESS);
+                    updateRouteEntities(inventoryItem, requestItem, route.getCar());
                     Volunteer takerRepresentative = requestService.getRepresentative(requestItem);
                     Volunteer giverRepresentative = inventoryService.getRepresentative(inventoryItem);
                     route.setInventoryItem(inventoryItem);
@@ -310,8 +326,40 @@ public class RouteServiceImpl implements RouteService {
         }
     }
 
+    private void updateRouteEntities(InventoryItem inventoryItem, RequestItem requestItem, Car car){
+        int carryingAmount = Math.min(inventoryItem.getAmount(),
+                (int)Math.floor(car.getCarryingKg() / inventoryItem.getWeight()));
+        if(requestItem.getAmount() != 0)
+            carryingAmount = Math.min(carryingAmount, requestItem.getAmount());
+
+        if(inventoryItem.getAmount() > carryingAmount){
+            InventoryItemDto itemDto = new InventoryItemDto(
+                    inventoryItem.isEndProduct(),
+                    inventoryItem.getName(),
+                    inventoryItem.getDescription(),
+                    inventoryItem.getWeight(),
+                    inventoryItem.getAmount() - carryingAmount,
+                    inventoryItem.getItemType()
+            );
+            inventoryService.saveItem(itemDto, inventoryItem.getInventory());
+
+            inventoryItem.setAmount(carryingAmount);
+        }
+
+        if(carryingAmount != 0) {
+            if (requestItem.getWeight() != 0)
+                requestItem.setWeight(requestItem.getWeight() - carryingAmount * inventoryItem.getWeight());
+
+            if (requestItem.getAmount() > carryingAmount)
+                requestItem.setAmount(requestItem.getAmount() - carryingAmount);
+            else if (requestItem.getAmount() == carryingAmount)
+                requestItem.setRequestStatus(RequestStatus.COMPLETED);
+        }
+    }
+
     private boolean doesInventoryItemFitsRequestItem(InventoryItem inventoryItem, RequestItem requestItem){
-        return inventoryItem.getItemType().equals(requestItem.getItemType());
+        return inventoryItem.getItemType().equals(requestItem.getItemType()) &&
+                inventoryItem.isEndProduct() == requestItem.isEndProduct();
     }
 
     private InventoryItem getClosestInventoryItem(List<InventoryItem> inventoryItems, Address from){

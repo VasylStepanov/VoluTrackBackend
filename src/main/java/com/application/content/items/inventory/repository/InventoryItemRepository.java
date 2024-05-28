@@ -20,17 +20,13 @@ public interface InventoryItemRepository extends JpaRepository<InventoryItem, UU
     @Query("""
             SELECT i
             FROM inventory_item i
-            WHERE i.readyToSend = true
-            AND ((i.inventory.group.address.coordinatesLongitude < ?1 AND
-            i.inventory.group.address.coordinatesLongitude > ?2 AND
-            i.inventory.group.address.coordinatesLatitude < ?3 AND
-            i.inventory.group.address.coordinatesLatitude > ?4)
-            OR (i.inventory.group.address.coordinatesLongitude < ?1 AND
-            i.inventory.group.address.coordinatesLongitude > ?2 AND
-            i.inventory.group.address.coordinatesLatitude < ?3 AND
-            i.inventory.group.address.coordinatesLatitude > ?4))
+            WHERE i.readyToSend = true AND
+            i.inventory.volunteer.address.coordinatesLongitude < ?1 AND
+            i.inventory.volunteer.address.coordinatesLongitude > ?2 AND
+            i.inventory.volunteer.address.coordinatesLatitude < ?3 AND
+            i.inventory.volunteer.address.coordinatesLatitude > ?4
             """)
-    List<InventoryItem> findAllByAddress(double longitudeX,
+    List<InventoryItem> findAllByAddressVolunteer(double longitudeX,
                                          double longitudeY,
                                          double latitudeX,
                                          double latitudeY);
@@ -38,19 +34,44 @@ public interface InventoryItemRepository extends JpaRepository<InventoryItem, UU
     @Query("""
             SELECT i
             FROM inventory_item i
-            WHERE i.readyToSend = true AND i.itemType = ?5
-            AND ((i.inventory.group.address.coordinatesLongitude < ?1 AND
+            WHERE i.readyToSend = true AND
+            i.inventory.group.address.coordinatesLongitude < ?1 AND
             i.inventory.group.address.coordinatesLongitude > ?2 AND
             i.inventory.group.address.coordinatesLatitude < ?3 AND
-            i.inventory.group.address.coordinatesLatitude > ?4)
-            OR (i.inventory.group.address.coordinatesLongitude < ?1 AND
-            i.inventory.group.address.coordinatesLongitude > ?2 AND
-            i.inventory.group.address.coordinatesLatitude < ?3 AND
-            i.inventory.group.address.coordinatesLatitude > ?4))
+            i.inventory.group.address.coordinatesLatitude > ?4
             """)
-    List<InventoryItem> findAllByAddress(double longitudeX,
-                                       double longitudeY,
-                                       double latitudeX,
-                                       double latitudeY,
-                                       String itemType);
+    List<InventoryItem> findAllByAddressGroup(double longitudeX,
+                                          double longitudeY,
+                                          double latitudeX,
+                                          double latitudeY);
+
+    @Query("""
+            SELECT i
+            FROM inventory_item i
+            WHERE i.readyToSend = true AND i.itemType = ?5 AND
+            i.inventory.volunteer.address.coordinatesLongitude < ?1 AND
+            i.inventory.volunteer.address.coordinatesLongitude > ?2 AND
+            i.inventory.volunteer.address.coordinatesLatitude < ?3 AND
+            i.inventory.volunteer.address.coordinatesLatitude > ?4
+            """)
+    List<InventoryItem> findAllByAddressVolunteer(double longitudeX,
+                                           double longitudeY,
+                                           double latitudeX,
+                                           double latitudeY,
+                                           ItemType itemType);
+
+    @Query("""
+            SELECT i
+            FROM inventory_item i
+            WHERE i.readyToSend = true AND i.itemType = ?5 AND
+            i.inventory.group.address.coordinatesLongitude < ?1 AND
+            i.inventory.group.address.coordinatesLongitude > ?2 AND
+            i.inventory.group.address.coordinatesLatitude < ?3 AND
+            i.inventory.group.address.coordinatesLatitude > ?4
+            """)
+    List<InventoryItem> findAllByAddressGroup(double longitudeX,
+                                          double longitudeY,
+                                          double latitudeX,
+                                          double latitudeY,
+                                          ItemType itemType);
 }

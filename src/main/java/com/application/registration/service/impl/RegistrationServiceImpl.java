@@ -11,10 +11,9 @@ import com.application.user.model.User;
 import com.application.registration.service.RegistrationService;
 import com.application.user.service.UserService;
 import lombok.AccessLevel;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +38,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     VolunteerService volunteerService;
 
     @Override
+    @SneakyThrows
     public String register(RegistrationRequest registrationRequest) {
         String password = signUpUser(registrationRequest);
         Map<String, Object> models = getModels(registrationRequest.firstName(),
@@ -88,6 +88,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         return "Resent confirmation";
     }
 
+    @SneakyThrows
     private String signUpUser(RegistrationRequest registrationRequest) {
 
         User user = userService.createUser(registrationRequest);

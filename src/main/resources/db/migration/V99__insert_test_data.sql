@@ -82,13 +82,13 @@ VALUES ('3ff0b760-5cd1-418e-877e-705c18a3bcd5', 'АО 1234 ВВ', 'Чорна ш
 ('f374ea06-680c-46b9-91ad-2dc9b08f5fca', 'АК 1234 АО', 'Лада калина біла', 100, 0, 'd7b05a64-e7f6-4059-b41d-69672dfdec1e');
 
 INSERT INTO item_data.inventory_items(id, ready_to_send, end_product, name, description, weight, amount, item_type, inventory_id)
-VALUES ('04498a3a-f704-4e70-b197-1a76c29f9e85', true, true, '6 пар військових берц', NULL, 6, 2, 2, '755748a4-3d57-42a3-9af6-2661c021681b'),
-('6fa8667b-1b88-48ff-badb-89701fcf1a82', true, true, '5 кг тушонки', 'Тушонка домашня в 1л банках', 5, 5, 3, '0e612ea1-32de-4776-b1f1-412fd482fd70'),
-('a3eec7b1-16a8-42d7-ba28-1b53882a251b', true, true, '10 FPV дронів', '10 Звичайних FPV дронів', 6, 5, 5, '29823253-599a-43bb-8e85-97e36c7ba429'),
-('d210e4d4-6164-403f-9205-7871d145df08', false, true, '4 штуки маскувальних сіток', NULL, 8, 4, 6, '02ab61b1-ac27-4f32-9bc9-3e40341b4699'),
+VALUES ('04498a3a-f704-4e70-b197-1a76c29f9e85', true, true, '6 пар військових берц', NULL, 2, 6, 2, '755748a4-3d57-42a3-9af6-2661c021681b'),
+('6fa8667b-1b88-48ff-badb-89701fcf1a82', true, true, '5 кг тушонки', 'Тушонка домашня в 1л банках', 1, 5, 3, '0e612ea1-32de-4776-b1f1-412fd482fd70'),
+('a3eec7b1-16a8-42d7-ba28-1b53882a251b', true, true, '10 FPV дронів', '10 Звичайних FPV дронів', 2, 10, 5, '29823253-599a-43bb-8e85-97e36c7ba429'),
+('d210e4d4-6164-403f-9205-7871d145df08', false, true, '4 штуки маскувальних сіток', NULL, 1, 4, 6, '02ab61b1-ac27-4f32-9bc9-3e40341b4699'),
 ('8c3fbc57-b555-4c1c-ae4c-9d632c953633', false, true, 'Одяг', 'Різний дитячий одяг', 4, 0, 1, '710c2e63-641e-42c3-a306-9e3088b8fda8'),
 ('ab25a8af-17ed-42cb-a8c0-78cff5563dde', true, true, 'Окопні свічки', '40 кг окопних свічок', 40, 0, 7, '539d6275-39b8-46cf-af78-9b815cc670e9'),
-('388835f9-19c3-49b7-945f-8cd7fc216f51', true, true, 'Дрони', 'FPV дрони', 6, 4, 4, '97095135-7388-4fbc-9e79-e642fa11c5ea'),
+('388835f9-19c3-49b7-945f-8cd7fc216f51', true, true, 'Дрони', 'FPV дрони', 1, 4, 4, '97095135-7388-4fbc-9e79-e642fa11c5ea'),
 ('56a492f7-9117-405a-bac6-31dc4f1405f4', false, false, 'Запчастини для дронів', NULL, 20, 0, 0, '97095135-7388-4fbc-9e79-e642fa11c5ea');
 
 INSERT INTO item_data.request_items(id, request_status, end_product, weight, amount, item_type, request_id)

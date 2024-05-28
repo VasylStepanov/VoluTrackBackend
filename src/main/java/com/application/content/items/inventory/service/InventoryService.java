@@ -27,6 +27,8 @@ public interface InventoryService {
 
     void saveItem(InventoryItemDto requestItemDto, UUID volunteerId, UUID groupId);
 
+    void saveItem(InventoryItemDto inventoryItemDto, Inventory inventory);
+
     void updateItem(InventoryItemDto requestItemDto, UUID volunteerId, UUID groupId, UUID itemId);
 
     InventoryItem updateReadyToSend(boolean readyToSend, UUID volunteerId, UUID groupId, UUID inventoryItemId);

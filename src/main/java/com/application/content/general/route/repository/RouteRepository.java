@@ -32,7 +32,7 @@ public interface RouteRepository extends JpaRepository<Route, UUID> {
             AND r.fromAddress.coordinatesLongitude > ?2
             AND r.fromAddress.coordinatesLatitude < ?3
             AND r.fromAddress.coordinatesLatitude > ?4
-            AND r.routeStatus = 'CREATED'""")
+            AND r.routeStatus = RouteStatus.CREATED""")
     List<Route> findRouteByAddressFrom(double longitudeX,
                                        double longitudeY,
                                        double latitudeX,
@@ -43,7 +43,7 @@ public interface RouteRepository extends JpaRepository<Route, UUID> {
             AND r.toAddress.coordinatesLongitude > ?2
             AND r.toAddress.coordinatesLatitude < ?3
             AND r.toAddress.coordinatesLatitude > ?4
-            AND r.routeStatus = 'CREATED'""")
+            AND r.routeStatus = RouteStatus.CREATED""")
     List<Route> findRouteByAddressTo(double longitudeX,
                                      double longitudeY,
                                      double latitudeX,

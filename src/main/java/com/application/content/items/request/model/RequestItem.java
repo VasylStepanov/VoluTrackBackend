@@ -2,7 +2,6 @@ package com.application.content.items.request.model;
 
 import com.application.config.BaseEntity;
 import com.application.content.items.item.model.ItemType;
-import com.application.content.items.request.dto.RequestStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

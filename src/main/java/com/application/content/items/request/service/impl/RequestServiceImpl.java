@@ -2,7 +2,7 @@ package com.application.content.items.request.service.impl;
 
 import com.application.content.general.address.model.Address;
 import com.application.content.items.item.model.ItemType;
-import com.application.content.items.request.dto.RequestStatus;
+import com.application.content.items.request.model.RequestStatus;
 import com.application.content.items.request.dto.ResponseRequestItemDto;
 import com.application.content.items.item.service.ItemValidation;
 import com.application.content.items.request.model.Request;
@@ -61,7 +61,7 @@ public class RequestServiceImpl implements RequestService {
                 address.getCoordinatesLongitude() - SIZE_LENGTH,
                 address.getCoordinatesLatitude() + SIZE_LENGTH,
                 address.getCoordinatesLatitude() - SIZE_LENGTH,
-                itemType.name());
+                itemType);
     }
 
     @Override

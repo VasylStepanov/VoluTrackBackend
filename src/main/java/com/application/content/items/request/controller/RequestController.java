@@ -1,5 +1,6 @@
 package com.application.content.items.request.controller;
 
+import com.application.content.general.address.service.AddressService;
 import com.application.content.general.route.service.RouteService;
 import com.application.content.items.request.dto.RequestItemDto;
 import com.application.content.items.request.model.RequestItem;
@@ -27,6 +28,9 @@ public class RequestController {
     @Autowired
     RouteService routeService;
 
+    @Autowired
+    AddressService addressService;
+
     @Operation(summary = "Get all request items",
             description = "Get request items by group id or if group id is null, then get by volunteer id.")
     @GetMapping("/getAllRequestItems")
@@ -47,9 +51,11 @@ public class RequestController {
                                      @RequestBody RequestItemDto requestItemDto,
                                      @RequestParam(required = false) UUID groupId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
+        if(addressService.getAddress(volunteerId, groupId) == null)
+            throw new RuntimeException("Can't add requests, set address first.");
         RequestItem requestItem = requestService.saveRequestItem(requestItemDto, volunteerId, groupId);
         routeService.setItemToRouteByRequestItem(requestItem);
-        return ResponseEntity.ok("Item is saved");
+        return ResponseEntity.ok("Request item is saved");
     }
 
     @Operation(summary = "Update request item",
@@ -63,7 +69,7 @@ public class RequestController {
                                         @RequestParam UUID requestItemId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         requestService.updateRequestItem(requestUpdateItemDto, volunteerId, groupId, requestItemId);
-        return ResponseEntity.ok("Item is updated");
+        return ResponseEntity.ok("Request item is updated");
     }
 
     @Operation(summary = "Delete request item by item id",
@@ -76,6 +82,6 @@ public class RequestController {
                                         @RequestParam UUID requestItemId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         requestService.deleteRequestItem(volunteerId, groupId, requestItemId);
-        return ResponseEntity.ok("Item is removed");
+        return ResponseEntity.ok("Request item is removed");
     }
 }

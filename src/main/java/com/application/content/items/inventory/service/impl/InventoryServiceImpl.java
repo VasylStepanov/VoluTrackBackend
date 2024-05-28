@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class InventoryServiceImpl implements InventoryService {
@@ -51,19 +52,38 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public List<InventoryItem> findAllInventoryItemsByAddress(Address address) {
-        return inventoryItemRepository.findAllByAddress(address.getCoordinatesLongitude() + SIZE_LENGTH,
+        List<InventoryItem> volunteerItems = inventoryItemRepository.findAllByAddressVolunteer(
+                address.getCoordinatesLongitude() + SIZE_LENGTH,
                 address.getCoordinatesLongitude() - SIZE_LENGTH,
                 address.getCoordinatesLatitude() + SIZE_LENGTH,
                 address.getCoordinatesLatitude() - SIZE_LENGTH);
+
+        List<InventoryItem> groupItems = inventoryItemRepository.findAllByAddressGroup(
+                address.getCoordinatesLongitude() + SIZE_LENGTH,
+                address.getCoordinatesLongitude() - SIZE_LENGTH,
+                address.getCoordinatesLatitude() + SIZE_LENGTH,
+                address.getCoordinatesLatitude() - SIZE_LENGTH);
+
+        return Stream.concat(volunteerItems.stream(), groupItems.stream()).toList();
     }
 
     @Override
     public List<InventoryItem> findAllInventoryItemsByAddressAndItemType(Address address, ItemType itemType){
-        return inventoryItemRepository.findAllByAddress(address.getCoordinatesLongitude() + SIZE_LENGTH,
+        List<InventoryItem> volunteerItems = inventoryItemRepository.findAllByAddressVolunteer(
+                address.getCoordinatesLongitude() + SIZE_LENGTH,
                 address.getCoordinatesLongitude() - SIZE_LENGTH,
                 address.getCoordinatesLatitude() + SIZE_LENGTH,
                 address.getCoordinatesLatitude() - SIZE_LENGTH,
-                itemType.name());
+                itemType);
+
+        List<InventoryItem> groupItems = inventoryItemRepository.findAllByAddressGroup(
+                address.getCoordinatesLongitude() + SIZE_LENGTH,
+                address.getCoordinatesLongitude() - SIZE_LENGTH,
+                address.getCoordinatesLatitude() + SIZE_LENGTH,
+                address.getCoordinatesLatitude() - SIZE_LENGTH,
+                itemType);
+
+        return Stream.concat(volunteerItems.stream(), groupItems.stream()).toList();
     }
 
     @Override
@@ -94,6 +114,22 @@ public class InventoryServiceImpl implements InventoryService {
     @SneakyThrows
     public void saveItem(InventoryItemDto inventoryItemDto, UUID volunteerId, UUID groupId) {
         Inventory inventory = getInventory(volunteerId, groupId);
+        InventoryItem inventoryItem = InventoryItem.builder()
+                .endProduct(inventoryItemDto.endProduct())
+                .readyToSend(false)
+                .name(itemValidation.eitherNameValidFull(inventoryItemDto.name()))
+                .description(itemValidation.eitherDescriptionValid(inventoryItemDto.description()))
+                .amount(itemValidation.eitherMoreThanZeroEqualFull(inventoryItemDto.amount()))
+                .weight(itemValidation.eitherMoreThanZeroFull(inventoryItemDto.weight()))
+                .itemType(inventoryItemDto.itemType())
+                .inventory(inventory)
+                .build();
+        inventoryItemRepository.save(inventoryItem);
+    }
+
+    @Override
+    @SneakyThrows
+    public void saveItem(InventoryItemDto inventoryItemDto, Inventory inventory) {
         InventoryItem inventoryItem = InventoryItem.builder()
                 .endProduct(inventoryItemDto.endProduct())
                 .readyToSend(false)
@@ -140,10 +176,7 @@ public class InventoryServiceImpl implements InventoryService {
                 .orElseThrow(() -> new RuntimeException("Item isn't from the inventory"));
         if(inventoryItem.isReadyToSend() == readyToSend)
             throw new RuntimeException("Ready to send already set to: " + readyToSend);
-        if(readyToSend)
-            inventoryItem.setReadyToSend(true);
-        else
-            inventoryItem.setReadyToSend(false);
+        inventoryItem.setReadyToSend(readyToSend);
         return inventoryItem;
     }
 

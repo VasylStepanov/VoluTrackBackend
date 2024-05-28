@@ -2,7 +2,7 @@ package com.application.content.items.request.dto;
 
 import com.application.content.items.item.model.ItemType;
 import com.application.content.items.request.model.RequestItem;
-import jakarta.persistence.Column;
+import com.application.content.items.request.model.RequestStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

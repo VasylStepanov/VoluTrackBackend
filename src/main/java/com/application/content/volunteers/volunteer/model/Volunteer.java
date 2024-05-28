@@ -32,7 +32,7 @@ public class Volunteer extends BaseEntity implements IAddress {
     @JoinColumn(name = "user_id", nullable = false)
     User user;
 
-    @OneToOne
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     Address address;
 

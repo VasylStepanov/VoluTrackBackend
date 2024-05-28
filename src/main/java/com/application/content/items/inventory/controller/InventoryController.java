@@ -1,5 +1,6 @@
 package com.application.content.items.inventory.controller;
 
+import com.application.content.general.address.service.AddressService;
 import com.application.content.general.route.service.RouteService;
 import com.application.content.items.inventory.model.InventoryItem;
 import com.application.content.items.inventory.service.InventoryService;
@@ -26,6 +27,9 @@ public class InventoryController {
 
     @Autowired
     RouteService routeService;
+
+    @Autowired
+    AddressService addressService;
 
     @Operation(summary = "Get all items",
             description = "Get items by group id or if group id is null, then get by volunteer id.")
@@ -60,9 +64,12 @@ public class InventoryController {
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         if(routeService.isInventoryItemInRoute(inventoryItemId))
             throw new RuntimeException("Can't update item, it's in road");
+        if(addressService.getAddress(volunteerId, groupId) == null)
+            throw new RuntimeException("Can't set item as ready to send, set address first.");
         InventoryItem inventoryItem = inventoryService
                 .updateReadyToSend(readyToSend, volunteerId, groupId, inventoryItemId);
-        routeService.setItemToRouteByInventoryItem(inventoryItem);
+        if(readyToSend)
+            routeService.setItemToRouteByInventoryItem(inventoryItem);
         return ResponseEntity.ok("Item ready_to_send is updated");
     }
 

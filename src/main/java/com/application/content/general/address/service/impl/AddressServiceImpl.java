@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Service
-@Transactional
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AddressServiceImpl implements AddressService {
 
@@ -74,6 +73,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Transactional
     public void updateAddress(IAddress iAddress, RequestAddressDto requestAddressDto) {
         Address address = iAddress.getAddress();
         if(address == null) {

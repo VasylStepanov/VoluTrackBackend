@@ -39,6 +39,5 @@ public interface RouteService {
 
     void setItemToRouteByInventoryItem(InventoryItem inventoryItem);
 
-    @Async
     void setItemToRouteByRequestItem(RequestItem requestItem);
 }
