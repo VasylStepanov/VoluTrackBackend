@@ -46,7 +46,6 @@ public class RequestController {
                     Amount must be more than 0 but less than 65536.
                     ItemType and ItemMeasurement are enum, there are two endpoints what responses their content.""")
     @PostMapping("/addRequestItem")
-    @Transactional
     public ResponseEntity<?> addRequestItem(HttpServletRequest httpServletRequest,
                                      @RequestBody RequestItemDto requestItemDto,
                                      @RequestParam(required = false) UUID groupId){

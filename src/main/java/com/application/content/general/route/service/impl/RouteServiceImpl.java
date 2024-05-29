@@ -218,8 +218,11 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public void deleteRoute(UUID volunteerId, UUID routeId) {
         Route route = getRouteEitherDriver(volunteerId, routeId);
-        if(!route.getRouteStatus().equals(RouteStatus.CREATED))
+        if(!route.getRouteStatus().equals(RouteStatus.DRIVER_TAKE))
             throw new RuntimeException("Route can't be deleted");
+        if(route.getRouteStatus().equals(RouteStatus.SET)){
+
+        }
         routeRepository.delete(route);
     }
 
@@ -227,7 +230,6 @@ public class RouteServiceImpl implements RouteService {
         routeRepository.delete(route);
     }
 
-    @Async
     @Override
     public void setItemToRouteByInventoryItem(InventoryItem inventoryItem){
         Address address = addressService.getAddress(inventoryItem);
@@ -261,8 +263,8 @@ public class RouteServiceImpl implements RouteService {
         }
     }
 
-    @Async
     @Override
+    @Transactional
     public void setItemToRouteByRequestItem(RequestItem requestItem){
         Address address = addressService.getAddress(requestItem);
         Volunteer takerRepresentative = requestService.getRepresentative(requestItem);
@@ -276,7 +278,7 @@ public class RouteServiceImpl implements RouteService {
         if(routeList != null && !routeList.isEmpty()) {
             for(Route route: routeList){
                 List<InventoryItem> inventoryItems = inventoryService.findAllInventoryItemsByAddressAndItemType(
-                        route.getToAddress(), requestItem.getItemType());
+                        route.getFromAddress(), requestItem.getItemType());
                 if(inventoryItems != null && !inventoryItems.isEmpty()){
                     InventoryItem inventoryItem = getClosestInventoryItem(inventoryItems, route.getFromAddress());
                     requestItem.setRequestStatus(RequestStatus.IN_PROCESS);

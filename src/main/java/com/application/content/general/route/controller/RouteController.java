@@ -98,22 +98,31 @@ public class RouteController {
         return ResponseEntity.ok("Route is updated");
     }
 
+    @Operation(summary = "Volunteer gives aid", description = """
+                Volunteer gives aid to the provided driver, and route status is set to DRIVER_TAKE.
+                """)
     @PutMapping("/giveAid")
     public ResponseEntity<?> giveAid(HttpServletRequest httpServletRequest,
                                               @RequestParam UUID routeId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         routeService.setRouteStatusGiven(volunteerId, routeId);
-        return ResponseEntity.ok("Item is given by volunteer");
+        return ResponseEntity.ok("Item is given by volunteer.");
     }
 
+    @Operation(summary = "Volunteer takes aid", description = """
+                Volunteer takes aid from the provided driver, and then transfer process is started and route is deleted.
+                """)
     @PutMapping("/takeAid")
     public ResponseEntity<?> takeAid(HttpServletRequest httpServletRequest,
                                               @RequestParam UUID routeId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         routeService.transferItem(volunteerId, routeId);
-        return ResponseEntity.ok("Item is taken by volunteer");
+        return ResponseEntity.ok("Item is taken by volunteer. Route is successfully finished!");
     }
 
+    @Operation(summary = "Driver deletes route", description = """
+                Volunteer takes aid from the provided driver, and then transfer process is started and route is deleted.
+                """)
     @DeleteMapping
     public ResponseEntity<?> deleteRoute(HttpServletRequest httpServletRequest,
                                          @RequestParam UUID routeId){

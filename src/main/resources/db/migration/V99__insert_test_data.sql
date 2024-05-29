@@ -8,7 +8,10 @@ VALUES ('71119396-8694-11ed-9ef6-77042ee83937', 'Микола', 'Вишиван�
 ('a48c5d51-11d3-47cd-8705-dd53df55f845', 'Євгеній', 'Сошкін', 'zhenya1990@gmail.com', '+380123456787', '$2a$12$VTtj8eiBMF9MZMycthaF6urVE39D8Wlsa/v9Mdq4BOG5.rEbUTuZC', 'false', 'true', 1),
 ('46bb1ff3-e05d-481c-b435-960dfc1f933d', 'Марк', 'Балтишев', 'baltishevmark123@gmail.com', '+380123456788', '$2a$12$ZVG4OzDa/l5Z2HUaNMxBfOd0TYBrvPDw7oxRkUOEyJnzsZPtVOHx2', 'false', 'true', 1),
 ('b1a163be-3913-4299-8403-35785977b768', 'Оксана', 'Зиноївна', 'zenoivnazitomyr@gmail.com', '+380123456789', '$2a$12$eHmZ.QUluAUVk7s40WPktukPv.PGw0oz8gT0IY60dgqN.9QSmsa0e', 'false', 'true', 1),
-('dba68dc0-d1ba-4df8-9399-7ab09b071560', 'Довженко', 'Марія', 'dovzhenko.m.1978@gmail.com', '+380123456791', '$2a$12$T89M9KeZJ2oE.we1V60UbOcaFdulAtjz8/sNS.VBkRJRcRrZPHPYS', 'false', 'true', 1);
+('dba68dc0-d1ba-4df8-9399-7ab09b071560', 'Довженко', 'Марія', 'dovzhenko.m.1978@gmail.com', '+380123456791', '$2a$12$T89M9KeZJ2oE.we1V60UbOcaFdulAtjz8/sNS.VBkRJRcRrZPHPYS', 'false', 'true', 1),
+('8a8b8c04-4461-43ba-a66f-567b29d53907', 'Володимир', 'Євгенович', 'volodya@gmail.com', '+380123456792', '$2a$12$vfbnvvPxlq.5JrfzQSCgGefJFW10p.74/Wz/DhphY9pmiFRB1pZom', 'false', 'true', 1),
+('4bfc05ca-a159-4b31-9cd5-c0d53c5f6e86', 'Михайло', 'Сергійович', 'michailoserhiovich@gmail.com', '+380123456793', '$2a$12$weYobTqg5LWDH2kRsaaQneNKnDTPksFdTNqekXyw2XRMBi9ZcYz6S', 'false', 'true', 1),
+('a1062a57-b7c7-4228-b283-6cdd03f4cf8c', 'Станіслав', 'Мазур', 'mazurstanislav@gmail.com', '+380123456794', '$2a$12$FjW3Wae8VLSxHJdGBx832umFchpZTFv2qk1c28MiB/s2GbtBgZgSm', 'false', 'true', 1);
 
 INSERT INTO item_data.inventories(id)
 VALUES ('02ab61b1-ac27-4f32-9bc9-3e40341b4699'), ('710c2e63-641e-42c3-a306-9e3088b8fda8'),
@@ -18,7 +21,8 @@ VALUES ('02ab61b1-ac27-4f32-9bc9-3e40341b4699'), ('710c2e63-641e-42c3-a306-9e308
 ('755748a4-3d57-42a3-9af6-2661c021681b'), ('006ea5bb-ec91-4026-a62c-ea4469f5276e'),
 ('8ee6f894-0bfb-4716-9264-54e9aee6ba61'), ('97095135-7388-4fbc-9e79-e642fa11c5ea'),
 ('0e612ea1-32de-4776-b1f1-412fd482fd70'), ('50a638ab-06c0-4493-89a2-5e3ada61ea44'),
-('80134b52-1fdf-4f48-8c97-404948f08ef8');
+('80134b52-1fdf-4f48-8c97-404948f08ef8'), ('7b055a2c-f176-4af4-9f3c-54bb25de98a9'),
+('906636cf-7649-47b0-9164-4173a1f4c96d'), ('b4eea626-0d50-4c7a-bbd4-b5f9b06fd57a');
 
 INSERT INTO item_data.requests(id)
 VALUES ('abfe376e-809e-40df-8b64-3aff45ff2e3c'), ('dbe9c523-44fb-47fb-9830-0b0f51bf36b7'),
@@ -28,7 +32,8 @@ VALUES ('abfe376e-809e-40df-8b64-3aff45ff2e3c'), ('dbe9c523-44fb-47fb-9830-0b0f5
 ('8d756d5c-d6fe-41c6-847f-e33d6cc18eae'), ('e9c45510-0f52-4523-9ef0-cdf80192fbf9'),
 ('21874d6e-e21b-4f43-8ef3-d0dabccc1095'), ('05faca4f-245c-4f91-b937-4be606520f9f'),
 ('96696d5e-d513-49e9-b752-d5f0a9284e1b'), ('0120d5d8-cd90-4edb-a929-d33c8982878f'),
-('6093c1b1-94d1-43ba-9474-06a3a36bf175');
+('6093c1b1-94d1-43ba-9474-06a3a36bf175'), ('03c5ede2-0812-4afd-941c-30e9f7029238'),
+('07ab059d-45d0-48ed-af31-d32c6c3efc6e'), ('6da1be5e-5b8a-4b3e-aea0-a6cf75dc6aa1');
 
 INSERT INTO general_data.addresses(id, address, coordinates_longitude, coordinates_latitude)
 VALUES ('e17d83d8-771e-4902-954c-04550fcabe60', 'Львівська область, Львів, Рівна вулиця 6', 49.8314759, 23.9761968),
@@ -43,7 +48,9 @@ VALUES ('e17d83d8-771e-4902-954c-04550fcabe60', 'Львівська област
 ('649daf96-6513-41f6-b5d8-688c3eae8fc9', NULL, 50.51613490390936, 30.773822268373745),
 ('0198c2dd-39a7-4629-9bbe-aa584ca5943e', 'Boryslavska St, 59, Kyiv, 02000', 50.43111486792335, 30.433654781339076),
 ('16b262e2-4207-4602-b699-5353350d51fd', 'Bilopil''s''kyi Shlyakh St, 53, Sumy, Sums''ka oblast, 40000', 50.929899459924336, 34.74157271215379),
-('70d90328-33ea-4369-acc0-aae94d91772a', 'Lyapunova St, 33, Kharkiv, Kharkivs''ka oblast, 61000', 50.019895, 36.230942);
+('70d90328-33ea-4369-acc0-aae94d91772a', 'Lyapunova St, 33, Kharkiv, Kharkivs''ka oblast, 61000', 50.019895, 36.230942),
+('54521cf4-2703-4602-85ab-6a0048f1527f', 'Hlyboka St, 27, L''viv, L''vivs''ka oblast, 79000', 49.83286183494328, 24.011988773420892),
+('c1a46bf0-d19f-47d9-89a2-7cc77ce8b32c', 'Mahistratska St, 98А, Vinnytsia, Vinnyts''ka oblast, 21000', 49.239332589129354, 28.458636158381253);
 
 INSERT INTO volunteer_data.volunteers(id, user_id, address_id, inventory_id, request_id)
 VALUES ('ea5353ba-7df5-44dd-a85c-5c011580f9aa', '71119396-8694-11ed-9ef6-77042ee83937', 'e17d83d8-771e-4902-954c-04550fcabe60', '02ab61b1-ac27-4f32-9bc9-3e40341b4699', 'abfe376e-809e-40df-8b64-3aff45ff2e3c'),
@@ -55,7 +62,10 @@ VALUES ('ea5353ba-7df5-44dd-a85c-5c011580f9aa', '71119396-8694-11ed-9ef6-77042ee
 ('f841617c-fa16-464f-9efc-71f3731e8f52', 'a48c5d51-11d3-47cd-8705-dd53df55f845', NULL, '006ea5bb-ec91-4026-a62c-ea4469f5276e', 'e9c45510-0f52-4523-9ef0-cdf80192fbf9'),
 ('d7b05a64-e7f6-4059-b41d-69672dfdec1e', '46bb1ff3-e05d-481c-b435-960dfc1f933d', NULL, '8ee6f894-0bfb-4716-9264-54e9aee6ba61', '21874d6e-e21b-4f43-8ef3-d0dabccc1095'),
 ('a0c04e2a-bb44-4e39-abd2-dda0d9417f74', 'b1a163be-3913-4299-8403-35785977b768', NULL, '0e612ea1-32de-4776-b1f1-412fd482fd70', '96696d5e-d513-49e9-b752-d5f0a9284e1b'),
-('7de01b75-f9cc-46a9-b995-f2e42cdc424e', 'dba68dc0-d1ba-4df8-9399-7ab09b071560', NULL, '50a638ab-06c0-4493-89a2-5e3ada61ea44', '0120d5d8-cd90-4edb-a929-d33c8982878f');
+('7de01b75-f9cc-46a9-b995-f2e42cdc424e', 'dba68dc0-d1ba-4df8-9399-7ab09b071560', NULL, '50a638ab-06c0-4493-89a2-5e3ada61ea44', '0120d5d8-cd90-4edb-a929-d33c8982878f'),
+('71a1ee7c-8eb7-49fb-b436-2fe3a1c3156e', '8a8b8c04-4461-43ba-a66f-567b29d53907', '54521cf4-2703-4602-85ab-6a0048f1527f', '7b055a2c-f176-4af4-9f3c-54bb25de98a9', '03c5ede2-0812-4afd-941c-30e9f7029238'),
+('c4d177d7-75cc-4b45-8df9-5c7cc86c3207', '4bfc05ca-a159-4b31-9cd5-c0d53c5f6e86', 'c1a46bf0-d19f-47d9-89a2-7cc77ce8b32c', '906636cf-7649-47b0-9164-4173a1f4c96d', '07ab059d-45d0-48ed-af31-d32c6c3efc6e'),
+('f78608f0-8155-46fe-bbeb-0fc99aa32a53', 'a1062a57-b7c7-4228-b283-6cdd03f4cf8c', NULL, 'b4eea626-0d50-4c7a-bbd4-b5f9b06fd57a', '6da1be5e-5b8a-4b3e-aea0-a6cf75dc6aa1');
 
 INSERT INTO group_data.groups(id, name, description, volunteer_id, address_id, inventory_id, request_id)
 VALUES ('360ee69b-0f6b-48d7-a40b-db0cd537afda', 'Робимо окопні свічки', NULL, 'f061ad57-879c-446d-8bd4-b64452243bae', '4fdbfff0-908b-44c9-89cb-61a37ab20df5', '29823253-599a-43bb-8e85-97e36c7ba429', 'f7d0158b-fd25-4a46-ae62-7b4f70435773'),
@@ -75,11 +85,11 @@ VALUES ('10fca4f1-2854-4f0b-b816-6a90298a4904', 'f061ad57-879c-446d-8bd4-b644522
 ('b2b5075a-cd9d-4fc9-a97a-9c353803da3c', '7de01b75-f9cc-46a9-b995-f2e42cdc424e', 'b5d1f4bd-c079-41cd-94b6-b7086b4ee19c', 2);
 
 INSERT INTO volunteer_data.cars(id, number, description, carrying_kg, type, volunteer_id)
-VALUES ('3ff0b760-5cd1-418e-877e-705c18a3bcd5', 'АО 1234 ВВ', 'Чорна шкода', 60, 0, 'ea5353ba-7df5-44dd-a85c-5c011580f9aa'),
-('c852891b-3f67-424d-97ef-194da575d403', 'АВ 6523 АК', 'Біла хонда', 100, 1, 'c852891b-3f67-424d-97ef-194da575d403'),
-('17255247-e4a5-4edb-a446-74b7e0f2e9a9', 'ВА 1234 ОО', 'Бус мерседес', 400, 2, 'f841617c-fa16-464f-9efc-71f3731e8f52'),
-('b8d3c4f3-8bcd-4d7b-8cd5-167f1b61f3e3', 'ВХ 0000 НХ', 'Форд фокус синій', 80, 0, 'd7b05a64-e7f6-4059-b41d-69672dfdec1e'),
-('f374ea06-680c-46b9-91ad-2dc9b08f5fca', 'АК 1234 АО', 'Лада калина біла', 100, 0, 'd7b05a64-e7f6-4059-b41d-69672dfdec1e');
+VALUES ('3ff0b760-5cd1-418e-877e-705c18a3bcd5', 'АО1234ВВ', 'Чорна шкода', 60, 0, 'ea5353ba-7df5-44dd-a85c-5c011580f9aa'),
+('c852891b-3f67-424d-97ef-194da575d403', 'АВ6523АК', 'Біла хонда', 100, 1, 'c852891b-3f67-424d-97ef-194da575d403'),
+('17255247-e4a5-4edb-a446-74b7e0f2e9a9', 'ВА1234ОО', 'Бус мерседес', 400, 2, 'f841617c-fa16-464f-9efc-71f3731e8f52'),
+('b8d3c4f3-8bcd-4d7b-8cd5-167f1b61f3e3', 'ВХ0000НХ', 'Форд фокус синій', 80, 0, 'd7b05a64-e7f6-4059-b41d-69672dfdec1e'),
+('f374ea06-680c-46b9-91ad-2dc9b08f5fca', 'АК1234АО', 'Лада калина біла', 100, 0, 'd7b05a64-e7f6-4059-b41d-69672dfdec1e');
 
 INSERT INTO item_data.inventory_items(id, ready_to_send, end_product, name, description, weight, amount, item_type, inventory_id)
 VALUES ('04498a3a-f704-4e70-b197-1a76c29f9e85', true, true, '6 пар військових берц', NULL, 2, 6, 2, '755748a4-3d57-42a3-9af6-2661c021681b'),
@@ -89,14 +99,17 @@ VALUES ('04498a3a-f704-4e70-b197-1a76c29f9e85', true, true, '6 пар війсь
 ('8c3fbc57-b555-4c1c-ae4c-9d632c953633', false, true, 'Одяг', 'Різний дитячий одяг', 4, 0, 1, '710c2e63-641e-42c3-a306-9e3088b8fda8'),
 ('ab25a8af-17ed-42cb-a8c0-78cff5563dde', true, true, 'Окопні свічки', '40 кг окопних свічок', 40, 0, 7, '539d6275-39b8-46cf-af78-9b815cc670e9'),
 ('388835f9-19c3-49b7-945f-8cd7fc216f51', true, true, 'Дрони', 'FPV дрони', 1, 4, 4, '97095135-7388-4fbc-9e79-e642fa11c5ea'),
-('56a492f7-9117-405a-bac6-31dc4f1405f4', false, false, 'Запчастини для дронів', NULL, 20, 0, 0, '97095135-7388-4fbc-9e79-e642fa11c5ea');
+('56a492f7-9117-405a-bac6-31dc4f1405f4', false, false, 'Запчастини для дронів', NULL, 20, 0, 5, '97095135-7388-4fbc-9e79-e642fa11c5ea'),
+('55d8083f-fa06-4ee2-9926-7af883a456bc', true, false, 'Запчастини для електронних пристроїв', NULL, 1, 1, 0, '7b055a2c-f176-4af4-9f3c-54bb25de98a9');
 
 INSERT INTO item_data.request_items(id, request_status, end_product, weight, amount, item_type, request_id)
 VALUES ('0b222c33-dafa-40aa-b583-7ee67f8fe02e', 0, true, 0, 0, 3, '29ae3f8a-5439-425a-98a0-12d17e09530c'),
 ('749d1a05-39db-4610-a4ac-365e05cdd1fd', 0, true, 0, 0, 1, '29ae3f8a-5439-425a-98a0-12d17e09530c'),
 ('03867446-1f50-45d7-9146-51258955f076', 1, false, 100, 0, 0, '05faca4f-245c-4f91-b937-4be606520f9f'),
-('f32ecc47-b82d-40a9-b901-6a1b7fbdce52', 0, false, 0, 0, 3, '96696d5e-d513-49e9-b752-d5f0a9284e1b');
+('f32ecc47-b82d-40a9-b901-6a1b7fbdce52', 0, false, 0, 0, 3, '96696d5e-d513-49e9-b752-d5f0a9284e1b'),
+('11df003a-dd60-4f40-92fe-fe5ae2d35d33', 0, false, 10, 0, 1, '03c5ede2-0812-4afd-941c-30e9f7029238');
 
 INSERT INTO general_data.routes(id, start_at, status, driver_id, car_id, from_address_id, to_address_id, inventory_item_id, request_item_id, volunteer_giver_id, volunteer_taker_id)
 VALUES ('effd3f58-5f6b-4cbd-8f00-f056e0edffbe', '2024-06-22 09:15:00.000', 0, 'c852891b-3f67-424d-97ef-194da575d403', 'c852891b-3f67-424d-97ef-194da575d403', 'c3880914-311c-40af-bb57-d0540933d3cd', '4d05e7fe-de5c-4b98-b506-48b3ed170038', NULL, NULL, NULL, NULL),
+('a8bc7f54-9350-4d35-885b-6ca2badfcfed', '2024-06-24 09:15:00.000', 0, 'c852891b-3f67-424d-97ef-194da575d403', 'c852891b-3f67-424d-97ef-194da575d403', '4d05e7fe-de5c-4b98-b506-48b3ed170038', 'c3880914-311c-40af-bb57-d0540933d3cd', NULL, NULL, NULL, NULL),
 ('07a0fd7f-53f4-4868-a985-946fa4930c98', '2024-06-13 19:15:00.000', 0, 'd7b05a64-e7f6-4059-b41d-69672dfdec1e', 'b8d3c4f3-8bcd-4d7b-8cd5-167f1b61f3e3', '649daf96-6513-41f6-b5d8-688c3eae8fc9', '16b262e2-4207-4602-b699-5353350d51fd', NULL, NULL, NULL, NULL);
