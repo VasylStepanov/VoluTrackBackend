@@ -6,6 +6,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Comparator;
+
 @Getter
 @Setter
 @SuperBuilder
@@ -14,14 +16,19 @@ import lombok.experimental.SuperBuilder;
 @Entity(name = "address")
 @Table(name = "addresses", schema = "general_data")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Address extends BaseEntity {
+public class Address extends BaseEntity{
 
-    @Column(name = "address", length = 256, nullable = false)
+    @Column(name = "address", length = 256)
     String address;
 
-    @Column(name = "coordinates_latitude")
+    @Column(name = "coordinates_longitude", nullable = false)
+    Double coordinatesLongitude;
+
+    @Column(name = "coordinates_latitude", nullable = false)
     Double coordinatesLatitude;
 
-    @Column(name = "coordinates_longitude")
-    Double coordinatesLongitude;
+    public double compareTo(Address address) {
+        return Math.abs(this.getCoordinatesLatitude() - address.getCoordinatesLatitude() +
+                this.getCoordinatesLongitude() - address.getCoordinatesLongitude());
+    }
 }

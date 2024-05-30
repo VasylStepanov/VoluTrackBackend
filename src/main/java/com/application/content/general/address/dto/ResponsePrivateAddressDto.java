@@ -11,16 +11,16 @@ public class ResponsePrivateAddressDto {
 
     String address;
 
-    Double coordinatesLatitude;
-
     Double coordinatesLongitude;
+
+    Double coordinatesLatitude;
 
     public static ResponsePrivateAddressDto toResponseAddressDto(Address address){
         if(address == null)
             return null;
         return new ResponsePrivateAddressDto(
                 address.getAddress(),
-                address.getCoordinatesLatitude(),
+                address.getCoordinatesLongitude(),
                 address.getCoordinatesLatitude());
     }
 }

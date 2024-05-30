@@ -13,6 +13,9 @@ security:
   refresh-token:
     expiration: ${REFRESH_TIME}
 
+const:
+  size_length: ${SIZE_LENGTH}
+
 spring:
   flyway:
     schema: public

@@ -1,9 +1,9 @@
 package com.application.content.items.request.model;
 
 import com.application.config.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.application.content.groups.group.model.Group;
+import com.application.content.volunteers.volunteer.model.Volunteer;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -22,4 +22,10 @@ public class Request extends BaseEntity {
 
     @OneToMany(mappedBy = "request")
     List<RequestItem> requestItems;
+
+    @OneToOne(mappedBy = "request", optional = false, fetch = FetchType.LAZY)
+    Group group;
+
+    @OneToOne(mappedBy = "request", optional = false, fetch = FetchType.LAZY)
+    Volunteer volunteer;
 }

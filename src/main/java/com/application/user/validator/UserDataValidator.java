@@ -1,11 +1,28 @@
 package com.application.user.validator;
 
 import com.application.registration.exception.ValidationException;
+import lombok.SneakyThrows;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserDataValidator {
+
+    private final static String PHONE_NUMBER_REGEX = "^\\+380\\d{9}$";
+
+    @SneakyThrows
+    public String eitherPhoneNumberIsValid(String phoneNumber){
+        if(phoneNumber.matches(PHONE_NUMBER_REGEX))
+            return phoneNumber;
+        throw new RuntimeException("Phone is invalid");
+    }
+
+    @SneakyThrows
+    public String eitherPhoneNumberIsValidFull(String phoneNumber){
+        if(phoneNumber == null)
+            throw new RuntimeException("Phone number is null");
+        return eitherPhoneNumberIsValid(phoneNumber);
+    }
 
     public String eitherFirstNameIsValid(String firstname) throws ValidationException {
         if(firstname.length() < 2 || firstname.length() >= 64)

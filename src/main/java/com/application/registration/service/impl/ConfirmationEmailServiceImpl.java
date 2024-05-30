@@ -21,13 +21,13 @@ public class ConfirmationEmailServiceImpl implements ConfirmationEmailService {
     }
 
     @Override
-    public void deleteConfirmationEmail(String token){
-        repository.deleteByToken(token);
+    public void deleteConfirmationEmail(String password){
+        repository.deleteByPassword(password);
     }
 
     @Override
-    public ConfirmationEmail getToken(String token) {
-        return repository.findByToken(token).orElseThrow(() -> new IllegalStateException("Confirmation entity wasn't find."));
+    public ConfirmationEmail getConfirmationEmail(String password) {
+        return repository.findByPassword(password).orElseThrow(() -> new IllegalStateException("Confirmation entity wasn't find."));
     }
 
 }

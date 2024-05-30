@@ -12,11 +12,13 @@ import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -66,18 +68,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @SneakyThrows
     public void updateUser(User user, UserDto userDto){
-        if(userDto.getFirstName() != null)
-            user.setFirstName(validator.eitherFirstNameIsValid(userDto.getFirstName()));
-        if(userDto.getLastName() != null)
-            user.setLastName(validator.eitherLastNameIsValid(userDto.getLastName()));
-        if(userDto.getEmail() != null)
-            user.setEmail(validator.eitherEmailIsValid(userDto.getEmail()));
-        if(userDto.getPassword() != null)
-            user.setPassword(passwordEncoder.encode(validator.eitherPasswordIsValid(userDto.getPassword())));
-        if(userDto.getEnabled() != null)
-            user.setEnabled(userDto.getEnabled());
-        if(userDto.getLocked() != null)
-            user.setLocked(userDto.getLocked());
+        UserDto.updateUser(user, userDto);
     }
 
     @Override
@@ -91,13 +82,17 @@ public class UserServiceImpl implements UserService {
                 .firstName(validator.eitherFirstNameIsValidFull(registrationRequest.firstName()))
                 .lastName(validator.eitherLastNameIsValidFull(registrationRequest.lastName()))
                 .email(validator.eitherEmailIsValid(registrationRequest.email()))
+                .phoneNumber(validator.eitherPhoneNumberIsValid(registrationRequest.phoneNumber()))
                 .password(passwordEncoder.encode(validator.eitherPasswordIsValidFull(registrationRequest.password())))
                 .locked(false)
                 .enabled(false)
                 .role(role)
                 .build();
-        userRepository.save(user);
-        return user;
+
+        if(userRepository.findByData(registrationRequest.email(), registrationRequest.phoneNumber()).isPresent())
+            throw new RuntimeException("User already exists with the provided data.");
+
+        return userRepository.save(user);
     }
 
     @Override

@@ -5,7 +5,12 @@ import com.application.content.general.address.service.AddressService;
 import com.application.content.groups.group.dto.RequestGroupDto;
 import com.application.content.groups.group.model.Group;
 import com.application.content.groups.group.service.GroupService;
+import com.application.content.items.inventory.dto.ResponseInventoryItemDto;
+import com.application.content.items.inventory.model.InventoryItem;
 import com.application.content.items.inventory.service.InventoryService;
+import com.application.content.items.request.dto.ResponseRequestItemDto;
+import com.application.content.items.request.model.RequestItem;
+import com.application.content.items.request.service.RequestService;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -27,6 +33,9 @@ public class GroupController {
 
     @Autowired
     InventoryService inventoryService;
+
+    @Autowired
+    RequestService requestService;
 
     @Autowired
     AddressService addressService;
@@ -55,24 +64,29 @@ public class GroupController {
                                        HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         groupService.saveGroup(requestGroupDto, volunteerId);
-        return ResponseEntity.ok("Group is successfully added");
+        return ResponseEntity.ok("Group is successfully added.");
     }
 
     @Operation(summary = "Update group")
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<?> updateGroup(@RequestBody RequestGroupDto requestGroupDto,
                                          @RequestParam UUID groupId,
                                          HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         groupService.updateGroup(requestGroupDto, volunteerId, groupId);
-        return ResponseEntity.ok("Group is successfully updated");
+        return ResponseEntity.ok("Group is successfully updated.");
     }
 
     @Operation(summary = "Delete group")
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<?> deleteGroup(@RequestParam UUID groupId,
                                          HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
+        List<ResponseInventoryItemDto> inventoryItems = inventoryService.findAllItems(volunteerId, groupId);
+        List<ResponseRequestItemDto> requestItems = requestService.findAllRequestItems(volunteerId, groupId);
+        if((inventoryItems != null && inventoryItems.isEmpty()) &&
+                (requestItems != null && requestItems.isEmpty()))
+            throw new RuntimeException("Group can't be deleted, remove inventory and request items first.");
         groupService.deleteGroup(volunteerId, groupId);
         return ResponseEntity.ok("Group is successfully removed");
     }
@@ -83,12 +97,14 @@ public class GroupController {
 
     @Operation(summary = "Update group's address",
             description = "If it's first request, than address is saved, next requests will update the address.")
-    @PostMapping("/address/update")
+    @PutMapping("/address/update")
     public ResponseEntity<?> updateAddress(@RequestBody RequestAddressDto requestAddressDto,
                                            @RequestParam UUID groupId,
                                            HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         Group group = groupService.eitherIsAGroupAdmin(volunteerId, groupId);
+        if(group.getAddress() != null)
+            throw new RuntimeException("Group address can't be updated, because is already set.");
         addressService.updateAddress(group, requestAddressDto);
         return ResponseEntity.ok("Address is updated");
     }

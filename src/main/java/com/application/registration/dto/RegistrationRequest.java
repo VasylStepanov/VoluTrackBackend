@@ -7,5 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 public record RegistrationRequest( String firstName,
                                    String lastName,
                                    String email,
+                                   String phoneNumber,
                                    String password) {
 }

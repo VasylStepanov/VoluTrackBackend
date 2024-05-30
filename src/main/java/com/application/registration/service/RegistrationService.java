@@ -6,8 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface RegistrationService {
     String register(RegistrationRequest registrationRequest);
 
-    String confirmToken(String token);
+    String confirmAccount(String token);
 
-    @Transactional
     String resendConfirmToken(String token);
 }

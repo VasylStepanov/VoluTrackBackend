@@ -5,6 +5,9 @@ sender:
     email: ${EMAIL}
     link: ${LINK}
 
+const:
+    size_length: 0.08
+
 security:
     secret: e9fe2e88cd731b2f102e90439103eabf69dadf4d40f0436c9042d229bb85f7e4
     access-token:

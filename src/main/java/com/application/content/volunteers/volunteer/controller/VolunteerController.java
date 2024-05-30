@@ -2,6 +2,7 @@ package com.application.content.volunteers.volunteer.controller;
 
 import com.application.content.general.address.dto.RequestAddressDto;
 import com.application.content.general.address.service.AddressService;
+import com.application.content.general.route.service.RouteService;
 import com.application.content.volunteers.car.dto.RequestCarDto;
 import com.application.content.volunteers.car.service.CarService;
 import com.application.content.volunteers.volunteer.model.Volunteer;
@@ -31,6 +32,9 @@ public class VolunteerController {
     @Autowired
     AddressService addressService;
 
+    @Autowired
+    RouteService routeService;
+
     @Operation(summary = "Get profile data", description = "Profile data is a volunteer data with user data.")
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile(HttpServletRequest httpServletRequest){
@@ -49,25 +53,30 @@ public class VolunteerController {
 
     @Operation(summary = "Save car", description = "Car number examples: UA - АА0000АА; EU - AA000AA, AA00000. Carrying kg is a maximum weight to transport. To set car type get all possible types from /getAllCarTypes")
     @PostMapping("/car/save")
-    public ResponseEntity<?> saveCar(@RequestBody RequestCarDto requestCarDto, HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> saveCar(@RequestBody RequestCarDto requestCarDto,
+                                     HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
         carService.saveCar(volunteerId, requestCarDto);
         return ResponseEntity.ok("Car is saved");
     }
 
     @Operation(summary = "Update car", description = "Car number examples: UA - АА0000АА; EU - AA000AA, AA00000. Carrying kg is a maximum weight to transport. To set car type get all possible types from /getAllCarTypes")
-    @PostMapping("/car/update")
+    @PutMapping("/car/update")
     public ResponseEntity<?> updateCar(@RequestBody RequestCarDto requestCarDto, @RequestParam UUID carId, HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
+        if(routeService.isCarInRoute(carId))
+            throw new RuntimeException("Car can't be updated, because is already in route.");
         carService.updateCar(volunteerId, carId, requestCarDto);
         return ResponseEntity.ok("Car is updated");
     }
 
     @Operation(summary = "Delete car")
-    @PostMapping("/car/delete")
+    @DeleteMapping("/car/delete")
     public ResponseEntity<?> deleteCar(@RequestParam UUID carId, HttpServletRequest httpServletRequest){
         try {
             UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
+            if(routeService.isCarInRoute(carId))
+                throw new RuntimeException("Car can't be deleted, because is already in route.");
             carService.deleteCar(volunteerId, carId);
             return ResponseEntity.ok("Car is deleted");
         } catch (Exception e) {
@@ -80,10 +89,12 @@ public class VolunteerController {
      * */
     @Operation(summary = "Update volunteer's address",
             description = "If it's first request, than address is saved, next requests will update the address.")
-    @PostMapping("/address/update")
+    @PutMapping("/address/update")
     public ResponseEntity<?> updateAddress(@RequestBody RequestAddressDto requestAddressDto,
                                            HttpServletRequest httpServletRequest){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
+        if(routeService.isVolunteerInRoute(volunteerId))
+            throw new RuntimeException("Address can't be updated. Complete all routes to accomplish this.");
         Volunteer volunteer = volunteerService.getVolunteer(volunteerId);
         addressService.updateAddress(volunteer, requestAddressDto);
         return ResponseEntity.ok("Address is updated");

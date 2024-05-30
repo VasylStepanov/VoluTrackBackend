@@ -11,14 +11,14 @@ import java.util.UUID;
 
 public interface ConfirmationEmailRepository extends JpaRepository<ConfirmationEmail, UUID> {
 
-    Optional<ConfirmationEmail> findByToken(String token);
+    Optional<ConfirmationEmail> findByPassword(String password);
 
     @Modifying
     @Transactional
-    @Query("UPDATE ConfirmationEmail c SET c.confirmed = ?2 WHERE c.token = ?1")
-    void updateConfirmationToken(String token, boolean confirmed);
+    @Query("UPDATE ConfirmationEmail c SET c.confirmed = ?2 WHERE c.password = ?1")
+    void updateConfirmationEmail(String password, boolean confirmed);
 
     @Modifying
-    @Query("DELETE FROM ConfirmationEmail c WHERE c.token = ?1")
-    void deleteByToken(String token);
+    @Query("DELETE FROM ConfirmationEmail c WHERE c.password = ?1")
+    void deleteByPassword(String password);
 }

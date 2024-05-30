@@ -32,7 +32,7 @@ public class Volunteer extends BaseEntity implements IAddress {
     @JoinColumn(name = "user_id", nullable = false)
     User user;
 
-    @OneToOne
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     Address address;
 
@@ -42,11 +42,11 @@ public class Volunteer extends BaseEntity implements IAddress {
     @OneToMany(mappedBy = "volunteer", fetch = FetchType.LAZY)
     List<Group> groupList;
 
-    @OneToOne
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "inventory_id")
     Inventory inventory;
 
-    @OneToOne
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id")
     Request request;
 

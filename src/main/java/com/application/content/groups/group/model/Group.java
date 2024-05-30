@@ -30,19 +30,19 @@ public class Group extends BaseEntity implements IAddress {
     @Column(name = "description")
     String description;
 
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "volunteer_id", nullable = false)
     Volunteer volunteer;
 
-    @OneToOne
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     Address address;
 
-    @OneToOne
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "inventory_id")
     Inventory inventory;
 
-    @OneToOne
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id")
     Request request;
 

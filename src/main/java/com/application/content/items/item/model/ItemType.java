@@ -3,7 +3,8 @@ package com.application.content.items.item.model;
 import lombok.SneakyThrows;
 
 public enum ItemType {
-    ELECTRONIC_STUFF, CLOTHES, SHOES, FOOD, DRONES, DRONE_SPARES, CAMOUFLAGE_NETS, TRENCH_CANDLES, ANOTHER;
+    ELECTRONIC_STUFF, CLOTHES, SHOES, FOOD, DRONES, DRONE_SPARES, CAMOUFLAGE_NETS,
+    TRENCH_CANDLES, STARLINK, HELMETS, BODY_ARMORS, ANOTHER;
 
     @SneakyThrows
     public static ItemType valueOfChecked(String value) {

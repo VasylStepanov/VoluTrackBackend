@@ -22,8 +22,8 @@ public class ConfirmationEmail extends BaseEntity {
     @Column
     boolean confirmed;
 
-    @Column(nullable = false, length = 36)
-    String token;
+    @Column(nullable = false, length = 6)
+    String password;
 
     @Column(nullable = false)
     LocalDateTime expiresAt;

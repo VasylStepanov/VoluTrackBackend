@@ -74,15 +74,6 @@ public class AuthenticationController {
         return ResponseEntity.ok("User data is updated");
     }
 
-    @Operation(summary = "Delete user account.")
-    @PostMapping("/delete")
-    public ResponseEntity<?> deleteUserProfile(HttpServletRequest httpServletRequest){
-        String accessToken = cookieUtil.getAccessTokenCookie(httpServletRequest.getCookies());
-        authenticationService.deleteUser(jwtService.extractUserId(accessToken), jwtService.extractVolunteerId(accessToken));
-        disabledTokenService.save(DisabledToken.builder().accessToken(accessToken).build());
-        return ResponseEntity.ok("User is deleted");
-    }
-
     @Operation(summary = "Logout.",
             description = "Removes cookies, Access token is placed to set of disabled tokens, Refresh token is removed from DB.")
     @PostMapping("/logout")

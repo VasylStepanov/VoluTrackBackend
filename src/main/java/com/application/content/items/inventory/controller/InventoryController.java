@@ -1,12 +1,16 @@
 package com.application.content.items.inventory.controller;
 
+import com.application.content.general.address.service.AddressService;
+import com.application.content.general.route.service.RouteService;
+import com.application.content.items.inventory.model.InventoryItem;
 import com.application.content.items.inventory.service.InventoryService;
-import com.application.content.items.item.dto.RequestItemDto;
+import com.application.content.items.inventory.dto.InventoryItemDto;
 import com.application.content.volunteers.volunteer.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -20,6 +24,12 @@ public class InventoryController {
 
     @Autowired
     InventoryService inventoryService;
+
+    @Autowired
+    RouteService routeService;
+
+    @Autowired
+    AddressService addressService;
 
     @Operation(summary = "Get all items",
             description = "Get items by group id or if group id is null, then get by volunteer id.")
@@ -37,26 +47,30 @@ public class InventoryController {
                     ItemType and ItemMeasurement are enum, there are two endpoints what responses their content.""")
     @PostMapping("/addItem")
     public ResponseEntity<?> addItem(HttpServletRequest httpServletRequest,
-                                     @RequestBody RequestItemDto requestItemDto,
+                                     @RequestBody InventoryItemDto inventoryItemDto,
                                      @RequestParam(required = false) UUID groupId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
-
-        inventoryService.saveItem(requestItemDto, volunteerId, groupId);
+        inventoryService.saveItem(inventoryItemDto, volunteerId, groupId);
         return ResponseEntity.ok("Item is saved");
     }
 
-    @Operation(summary = "Update item",
-            description = """ 
-                    Update item by group id or if group id is null, then update by volunteer id.
-                    Only owner of the item can update the item.""")
-    @PutMapping("/updateItem")
-    public ResponseEntity<?> updateItem(HttpServletRequest httpServletRequest,
-                                        @RequestBody RequestItemDto requestUpdateItemDto,
+    @Operation(summary = "Update item, set ready to send")
+    @PutMapping("/setReadyToSend")
+    @Transactional
+    public ResponseEntity<?> updateItemSetReadyToSend(HttpServletRequest httpServletRequest,
+                                        @RequestParam boolean readyToSend,
                                         @RequestParam(required = false) UUID groupId,
-                                        @RequestParam UUID itemId){
+                                        @RequestParam UUID inventoryItemId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
-        inventoryService.updateItem(requestUpdateItemDto, volunteerId, groupId, itemId);
-        return ResponseEntity.ok("Item is updated");
+        if(routeService.isInventoryItemInRoute(inventoryItemId))
+            throw new RuntimeException("Can't update item, it's in road");
+        if(addressService.getAddress(volunteerId, groupId) == null)
+            throw new RuntimeException("Can't set item as ready to send, set address first.");
+        InventoryItem inventoryItem = inventoryService
+                .updateReadyToSend(readyToSend, volunteerId, groupId, inventoryItemId);
+        if(readyToSend)
+            routeService.setItemToRouteByInventoryItem(inventoryItem);
+        return ResponseEntity.ok("Item ready_to_send is updated");
     }
 
     @Operation(summary = "Delete item by item id",
@@ -66,9 +80,11 @@ public class InventoryController {
     @DeleteMapping("/deleteItem")
     public ResponseEntity<?> deleteItem(HttpServletRequest httpServletRequest,
                                         @RequestParam(required = false) UUID groupId,
-                                        @RequestParam UUID itemId){
+                                        @RequestParam UUID inventoryItemId){
         UUID volunteerId = volunteerService.getVolunteerId(httpServletRequest);
-        inventoryService.deleteItem(volunteerId, groupId, itemId);
+        if(routeService.isInventoryItemInRoute(inventoryItemId))
+            throw new RuntimeException("Inventory item can't be deleted, because item is in route");
+        inventoryService.deleteItem(volunteerId, groupId, inventoryItemId);
         return ResponseEntity.ok("Item is removed");
     }
 }
