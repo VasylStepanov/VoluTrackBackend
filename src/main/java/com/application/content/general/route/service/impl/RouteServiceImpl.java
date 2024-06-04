@@ -180,6 +180,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
+    @Transactional
     public void setRouteStatusGiven(UUID volunteerId, UUID routeId) {
         Route route = routeRepository
                 .findById(routeId)
@@ -189,6 +190,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
+    @Transactional
     public void transferItem(UUID volunteerId, UUID routeId) {
         Route route = routeRepository
                 .findById(routeId)

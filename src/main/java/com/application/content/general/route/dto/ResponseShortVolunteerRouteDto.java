@@ -10,11 +10,14 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ResponseShortVolunteerRouteDto {
+
+    UUID routeId;
 
     LocalDateTime startAt;
 
@@ -26,6 +29,7 @@ public class ResponseShortVolunteerRouteDto {
 
     public static ResponseShortVolunteerRouteDto toResponseShortRouteDto(Route route) {
         return new ResponseShortVolunteerRouteDto(
+                route.getId(),
                 route.getStartAt(),
                 route.getRouteStatus(),
                 ResponseDriverDto.toResponseDriverDto(route.getDriver(), route.getCar()),
